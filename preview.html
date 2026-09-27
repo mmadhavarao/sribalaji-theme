@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Balaji Books — Custom Theme Preview</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific styling for WooCommerce sample product grid in static preview */
+        .sample-products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .sample-product-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .sample-product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        }
+        .sample-product-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+            background: #f1f5f9;
+        }
+        .sample-product-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.35rem;
+        }
+        .sample-product-cat {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .sample-price-box {
+            margin-bottom: 0.75rem;
+        }
+        .sample-regular-price {
+            text-decoration: line-through;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+        .sample-sale-price {
+            color: #1e3a8a;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+        .sample-add-to-cart {
+            display: block;
+            background: #1e3a8a;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .preview-ribbon {
+            background: #f59e0b;
+            color: #0f172a;
+            text-align: center;
+            padding: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Local Preview Banner -->
+    <div class="preview-ribbon">
+        👀 LOCAL & GITHUB PAGES PREVIEW MODE &bull; Sri Balaji Books Custom Starter Theme
+    </div>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <div class="site-branding">
+                <a href="#" class="brand-title">Sri Balaji Books</a>
+                <div class="brand-tagline">Read . Create . Play</div>
+            </div>
+
+            <nav class="header-nav">
+                <ul>
+                    <li><a href="#" style="color: var(--primary);">Home</a></li>
+                    <li><a href="#">Shop</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Cart (0)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="site-main">
+
+        <!-- Hero Section -->
+        <section class="hero-box">
+            <div class="git-badge">
+                🚀 Git Continuous Deployment Active &bull; Branch: main
+            </div>
+            <h1>Welcome to Sri Balaji Books</h1>
+            <p>
+                Read . Create . Play &bull; Premium Office Stationery, School Supplies, Art &amp; Craft, Bags, and Novelty Gifts.
+            </p>
+            <a href="#featured-products" class="btn-primary">
+                Shop Our Collection &rarr;
+            </a>
+        </section>
+
+        <!-- Architecture Highlights -->
+        <section class="features-grid">
+            <div class="feature-card">
+                <h3>⚡ Zero Bloat Architecture</h3>
+                <p>Built from scratch without fragile 3rd-party demo importers. 100% reliable, clean, and instant page loads.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🗄️ Hostinger Database Powered</h3>
+                <p>Directly connected to your Hostinger MySQL database. All products, categories, and orders stay permanently safe.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔄 Git-Driven Workflow</h3>
+                <p>Edit code in VS Code on your Mac, run <code>git push</code>, and Hostinger automatically updates your live site.</p>
+            </div>
+        </section>
+
+        <!-- Live Products Showcase (Sample Preview of what WooCommerce renders) -->
+        <section id="featured-products" class="products-section" style="margin-top: 3.5rem;">
+            <h2 style="font-size: 1.75rem; color: var(--primary); margin-bottom: 0.5rem; text-align: center;">
+                Featured Products
+            </h2>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem;">
+                Sample preview of products populated from your Hostinger database
+            </p>
+
+            <div class="sample-products-grid">
+                <!-- Product 1 -->
+                <div class="sample-product-card">
+                    <img src="./screenshot.png" alt="Train Sharpener" class="sample-product-img">
+                    <div class="sample-product-cat">Novelty &amp; Gifts</div>
+                    <div class="sample-product-title">Train Sharpener &amp; Eraser 2-in-1</div>
+                    <div class="sample-price-box">
+                        <span class="sample-regular-price">₹149.00</span>
+                        <span class="sample-sale-price">₹110.00</span>
+                    </div>
+                    <a href="#" class="sample-add-to-cart">Add to cart</a>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="sample-product-card">
+                    <img src="./screenshot.png" alt="Pilot V5" class="sample-product-img">
+                    <div class="sample-product-cat">School Essentials</div>
+                    <div class="sample-product-title">Pilot Hi-Tecpoint V5 (Black)</div>
+                    <div class="sample-price-box">
+                        <span class="sample-regular-price">₹75.00</span>
+                        <span class="sample-sale-price">₹68.00</span>
+                    </div>
+                    <a href="#" class="sample-add-to-cart">Add to cart</a>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="sample-product-card">
+                    <img src="./screenshot.png" alt="Canvas Bag" class="sample-product-img">
+                    <div class="sample-product-cat">Bags &amp; Totes</div>
+                    <div class="sample-product-title">Handmade Canvas Tote Bag (Medium)</div>
+                    <div class="sample-price-box">
+                        <span class="sample-regular-price">₹129.00</span>
+                        <span class="sample-sale-price">₹99.00</span>
+                    </div>
+                    <a href="#" class="sample-add-to-cart">Add to cart</a>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="sample-product-card">
+                    <img src="./screenshot.png" alt="Casio Calculator" class="sample-product-img">
+                    <div class="sample-product-cat">Office Supplies</div>
+                    <div class="sample-product-title">Casio fx-82MS 2nd Edition</div>
+                    <div class="sample-price-box">
+                        <span class="sample-regular-price">₹595.00</span>
+                        <span class="sample-sale-price">₹545.00</span>
+                    </div>
+                    <a href="#" class="sample-add-to-cart">Add to cart</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <p>&copy; 2026 <strong>Sri Balaji Books</strong>. All rights reserved.</p>
+            <p style="font-size: 0.8rem; margin-top: 0.35rem; color: #94a3b8;">
+                Deployed seamlessly from GitHub &bull; Powered by Hostinger MySQL &bull; Read . Create . Play
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
