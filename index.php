@@ -14,7 +14,8 @@ get_header(); ?>
         <div class="git-badge">
             🚀 Git Continuous Deployment Active &bull; Branch: main
         </div>
-        <h1>Welcome to <?php bloginfo( 'name' ); ?></h1>
+        <!-- <h1>Welcome to <?php bloginfo( 'name' ); ?></h1> -->
+        <h1>Welcome to Sri Balaji Books — Deployed Live from Git!</h1>
         <p>
             <?php bloginfo( 'description' ); ?> &bull; Premium Office Stationery, School Supplies, Art &amp; Craft, Bags, and Novelty Gifts.
         </p>
