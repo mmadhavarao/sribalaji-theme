@@ -20,7 +20,7 @@ A lightweight, blazingly fast, zero-bloat e-commerce starter theme designed for 
    git push -u origin main
    ```
 2. In Hostinger hPanel:
-   * Select `stg.sribalajibooks.com` in top dropdown.
+   * Select `staging.sribalajibooks.com` in top dropdown.
    * Go to **Advanced** > **Git**.
    * Repository: `https://github.com/<YOUR_USERNAME>/sribalaji-theme.git`
    * Branch: `main`
