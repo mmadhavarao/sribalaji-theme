@@ -12,7 +12,7 @@ get_header(); ?>
     <!-- Hero Section -->
     <section class="hero-box">
         <div class="git-badge">
-            🚀 Git Continuous Deployment Active &bull; Branch: 
+            🚀 Git Continuous Deployment Active &bull; Branch: main
         </div>
         <!-- <h1>Welcome to <?php bloginfo( 'name' ); ?></h1> -->
         <h1>Welcome to Sri Balaji Books — Deployed Live from Git!</h1>
