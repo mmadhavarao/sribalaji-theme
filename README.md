@@ -26,5 +26,5 @@ A lightweight, blazingly fast, zero-bloat e-commerce starter theme designed for 
    * Branch: `main`
    * Install Path: `public_html/wp-content/themes/sribalaji-theme`
    * Click **Create** / **Deploy**.
-3. In WP Admin (`stg.sribalajibooks.com/wp-admin`):
+3. In WP Admin (`staging.sribalajibooks.com/wp-admin`):
    * Go to **Appearance** > **Themes** > Click **Activate** on "Sri Balaji Books Custom".
