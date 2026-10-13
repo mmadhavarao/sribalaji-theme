@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 44" width="180" height="44">
+    <!-- Apsara Iconic Brand Wordmark -->
+    <g fill="#be123c">
+        <!-- Diamond star emblem -->
+        <path d="M 12 18 Q 17 18 17 13 Q 17 18 22 18 Q 17 18 17 23 Q 17 18 12 18 Z" fill="#e11d48"/>
+        <!-- Apsara text with custom stationery typography styling -->
+        <text x="96" y="27" font-family="'Montserrat', 'Arial Black', -apple-system, sans-serif" font-size="24" font-weight="900" letter-spacing="1.5" fill="#be123c" text-anchor="middle">Apsara</text>
+        <!-- Subtitle tagline -->
+        <text x="96" y="39" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="6.5" font-weight="800" letter-spacing="3" fill="#9f1239" text-anchor="middle">EXTRA DARK &#8226; PENCILS &#8226; ART</text>
+    </g>
+</svg>

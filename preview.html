@@ -3,105 +3,1134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sri Balaji Books — Custom Theme Preview</title>
+    <title>Sri Balaji Books & Stationery — Storefront Preview</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Specific styling for WooCommerce sample product grid in static preview */
+        /* ==========================================================================
+           PROTOTYPE CONTROL RIBBON & PALETTE SWITCHER
+           ========================================================================== */
+        .preview-ribbon {
+            background: #0f172a;
+            color: #ffffff;
+            padding: 0.65rem 1.25rem;
+            font-size: 0.85rem;
+            border-bottom: 2px solid #059669;
+            position: sticky;
+            top: 0;
+            z-index: 99999;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+        }
+        .preview-ribbon-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .preview-ribbon-title {
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            color: #a7f3d0;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+        }
+        .preview-controls-group {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+        }
+        .ctrl-mode-btn {
+            background: rgba(255,255,255,0.12);
+            color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 0.28rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .ctrl-mode-btn:hover {
+            background: rgba(255,255,255,0.22);
+            color: #ffffff;
+        }
+        .ctrl-mode-btn.is-active {
+            background: #059669;
+            color: #ffffff;
+            border-color: #10b981;
+            font-weight: 800;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Color Palette Switcher Pills */
+        .palette-switcher {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: rgba(255,255,255,0.06);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .palette-label {
+            font-size: 0.72rem;
+            color: #94a3b8;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-right: 0.2rem;
+        }
+        .palette-pill {
+            background: rgba(255,255,255,0.1);
+            color: #f1f5f9;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.2rem 0.55rem;
+            border-radius: 4px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .palette-pill:hover {
+            background: rgba(255,255,255,0.22);
+        }
+        .palette-pill.is-active {
+            background: #059669;
+            color: #ffffff;
+            border-color: #34d399;
+            font-weight: 800;
+            box-shadow: 0 1px 4px rgba(16,185,129,0.4);
+        }
+
+        .ctrl-toggle-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            cursor: pointer;
+            user-select: none;
+            background: rgba(255,255,255,0.06);
+            padding: 0.28rem 0.65rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .ctrl-toggle-label input {
+            accent-color: #059669;
+            cursor: pointer;
+        }
+
+        /* Static sample product styling mimicking WooCommerce grid */
         .sample-products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 1.5rem;
+            gap: 1.75rem;
             margin-top: 1.5rem;
         }
         .sample-product-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 1rem;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            transition: transform 0.15s, box-shadow 0.15s;
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .sample-product-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -3px rgba(0,0,0,0.08);
+            border-color: #cbd5e1;
         }
         .sample-product-img {
             width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 6px;
-            margin-bottom: 0.75rem;
-            background: #f1f5f9;
+            height: 190px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #f8fafc;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
         }
         .sample-product-title {
             font-size: 1rem;
             font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 0.35rem;
-        }
-        .sample-product-cat {
-            font-size: 0.75rem;
-            color: #64748b;
-            text-transform: uppercase;
-            font-weight: 600;
+            color: #1e3a8a;
             margin-bottom: 0.5rem;
+            line-height: 1.4;
+            min-height: 2.8rem;
         }
         .sample-price-box {
-            margin-bottom: 0.75rem;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #065f46;
+            margin-bottom: 1rem;
         }
-        .sample-regular-price {
+        .sample-price-box .regular {
             text-decoration: line-through;
             color: #94a3b8;
-            font-size: 0.85rem;
-            margin-right: 0.5rem;
-        }
-        .sample-sale-price {
-            color: #1e3a8a;
-            font-weight: 800;
-            font-size: 1.1rem;
+            font-size: 0.9rem;
+            margin-right: 0.35rem;
+            font-weight: 500;
         }
         .sample-add-to-cart {
             display: block;
-            background: #1e3a8a;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #059669;
             color: #ffffff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-        .preview-ribbon {
-            background: #f59e0b;
-            color: #0f172a;
-            text-align: center;
-            padding: 0.4rem;
-            font-size: 0.85rem;
+            font-size: 0.92rem;
             font-weight: 700;
-            letter-spacing: 0.05em;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+            transition: background 0.15s, transform 0.15s;
+        }
+        .sample-add-to-cart:hover {
+            background: #047857;
+            transform: translateY(-1px);
+        }
+
+        /* ==========================================================================
+           BACKGROUND COLOR PALETTES (Premium Luxury Tints)
+           ========================================================================== */
+        body[data-theme="tea-green"] {
+            background-color: #f2f6f4 !important;
+            color: #1e293b;
+        }
+        body[data-theme="tea-green"] .site-header {
+            background: rgba(242, 246, 244, 0.96) !important;
+            border-bottom: 1px solid #d8e5df !important;
+        }
+        body[data-theme="tea-green"] .category-card,
+        body[data-theme="tea-green"] .sample-product-card,
+        body[data-theme="tea-green"] .sribalaji-fbt-section,
+        body[data-theme="tea-green"] .reviews-ticker-container,
+        body[data-theme="tea-green"] .hub-link-card {
+            background: #ffffff !important;
+            border-color: #dce7e1 !important;
+            box-shadow: 0 2px 8px rgba(15, 60, 40, 0.04) !important;
+        }
+        body[data-theme="tea-green"] .brands-section {
+            background: #eaf1ed !important;
+            border-radius: 18px;
+        }
+
+        body[data-theme="teal-mist"] {
+            background-color: #edf5f6 !important;
+            color: #1e293b;
+        }
+        body[data-theme="teal-mist"] .site-header {
+            background: rgba(237, 245, 246, 0.96) !important;
+            border-bottom: 1px solid #d1e3e6 !important;
+        }
+        body[data-theme="teal-mist"] .category-card,
+        body[data-theme="teal-mist"] .sample-product-card,
+        body[data-theme="teal-mist"] .sribalaji-fbt-section,
+        body[data-theme="teal-mist"] .reviews-ticker-container,
+        body[data-theme="teal-mist"] .hub-link-card {
+            background: #ffffff !important;
+            border-color: #d5e6e8 !important;
+            box-shadow: 0 2px 8px rgba(10, 50, 60, 0.04) !important;
+        }
+        body[data-theme="teal-mist"] .brands-section {
+            background: #e4eff1 !important;
+            border-radius: 18px;
+        }
+
+        body[data-theme="parchment"] {
+            background-color: #fbf9f4 !important;
+            color: #292524;
+        }
+        body[data-theme="parchment"] .site-header {
+            background: rgba(251, 249, 244, 0.96) !important;
+            border-bottom: 1px solid #ede7db !important;
+        }
+        body[data-theme="parchment"] .category-card,
+        body[data-theme="parchment"] .sample-product-card,
+        body[data-theme="parchment"] .sribalaji-fbt-section,
+        body[data-theme="parchment"] .reviews-ticker-container,
+        body[data-theme="parchment"] .hub-link-card {
+            background: #ffffff !important;
+            border-color: #ede6d8 !important;
+            box-shadow: 0 2px 8px rgba(60, 45, 20, 0.04) !important;
+        }
+        body[data-theme="parchment"] .brands-section {
+            background: #f4efe4 !important;
+            border-radius: 18px;
+        }
+
+        body[data-theme="white"] {
+            background-color: #ffffff !important;
+        }
+
+        /* ==========================================================================
+           WIDE LENS MODE PROTOTYPE (Ajio-Inspired)
+           ========================================================================== */
+        body.wide-lens-mode .site-main,
+        body.wide-lens-mode .header-container,
+        body.wide-lens-mode .top-bar-container,
+        body.wide-lens-mode .footer-container,
+        body.wide-lens-mode .brands-container,
+        body.wide-lens-mode .reviews-ticker-container,
+        body.wide-lens-mode .home-secondary-links-strip,
+        body.wide-lens-mode .fbt-preview-container {
+            max-width: 1440px !important;
+            padding-left: 1.25rem !important;
+            padding-right: 1.25rem !important;
+            transition: max-width 0.3s ease, padding 0.3s ease;
+        }
+
+        /* 1-Row Featured Products Grid */
+        body.wide-lens-mode .sample-products-grid {
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 1.25rem !important;
+            margin-top: 1.25rem !important;
+        }
+
+        /* ==========================================================================
+           50% SLEEK HEIGHT MODE (Reduced Margins, Paddings, & Card Heights Across All Sections)
+           ========================================================================== */
+        body.compact-height-mode .site-main {
+            margin: 1.5rem auto !important;
+        }
+
+        /* Hero: Sleek 340px */
+        body.compact-height-mode .hero-split-section {
+            padding: 1.85rem 2.25rem !important;
+            min-height: 340px !important;
+            margin-bottom: 1.75rem !important;
+            border-radius: 18px !important;
+            gap: 2.25rem !important;
+            transition: all 0.3s ease;
+        }
+        body.compact-height-mode .hero-split-left .store-badge {
+            padding: 0.28rem 0.85rem !important;
+            font-size: 0.76rem !important;
+            margin-bottom: 0.65rem !important;
+        }
+        body.compact-height-mode .hero-split-left h1 {
+            font-size: 1.95rem !important;
+            margin-bottom: 0.55rem !important;
+            line-height: 1.2 !important;
+        }
+        body.compact-height-mode .hero-split-left .hero-desc {
+            font-size: 0.9rem !important;
+            line-height: 1.45 !important;
+            margin-bottom: 1rem !important;
+            max-width: 540px !important;
+        }
+        body.compact-height-mode .hero-split-left .hero-cta-group {
+            margin-bottom: 1rem !important;
+            gap: 0.65rem !important;
+        }
+        body.compact-height-mode .hero-split-left .btn-primary,
+        body.compact-height-mode .hero-split-left .btn-secondary {
+            padding: 0.6rem 1.45rem !important;
+            font-size: 0.9rem !important;
+        }
+        body.compact-height-mode .hero-features-list {
+            font-size: 0.76rem !important;
+            gap: 0.85rem !important;
+        }
+
+        /* Slimmer Ajio Carousel Cards in Hero */
+        body.compact-height-mode .ajio-card {
+            width: 215px !important;
+            height: 275px !important;
+            border-radius: 12px !important;
+        }
+        body.compact-height-mode .ajio-card-img-wrap {
+            height: 180px !important;
+            padding: 0.85rem !important;
+        }
+        body.compact-height-mode .ajio-card-info {
+            padding: 0.65rem 0.85rem !important;
+        }
+        body.compact-height-mode .ajio-item-title {
+            font-size: 0.82rem !important;
+            line-height: 1.25 !important;
+        }
+        body.compact-height-mode .ajio-item-offer {
+            font-size: 0.88rem !important;
+        }
+        body.compact-height-mode .ajio-badge {
+            font-size: 0.65rem !important;
+            padding: 0.2rem 0.5rem !important;
+        }
+
+        /* Brands Carousel: Sleek 50% Height */
+        body.compact-height-mode .brands-section {
+            padding: 1.25rem 0 !important;
+            margin-bottom: 1.75rem !important;
+        }
+        body.compact-height-mode .brands-header {
+            margin-bottom: 0.85rem !important;
+        }
+        body.compact-height-mode .brands-badge {
+            font-size: 0.68rem !important;
+            padding: 0.2rem 0.5rem !important;
+            margin-bottom: 0.35rem !important;
+        }
+        body.compact-height-mode .brands-title {
+            font-size: 1.35rem !important;
+            margin-bottom: 0.2rem !important;
+        }
+        body.compact-height-mode .brands-subtitle {
+            font-size: 0.82rem !important;
+        }
+        body.compact-height-mode .brand-card {
+            padding: 0.75rem 0.85rem !important;
+            width: 155px !important;
+            height: 125px !important;
+        }
+        body.compact-height-mode .brand-emblem {
+            height: 40px !important;
+            margin-bottom: 0.35rem !important;
+        }
+        body.compact-height-mode .brand-logo-img {
+            max-height: 32px !important;
+        }
+        body.compact-height-mode .brand-desc {
+            font-size: 0.72rem !important;
+            margin-bottom: 0.25rem !important;
+        }
+        body.compact-height-mode .brand-link-pill {
+            font-size: 0.68rem !important;
+        }
+
+        /* Categories Section: Sleek 50% Height */
+        body.compact-height-mode .category-section {
+            margin-bottom: 1.75rem !important;
+        }
+        body.compact-height-mode .section-header {
+            margin-bottom: 0.85rem !important;
+        }
+        body.compact-height-mode .section-header h2 {
+            font-size: 1.45rem !important;
+            margin-bottom: 0.25rem !important;
+        }
+        body.compact-height-mode .section-header p {
+            font-size: 0.82rem !important;
+        }
+        body.compact-height-mode .category-grid {
+            gap: 1rem !important;
+        }
+        body.compact-height-mode .category-card {
+            padding: 1rem 1.15rem !important;
+            min-height: 130px !important;
+        }
+        body.compact-height-mode .category-icon {
+            font-size: 1.65rem !important;
+            margin-bottom: 0.35rem !important;
+        }
+        body.compact-height-mode .category-card h3 {
+            font-size: 0.98rem !important;
+            margin-bottom: 0.2rem !important;
+        }
+        body.compact-height-mode .category-card p {
+            font-size: 0.78rem !important;
+            line-height: 1.35 !important;
+            margin-bottom: 0.5rem !important;
+        }
+        body.compact-height-mode .category-link {
+            font-size: 0.76rem !important;
+        }
+
+        /* Featured Products Grid: Sleek 50% Height */
+        body.compact-height-mode .products-section {
+            margin-bottom: 1.75rem !important;
+        }
+        body.compact-height-mode .sample-products-grid {
+            gap: 1rem !important;
+            margin-top: 0.85rem !important;
+        }
+        body.compact-height-mode .sample-product-card {
+            padding: 0.85rem !important;
+        }
+        body.compact-height-mode .sample-product-img {
+            height: 135px !important;
+            padding: 0.45rem !important;
+            margin-bottom: 0.55rem !important;
+        }
+        body.compact-height-mode .sample-product-title {
+            font-size: 0.88rem !important;
+            min-height: 2.3rem !important;
+            margin-bottom: 0.35rem !important;
+            line-height: 1.3 !important;
+        }
+        body.compact-height-mode .sample-price-box {
+            font-size: 0.98rem !important;
+            margin-bottom: 0.65rem !important;
+        }
+        body.compact-height-mode .sample-add-to-cart {
+            padding: 0.55rem 0.8rem !important;
+            font-size: 0.82rem !important;
+        }
+        body.compact-height-mode .products-footer-cta {
+            margin-top: 0.85rem !important;
+        }
+        body.compact-height-mode .products-footer-cta .btn-primary {
+            padding: 0.55rem 1.4rem !important;
+            font-size: 0.88rem !important;
+        }
+
+        /* Frequently Bought Together Bundle: Sleek 50% Height */
+        body.compact-height-mode .fbt-preview-container {
+            margin-bottom: 1.75rem !important;
+        }
+        body.compact-height-mode .sribalaji-fbt-section {
+            padding: 1.25rem 1.5rem !important;
+            margin: 0 !important;
+            border-radius: 14px !important;
+        }
+        body.compact-height-mode .fbt-header {
+            margin-bottom: 0.85rem !important;
+        }
+        body.compact-height-mode .fbt-title {
+            font-size: 1.2rem !important;
+        }
+        body.compact-height-mode .fbt-bundle-wrap {
+            padding: 1rem 1.25rem !important;
+            gap: 1rem !important;
+            border-radius: 10px !important;
+        }
+        body.compact-height-mode .fbt-item {
+            padding: 0.75rem !important;
+            min-width: 210px !important;
+            border-radius: 10px !important;
+        }
+        body.compact-height-mode .fbt-thumb-wrap {
+            width: 62px !important;
+            height: 62px !important;
+        }
+        body.compact-height-mode .fbt-item-title {
+            font-size: 0.85rem !important;
+            margin-bottom: 0.2rem !important;
+        }
+        body.compact-height-mode .fbt-item-price {
+            font-size: 0.92rem !important;
+        }
+        body.compact-height-mode .fbt-action-box {
+            padding: 1rem 1.25rem !important;
+            min-width: 210px !important;
+        }
+        body.compact-height-mode .fbt-total-price {
+            font-size: 1.25rem !important;
+        }
+        body.compact-height-mode .fbt-add-bundle-btn {
+            padding: 0.65rem 1rem !important;
+            font-size: 0.88rem !important;
+        }
+
+        /* ==========================================================================
+           FEATURE 2.4: SLEEK SINGLE-LINE GOOGLE REVIEWS TICKER (Pause-on-Hover)
+           ========================================================================== */
+        .reviews-ticker-section {
+            margin-bottom: 2rem;
+            padding: 0.85rem 0;
+            transition: all 0.3s ease;
+        }
+        .reviews-ticker-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            background: #ffffff;
+            border: 1px solid #dce7e1;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(15, 60, 40, 0.04);
+            padding: 0.75rem 1.25rem;
+            overflow: hidden;
+        }
+        .reviews-ticker-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-shrink: 0;
+            padding-right: 1.25rem;
+            border-right: 1px solid #e2e8f0;
+        }
+        .reviews-ticker-badge .google-icon-box {
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            border-radius: 50%;
+            border: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+        .reviews-ticker-badge-text {
+            display: flex;
+            flex-direction: column;
+        }
+        .reviews-ticker-badge-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            white-space: nowrap;
+        }
+        .reviews-ticker-badge-title .stars {
+            color: #f59e0b;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+        .reviews-ticker-badge-subtitle {
+            font-size: 0.72rem;
+            color: #64748b;
+            white-space: nowrap;
+        }
+        .reviews-ticker-rate-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-decoration: none;
+            flex-shrink: 0;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+        .reviews-ticker-rate-btn:hover {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+        }
+        .reviews-ticker-viewport {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+        }
+        .reviews-ticker-track {
+            display: flex;
+            gap: 1.25rem;
+            width: max-content;
+            animation: tickerGlide 32s linear infinite;
+            will-change: transform;
+        }
+        .reviews-ticker-viewport:hover .reviews-ticker-track {
+            animation-play-state: paused;
+        }
+        @keyframes tickerGlide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .ticker-review-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            padding: 0.35rem 0.85rem 0.35rem 0.45rem;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .ticker-review-pill:hover {
+            background: #ffffff;
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            transform: translateY(-1px);
+        }
+        .ticker-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.72rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .avatar-blue { background: #3b82f6; }
+        .avatar-teal { background: #0d9488; }
+        .avatar-purple { background: #8b5cf6; }
+        .avatar-indigo { background: #6366f1; }
+        .ticker-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.78rem;
+            white-space: nowrap;
+        }
+        .ticker-name {
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .ticker-stars {
+            color: #f59e0b;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+        }
+        .ticker-tag {
+            font-size: 0.7rem;
+            color: #059669;
+            background: #ecfdf5;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .ticker-time {
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+        .ticker-verified {
+            font-size: 0.68rem;
+            color: #2563eb;
+            background: #eff6ff;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           SECONDARY LINKS HUB (Replaces Tall FAQ Accordion & Bulk Banner)
+           ========================================================================== */
+        .home-secondary-links-strip {
+            margin-bottom: 2.25rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hub-strip-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+        @media (max-width: 768px) {
+            .hub-strip-grid {
+                grid-template-columns: 1fr;
+            }
+            .reviews-ticker-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .reviews-ticker-badge {
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+                padding-right: 0;
+                padding-bottom: 0.75rem;
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+        .hub-link-card {
+            background: #ffffff;
+            border: 1px solid #dce7e1;
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.25rem;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 2px 8px rgba(15, 60, 40, 0.04);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .hub-link-card:hover {
+            border-color: #059669;
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.1);
+            transform: translateY(-2px);
+        }
+        .hub-card-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .hub-icon-wrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+        }
+        .faq-icon-bg {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+        .bulk-icon-bg {
+            background: #ecfdf5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+        .hub-card-text h3 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 0.35rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .hub-card-text p {
+            font-size: 0.82rem;
+            color: #64748b;
+            margin: 0 0 0.5rem 0;
+            line-height: 1.4;
+        }
+        .hub-card-meta {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #059669;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .hub-action-arrow {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        .hub-link-card:hover .hub-action-arrow {
+            background: #059669;
+            color: #ffffff;
+            transform: translateX(4px);
+        }
+
+        /* 50% SLEEK HEIGHT OVERRIDES FOR TICKER & SECONDARY CARDS */
+        body.compact-height-mode .reviews-ticker-section {
+            margin-bottom: 1.25rem !important;
+            padding: 0.4rem 0 !important;
+        }
+        body.compact-height-mode .reviews-ticker-container {
+            padding: 0.5rem 1rem !important;
+        }
+        body.compact-height-mode .reviews-ticker-badge {
+            padding-right: 1rem !important;
+            gap: 0.6rem !important;
+        }
+        body.compact-height-mode .reviews-ticker-badge .google-icon-box {
+            width: 28px !important;
+            height: 28px !important;
+        }
+        body.compact-height-mode .reviews-ticker-badge-title {
+            font-size: 0.78rem !important;
+        }
+        body.compact-height-mode .reviews-ticker-badge-subtitle {
+            font-size: 0.68rem !important;
+        }
+        body.compact-height-mode .reviews-ticker-rate-btn {
+            padding: 0.25rem 0.65rem !important;
+            font-size: 0.72rem !important;
+        }
+        body.compact-height-mode .ticker-review-pill {
+            padding: 0.25rem 0.75rem 0.25rem 0.35rem !important;
+        }
+        body.compact-height-mode .ticker-avatar {
+            width: 24px !important;
+            height: 24px !important;
+            font-size: 0.68rem !important;
+        }
+        body.compact-height-mode .ticker-content {
+            font-size: 0.74rem !important;
+        }
+
+        body.compact-height-mode .home-secondary-links-strip {
+            margin-bottom: 1.75rem !important;
+        }
+        body.compact-height-mode .hub-link-card {
+            padding: 0.95rem 1.25rem !important;
+            border-radius: 12px !important;
+        }
+        body.compact-height-mode .hub-icon-wrap {
+            width: 38px !important;
+            height: 38px !important;
+            font-size: 1.2rem !important;
+        }
+        body.compact-height-mode .hub-card-text h3 {
+            font-size: 0.95rem !important;
+            margin-bottom: 0.2rem !important;
+        }
+        body.compact-height-mode .hub-card-text p {
+            font-size: 0.78rem !important;
+            margin-bottom: 0.35rem !important;
+        }
+        body.compact-height-mode .hub-card-meta {
+            font-size: 0.68rem !important;
+        }
+        body.compact-height-mode .hub-action-arrow {
+            width: 32px !important;
+            height: 32px !important;
+            font-size: 0.95rem !important;
+        }
+
+        /* Footer: Sleek 50% Height */
+        body.compact-height-mode .site-footer {
+            padding: 2.25rem 0 1.25rem !important;
+        }
+        body.compact-height-mode .footer-container {
+            gap: 1.75rem !important;
+        }
+        body.compact-height-mode .footer-col h4 {
+            font-size: 0.92rem !important;
+            margin-bottom: 0.65rem !important;
+        }
+        body.compact-height-mode .footer-links li,
+        body.compact-height-mode .footer-info-list li {
+            font-size: 0.82rem !important;
+            margin-bottom: 0.4rem !important;
+        }
+        body.compact-height-mode .footer-bottom {
+            margin-top: 1.5rem !important;
+            padding-top: 1rem !important;
+            font-size: 0.78rem !important;
+        }
+
+        /* 10% Dim Ambient Background Drift Track */
+        .hero-ambient-watermark-wrap {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+            display: none;
+        }
+
+        body.watermark-active .hero-ambient-watermark-wrap {
+            display: block;
+        }
+
+        .hero-ambient-watermark-track {
+            display: flex;
+            gap: 3.5rem;
+            width: max-content;
+            height: 100%;
+            align-items: center;
+            animation: ambientWatermarkScroll 48s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes ambientWatermarkScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ambient-watermark-item {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            filter: grayscale(100%) contrast(110%);
+            opacity: 0.09;
+            mix-blend-mode: screen;
+            transform: rotate(-5deg);
+            flex-shrink: 0;
         }
     </style>
 </head>
-<body>
+<body class="wide-lens-mode watermark-active compact-height-mode" data-theme="teal-mist">
 
-    <!-- Local Preview Banner -->
+    <!-- Local Preview Banner & Prototype Controls -->
     <div class="preview-ribbon">
-        👀 LOCAL & GITHUB PAGES PREVIEW MODE &bull; Sri Balaji Books Custom Starter Theme
+        <div class="preview-ribbon-content">
+            <div class="preview-ribbon-left">
+                <span class="preview-ribbon-title">PROTOTYPE LAB: Wide Lens &bull; 50% Height &bull; Background Tints</span>
+            </div>
+            <div class="preview-controls-group">
+                <!-- Height Toggle -->
+                <button type="button" class="ctrl-mode-btn is-active" id="btnCompactHeight" onclick="toggleCompactHeight()">⚡ 50% Sleek Height</button>
+
+                <!-- Wide Lens Toggle -->
+                <button type="button" class="ctrl-mode-btn is-active" id="btnWideLens" onclick="setWideLensMode(true)">Wide Lens (1440px)</button>
+                <button type="button" class="ctrl-mode-btn" id="btnClassic" onclick="setWideLensMode(false)">Classic (1200px)</button>
+
+                <!-- Color Palette Switcher -->
+                <div class="palette-switcher">
+                    <span class="palette-label">Background:</span>
+                    <button type="button" class="palette-pill" id="palTeaGreen" onclick="setBgTheme('tea-green')" title="Pale Tea Green">🍵 Pale Tea Green</button>
+                    <button type="button" class="palette-pill is-active" id="palTealMist" onclick="setBgTheme('teal-mist')" title="Soft Teal Mist">🩵 Soft Teal Mist</button>
+                    <button type="button" class="palette-pill" id="palParchment" onclick="setBgTheme('parchment')" title="Bookstore Warm Ivory">📜 Warm Ivory</button>
+                    <button type="button" class="palette-pill" id="palWhite" onclick="setBgTheme('white')" title="Classic White">⚪ Crisp White</button>
+                </div>
+
+                <!-- Watermark Checkbox -->
+                <label class="ctrl-toggle-label">
+                    <input type="checkbox" id="watermarkToggle" onchange="toggleWatermark(this.checked)" checked>
+                    <span>10% Ambient Drift</span>
+                </label>
+            </div>
+        </div>
     </div>
+
+    <!-- Top Announcement & Free Delivery Bar (Header Feature 1.1) -->
+    <div class="top-announcement-bar" id="topAnnouncementBar" role="region" aria-label="Store Announcement">
+        <div class="top-bar-container">
+            
+            <!-- Left: Service Area & Phone Support -->
+            <div class="top-bar-left">
+                <span class="top-bar-location">📍 Visakhapatnam Local Delivery</span>
+                <span class="top-bar-divider">|</span>
+                <a href="tel:+919985181133" class="top-bar-contact" title="Direct Phone Support">📞 Helpline: +91 99851 81133</a>
+            </div>
+
+            <!-- Center: Interactive Announcement Ticker / Switcher with Quick Toggle -->
+            <div class="top-bar-center">
+                <button type="button" class="announcement-toggle-btn prev" onclick="switchAnnouncement(-1)" aria-label="Previous Announcement">&#10094;</button>
+                <div class="announcement-slider-viewport" id="announcementViewport">
+                    <!-- Slide 1: Primary Value Proposition - Free Delivery & COD -->
+                    <div class="announcement-slide is-active" data-index="0">
+                        <span class="announcement-pill pill-cod">COD ACTIVE</span>
+                        <span>🚚 <strong>Free Delivery in Visakhapatnam</strong> on orders over <strong>₹499</strong> <span class="mobile-hide">&bull; Cash on Delivery Available</span></span>
+                    </div>
+                    <!-- Slide 2: Express Dispatch for School & Office Essentials -->
+                    <div class="announcement-slide" data-index="1">
+                        <span class="announcement-pill pill-dispatch">EXPRESS DISPATCH</span>
+                        <span>⚡ <strong>Same-Day Dispatch</strong> on School Notebooks, Art &amp; Office Supplies!</span>
+                    </div>
+                    <!-- Slide 3: School Reopening Kits & Bulk Bundles -->
+                    <div class="announcement-slide" data-index="2">
+                        <span class="announcement-pill pill-offer">BULK BUNDLES</span>
+                        <span>🎒 <strong>School Reopening Kits</strong> &amp; Classroom Sets &bull; Special Institutional Discounts</span>
+                    </div>
+                </div>
+                <button type="button" class="announcement-toggle-btn next" onclick="switchAnnouncement(1)" aria-label="Next Announcement">&#10095;</button>
+            </div>
+
+            <!-- Right: WhatsApp Quick-Order & Dismiss Button -->
+            <div class="top-bar-right">
+                <a href="https://wa.me/919985181133?text=Hi%20Sri%20Balaji%20Books%2C%20I%20would%20like%20to%20order%20stationery%20and%20books" target="_blank" class="top-bar-wa-btn" rel="noopener noreferrer">
+                    <span>💬</span> Order on WhatsApp
+                </a>
+                <button type="button" class="top-bar-dismiss-btn" onclick="dismissAnnouncementBar()" aria-label="Dismiss Announcement Bar" title="Dismiss">&times;</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+    // Top Announcement Bar Slider & Dismissal Engine
+    (function() {
+        var slides = document.querySelectorAll('.announcement-slide');
+        if (!slides || !slides.length) return;
+
+        var currentIdx = 0;
+        var autoPlayTimer = null;
+        var bar = document.getElementById('topAnnouncementBar');
+        var restoreBtn = document.getElementById('restoreAnnouncementBtn');
+
+        // Check if dismissed in this browser session
+        try {
+            if (sessionStorage.getItem('sb_announcement_dismissed') === 'true') {
+                if (bar) bar.classList.add('is-dismissed');
+                if (restoreBtn) restoreBtn.style.display = 'inline-block';
+                return;
+            }
+        } catch(e) {}
+
+        function showSlide(index) {
+            slides.forEach(function(slide, idx) {
+                if (idx === index) {
+                    slide.classList.add('is-active');
+                } else {
+                    slide.classList.remove('is-active');
+                }
+            });
+            currentIdx = index;
+        }
+
+        window.switchAnnouncement = function(dir) {
+            var nextIdx = currentIdx + dir;
+            if (nextIdx >= slides.length) nextIdx = 0;
+            if (nextIdx < 0) nextIdx = slides.length - 1;
+            showSlide(nextIdx);
+            resetTimer();
+        };
+
+        window.dismissAnnouncementBar = function() {
+            if (bar) {
+                bar.classList.add('is-dismissed');
+                if (restoreBtn) restoreBtn.style.display = 'inline-block';
+                try {
+                    sessionStorage.setItem('sb_announcement_dismissed', 'true');
+                } catch(e) {}
+            }
+        };
+
+        window.restoreAnnouncementBar = function() {
+            if (bar) {
+                bar.classList.remove('is-dismissed');
+                if (restoreBtn) restoreBtn.style.display = 'none';
+                try {
+                    sessionStorage.removeItem('sb_announcement_dismissed');
+                } catch(e) {}
+                resetTimer();
+            }
+        };
+
+        function startTimer() {
+            if (autoPlayTimer) clearInterval(autoPlayTimer);
+            autoPlayTimer = setInterval(function() {
+                var nextIdx = (currentIdx + 1) % slides.length;
+                showSlide(nextIdx);
+            }, 4500);
+        }
+
+        function resetTimer() {
+            if (autoPlayTimer) clearInterval(autoPlayTimer);
+            startTimer();
+        }
+
+        if (bar) {
+            bar.addEventListener('mouseenter', function() {
+                if (autoPlayTimer) clearInterval(autoPlayTimer);
+            });
+            bar.addEventListener('mouseleave', function() {
+                startTimer();
+            });
+        }
+
+        startTimer();
+    })();
+    </script>
 
     <!-- Header -->
     <header class="site-header">
         <div class="header-container">
             <div class="site-branding">
                 <a href="#" class="brand-title">Sri Balaji Books</a>
-                <div class="brand-tagline">Read . Create . Play</div>
+                <div class="brand-tagline">Books &bull; Stationery &bull; Art Supplies &bull; Office Essentials</div>
             </div>
 
             <nav class="header-nav">
                 <ul>
-                    <li><a href="#" style="color: var(--primary);">Home</a></li>
-                    <li><a href="#">Shop</a></li>
-                    <li><a href="#">Categories</a></li>
+                    <li><a href="preview.html" style="color: var(--primary);">Home</a></li>
+                    <li><a href="#featured-products">Shop</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="bulk-orders.html">Bulk Orders</a></li>
                     <li><a href="#">Cart (0)</a></li>
                 </ul>
             </nav>
@@ -111,107 +1140,899 @@
     <!-- Main Content -->
     <main class="site-main">
 
-        <!-- Hero Section -->
-        <section class="hero-box">
-            <div class="git-badge">
-                🚀 Git Continuous Deployment Active &bull; Branch: main
+        <!-- 50/50 Split Storefront Hero Section (Ajio-Inspired) -->
+        <section class="hero-split-section">
+            <!-- Ambient 10% Dim Watermark Scrolling Background Drift -->
+            <div class="hero-ambient-watermark-wrap" id="ambientWatermarkWrap">
+                <div class="hero-ambient-watermark-track">
+                    <img src="./images/hero-product-1.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-2.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-3.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-4.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-5.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-6.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-7.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-8.jpg" alt="" class="ambient-watermark-item">
+                    <!-- Duplicate for infinite seamless drift -->
+                    <img src="./images/hero-product-1.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-2.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-3.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-4.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-5.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-6.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-7.jpg" alt="" class="ambient-watermark-item">
+                    <img src="./images/hero-product-8.jpg" alt="" class="ambient-watermark-item">
+                </div>
             </div>
-            <h1>Welcome to Sri Balaji Books</h1>
-            <p>
-                Read . Create . Play &bull; Premium Office Stationery, School Supplies, Art &amp; Craft, Bags, and Novelty Gifts.
-            </p>
-            <a href="#featured-products" class="btn-primary">
-                Shop Our Collection &rarr;
-            </a>
+
+            <!-- Left Column: Brand Narrative & CTAs (Zero background image clutter) -->
+            <div class="hero-split-left">
+                <div class="store-badge">
+                    ✨ Premium Stationery &bull; School Supplies &bull; Office Essentials
+                </div>
+                <h1>Empowering Young Minds &amp; Modern Workplaces</h1>
+                <p class="hero-desc">
+                    Your trusted neighborhood bookstore and school partner. Discover authentic Classmate notebooks, Pilot pens, Faber-Castell art gear, and custom student kit bundles.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="#featured-products" class="btn-primary">
+                        Shop All Products &rarr;
+                    </a>
+                    <a href="#categories" class="btn-secondary">
+                        Explore Categories &darr;
+                    </a>
+                </div>
+                <div class="hero-features-list">
+                    <span>🚚 Cash on Delivery (COD) Active</span>
+                    <span>🏷️ 100% Genuine Brands</span>
+                    <span>🏫 School &amp; Office Bulk Kits</span>
+                </div>
+            </div>
+
+            <!-- Right Column: Ajio-Style Large Product Showcase Carousel -->
+            <div class="hero-split-right">
+                <div class="hero-carousel-header">
+                    <div class="carousel-title-group">
+                        <span class="live-dot"></span>
+                        <span class="carousel-title">Trending In Store</span>
+                    </div>
+                    <div class="carousel-nav-arrows">
+                        <button type="button" class="c-arrow prev" onclick="scrollHeroCarousel(-1)" aria-label="Previous Products">&#10094;</button>
+                        <button type="button" class="c-arrow next" onclick="scrollHeroCarousel(1)" aria-label="Next Products">&#10095;</button>
+                    </div>
+                </div>
+
+                <div class="hero-carousel-viewport" id="heroProductViewport">
+                    <div class="hero-carousel-track">
+                        <!-- Card 1 -->
+                        <a href="#featured-products" class="ajio-card">
+                            <div class="ajio-card-img-wrap">
+                                <span class="ajio-badge">MIN. 20% OFF*</span>
+                                <img src="./images/hero-product-1.jpg" alt="Classmate Pulse Notebook" loading="lazy">
+                            </div>
+                            <div class="ajio-card-info">
+                                <div class="ajio-info-main">
+                                    <span class="ajio-item-title">Classmate Pulse Spiral Notebook</span>
+                                    <span class="ajio-item-offer"><del>₹130</del> ₹110</span>
+                                </div>
+                                <div class="ajio-info-divider"></div>
+                                <div class="ajio-info-brand">
+                                    <span class="ajio-brand-name">Classmate</span>
+                                    <span class="ajio-brand-tag">&amp; More</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!-- Card 2 -->
+                        <a href="#featured-products" class="ajio-card">
+                            <div class="ajio-card-img-wrap">
+                                <span class="ajio-badge">TOP SELLER</span>
+                                <img src="./images/hero-product-2.jpg" alt="Pilot Hi-Tecpoint V5" loading="lazy">
+                            </div>
+                            <div class="ajio-card-info">
+                                <div class="ajio-info-main">
+                                    <span class="ajio-item-title">Pilot Hi-Tecpoint V5 (Pack of 3)</span>
+                                    <span class="ajio-item-offer"><del>₹210</del> ₹195</span>
+                                </div>
+                                <div class="ajio-info-divider"></div>
+                                <div class="ajio-info-brand">
+                                    <span class="ajio-brand-name">Pilot</span>
+                                    <span class="ajio-brand-tag">&amp; More</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!-- Card 3 -->
+                        <a href="#featured-products" class="ajio-card">
+                            <div class="ajio-card-img-wrap">
+                                <span class="ajio-badge">ART SPECIAL</span>
+                                <img src="./images/hero-product-3.jpg" alt="Faber-Castell Pastels" loading="lazy">
+                            </div>
+                            <div class="ajio-card-info">
+                                <div class="ajio-info-main">
+                                    <span class="ajio-item-title">Faber-Castell Triangular Pastels</span>
+                                    <span class="ajio-item-offer"><del>₹160</del> ₹140</span>
+                                </div>
+                                <div class="ajio-info-divider"></div>
+                                <div class="ajio-info-brand">
+                                    <span class="ajio-brand-name">Faber-Castell</span>
+                                    <span class="ajio-brand-tag">&amp; More</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!-- Card 4 -->
+                        <a href="#featured-products" class="ajio-card">
+                            <div class="ajio-card-img-wrap">
+                                <span class="ajio-badge">EXAM KIT</span>
+                                <img src="./images/hero-product-6.jpg" alt="Casio Calculator" loading="lazy">
+                            </div>
+                            <div class="ajio-card-info">
+                                <div class="ajio-info-main">
+                                    <span class="ajio-item-title">Casio fx-82MS 2nd Edition</span>
+                                    <span class="ajio-item-offer"><del>₹595</del> ₹545</span>
+                                </div>
+                                <div class="ajio-info-divider"></div>
+                                <div class="ajio-info-brand">
+                                    <span class="ajio-brand-name">Casio</span>
+                                    <span class="ajio-brand-tag">&amp; More</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!-- Card 5 -->
+                        <a href="#featured-products" class="ajio-card">
+                            <div class="ajio-card-img-wrap">
+                                <span class="ajio-badge">POPULAR</span>
+                                <img src="./images/hero-product-5.jpg" alt="Camel Oil Pastels" loading="lazy">
+                            </div>
+                            <div class="ajio-card-info">
+                                <div class="ajio-info-main">
+                                    <span class="ajio-item-title">Camel Oil Pastels (10 Shades Set)</span>
+                                    <span class="ajio-item-offer"><del>₹80</del> ₹65</span>
+                                </div>
+                                <div class="ajio-info-divider"></div>
+                                <div class="ajio-info-brand">
+                                    <span class="ajio-brand-name">Camlin</span>
+                                    <span class="ajio-brand-tag">&amp; More</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!-- Card 6 -->
+                        <a href="#featured-products" class="ajio-card">
+                            <div class="ajio-card-img-wrap">
+                                <span class="ajio-badge">ECO TOTE</span>
+                                <img src="./images/hero-product-7.jpg" alt="Eco Canvas Tote" loading="lazy">
+                            </div>
+                            <div class="ajio-card-info">
+                                <div class="ajio-info-main">
+                                    <span class="ajio-item-title">Sri Balaji Eco Canvas Tote Bag</span>
+                                    <span class="ajio-item-offer"><del>₹149</del> ₹119</span>
+                                </div>
+                                <div class="ajio-info-divider"></div>
+                                <div class="ajio-info-brand">
+                                    <span class="ajio-brand-name">Sri Balaji</span>
+                                    <span class="ajio-brand-tag">&amp; More</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!-- Card 7 -->
+                        <a href="#featured-products" class="ajio-card">
+                            <div class="ajio-card-img-wrap">
+                                <span class="ajio-badge">KIDS PICK</span>
+                                <img src="./images/hero-product-4.jpg" alt="Train Sharpener" loading="lazy">
+                            </div>
+                            <div class="ajio-card-info">
+                                <div class="ajio-info-main">
+                                    <span class="ajio-item-title">Train Sharpener &amp; Eraser 2-in-1</span>
+                                    <span class="ajio-item-offer"><del>₹149</del> ₹110</span>
+                                </div>
+                                <div class="ajio-info-divider"></div>
+                                <div class="ajio-info-brand">
+                                    <span class="ajio-brand-name">Sri Balaji</span>
+                                    <span class="ajio-brand-tag">&amp; More</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!-- Card 8 -->
+                        <a href="#featured-products" class="ajio-card">
+                            <div class="ajio-card-img-wrap">
+                                <span class="ajio-badge">CAMPUS PICK</span>
+                                <img src="./images/hero-product-8.jpg" alt="Classmate Long Book" loading="lazy">
+                            </div>
+                            <div class="ajio-card-info">
+                                <div class="ajio-info-main">
+                                    <span class="ajio-item-title">Classmate Long Exercise Book</span>
+                                    <span class="ajio-item-offer"><del>₹90</del> ₹70</span>
+                                </div>
+                                <div class="ajio-info-divider"></div>
+                                <div class="ajio-info-brand">
+                                    <span class="ajio-brand-name">Classmate</span>
+                                    <span class="ajio-brand-tag">&amp; More</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <!-- Architecture Highlights -->
-        <section class="features-grid">
-            <div class="feature-card">
-                <h3>⚡ Zero Bloat Architecture</h3>
-                <p>Built from scratch without fragile 3rd-party demo importers. 100% reliable, clean, and instant page loads.</p>
+        <script>
+        function scrollHeroCarousel(dir) {
+            var el = document.getElementById('heroProductViewport');
+            if (el) {
+                el.scrollBy({ left: 305 * dir, behavior: 'smooth' });
+            }
+        }
+        (function() {
+            var el = document.getElementById('heroProductViewport');
+            if (!el) return;
+            var hovered = false;
+            el.addEventListener('mouseenter', function() { hovered = true; });
+            el.addEventListener('mouseleave', function() { hovered = false; });
+            setInterval(function() {
+                if (!hovered && el) {
+                    if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 15) {
+                        el.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        el.scrollBy({ left: 305, behavior: 'smooth' });
+                    }
+                }
+            }, 4000);
+        })();
+        </script>
+
+        <!-- Customer Trust & Value Pillars -->
+        <section class="trust-grid">
+            <div class="trust-card">
+                <div class="trust-icon">🚚</div>
+                <div class="trust-text">
+                    <h3>Fast Delivery &amp; COD</h3>
+                    <p>Doorstep delivery with Cash on Delivery available across all items.</p>
+                </div>
             </div>
-            <div class="feature-card">
-                <h3>🗄️ Hostinger Database Powered</h3>
-                <p>Directly connected to your Hostinger MySQL database. All products, categories, and orders stay permanently safe.</p>
+            <div class="trust-card">
+                <div class="trust-icon">🏷️</div>
+                <div class="trust-text">
+                    <h3>100% Authentic Brands</h3>
+                    <p>Classmate, Doms, Camlin, Faber-Castell, Apsara, and Reynolds.</p>
+                </div>
             </div>
-            <div class="feature-card">
-                <h3>🔄 Git-Driven Workflow</h3>
-                <p>Edit code in VS Code on your Mac, run <code>git push</code>, and Hostinger automatically updates your live site.</p>
+            <div class="trust-card">
+                <div class="trust-icon">🏫</div>
+                <div class="trust-text">
+                    <h3>School &amp; Institutional Supply</h3>
+                    <p>Bulk pricing and customized starter kits for schools, colleges, and offices.</p>
+                </div>
+            </div>
+            <div class="trust-card">
+                <div class="trust-icon">🛡️</div>
+                <div class="trust-text">
+                    <h3>Customer Satisfaction</h3>
+                    <p>Hassle-free support, easy exchanges, and friendly neighborhood service.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trusted Brand Partner Logo Strip / Carousel (Feature 2.2) -->
+        <section class="brands-section" aria-label="Trusted Brand Partners">
+            <div class="brands-container">
+                <div class="brands-header">
+                    <span class="brands-badge">✨ 100% AUTHENTIC PARTNERS</span>
+                    <h2 class="brands-title">Trusted Stationery Brands You Know &amp; Love</h2>
+                    <p class="brands-subtitle">Direct from official manufacturers with genuine quality assurance for schools &amp; offices</p>
+                </div>
+
+                <div class="brands-carousel-wrapper">
+                    <button type="button" class="brands-nav-btn prev" onclick="scrollBrandsCarousel(-1)" aria-label="Previous Brands">&#10094;</button>
+                    <div class="brands-carousel-viewport" id="brandsCarouselViewport">
+                        <div class="brands-track">
+                            <a href="#classmate" class="brand-card brand-classmate" title="Shop ITC Classmate">
+                                <div class="brand-emblem">
+                                    <img src="./images/brands/classmate.svg" alt="ITC Classmate" class="brand-logo-img brand-logo-classmate" loading="lazy">
+                                </div>
+                                <span class="brand-desc">Notebooks &bull; Pens &bull; Geometry</span>
+                                <span class="brand-link-pill">Explore Classmate &rarr;</span>
+                            </a>
+
+                            <a href="#apsara" class="brand-card brand-apsara" title="Shop Apsara Stationery & Pencils">
+                                <div class="brand-emblem">
+                                    <img src="./images/brands/apsara.png" alt="Apsara Stationery" class="brand-logo-img brand-logo-apsara" loading="lazy">
+                                </div>
+                                <span class="brand-desc">Platinum &bull; Matt &bull; Art Supplies</span>
+                                <span class="brand-link-pill">Explore Apsara &rarr;</span>
+                            </a>
+
+                            <a href="#doms" class="brand-card brand-doms" title="Shop Doms Stationery & Art">
+                                <div class="brand-emblem">
+                                    <img src="./images/brands/doms.png" alt="DOMS Stationery" class="brand-logo-img brand-logo-doms" loading="lazy">
+                                </div>
+                                <span class="brand-desc">Pencils &bull; Crayons &bull; Kits</span>
+                                <span class="brand-link-pill">Explore Doms &rarr;</span>
+                            </a>
+
+                            <a href="#camlin" class="brand-card brand-camlin" title="Shop Kokuyo Camlin">
+                                <div class="brand-emblem">
+                                    <img src="./images/brands/camlin.svg" alt="Kokuyo Camlin" class="brand-logo-img brand-logo-camlin" loading="lazy">
+                                </div>
+                                <span class="brand-desc">Camel Colors &bull; Art &bull; Pastels</span>
+                                <span class="brand-link-pill">Explore Camlin &rarr;</span>
+                            </a>
+
+                            <a href="#pidilite" class="brand-card brand-pidilite" title="Shop Pidilite & Fevicol Crafts">
+                                <div class="brand-emblem">
+                                    <img src="./images/brands/pidilite.png" alt="Pidilite & Fevicol" class="brand-logo-img brand-logo-pidilite" loading="lazy">
+                                </div>
+                                <span class="brand-desc">Fevicol &bull; Fevicryl &bull; Craft Kits</span>
+                                <span class="brand-link-pill">Explore Pidilite &rarr;</span>
+                            </a>
+
+                            <a href="#faber" class="brand-card brand-faber" title="Shop Faber-Castell">
+                                <div class="brand-emblem">
+                                    <img src="./images/brands/faber-castell.png" alt="Faber-Castell" class="brand-logo-img brand-logo-faber" loading="lazy">
+                                </div>
+                                <span class="brand-desc">Fine Art &bull; Highlighters &bull; Pens</span>
+                                <span class="brand-link-pill">Explore Faber-Castell &rarr;</span>
+                            </a>
+
+                            <a href="#pilot" class="brand-card brand-pilot" title="Shop Pilot Pens">
+                                <div class="brand-emblem">
+                                    <img src="./images/brands/pilot.svg" alt="Pilot Pens" class="brand-logo-img brand-logo-pilot" loading="lazy">
+                                </div>
+                                <span class="brand-desc">Hi-Tecpoint V5 &bull; V7 &bull; Gels</span>
+                                <span class="brand-link-pill">Explore Pilot &rarr;</span>
+                            </a>
+
+                            <a href="#casio" class="brand-card brand-casio" title="Shop Casio Calculators">
+                                <div class="brand-emblem">
+                                    <img src="./images/brands/casio.svg" alt="Casio Calculators" class="brand-logo-img brand-logo-casio" loading="lazy">
+                                </div>
+                                <span class="brand-desc">Scientific &bull; Basic Calculators</span>
+                                <span class="brand-link-pill">Explore Casio &rarr;</span>
+                            </a>
+
+                            <a href="#paperkraft" class="brand-card brand-paperkraft" title="Shop ITC Paperkraft Premium">
+                                <div class="brand-emblem">
+                                    <img src="./images/brands/paperkraft.svg" alt="ITC Paperkraft" class="brand-logo-img brand-logo-paperkraft" loading="lazy">
+                                </div>
+                                <span class="brand-desc">Executive Journals &bull; Ceramic Pens</span>
+                                <span class="brand-link-pill">Explore Paperkraft &rarr;</span>
+                            </a>
+
+                            <a href="#reynolds" class="brand-card brand-reynolds" title="Shop Reynolds Pens">
+                                <div class="brand-emblem">
+                                    <img src="./images/brands/reynolds.png" alt="Reynolds Pens" class="brand-logo-img brand-logo-reynolds" loading="lazy">
+                                </div>
+                                <span class="brand-desc">045 Classic &bull; Liquiflo &bull; Gel</span>
+                                <span class="brand-link-pill">Explore Reynolds &rarr;</span>
+                            </a>
+                        </div>
+                    </div>
+                    <button type="button" class="brands-nav-btn next" onclick="scrollBrandsCarousel(1)" aria-label="Next Brands">&#10095;</button>
+                </div>
+            </div>
+        </section>
+
+        <script>
+        function scrollBrandsCarousel(dir) {
+            var el = document.getElementById('brandsCarouselViewport');
+            if (el) {
+                el.scrollBy({ left: 280 * dir, behavior: 'smooth' });
+            }
+        }
+        </script>
+
+        <!-- Category Highlights Section -->
+        <section id="categories" class="category-section">
+            <div class="section-header">
+                <h2>Shop by Category</h2>
+                <p>Browse through our hand-picked collections for students, artists, and professionals.</p>
+            </div>
+            
+            <div class="category-grid">
+                <a href="#" class="category-card">
+                    <div class="category-icon">📚</div>
+                    <h3>Notebooks &amp; Registers</h3>
+                    <p>Single line, unruled, long books, graph &amp; drawing books</p>
+                    <span class="category-link">View Collection &rarr;</span>
+                </a>
+                <a href="#" class="category-card">
+                    <div class="category-icon">✍️</div>
+                    <h3>Pens &amp; Writing</h3>
+                    <p>Gel pens, rollerballs, fine liners, pencils &amp; markers</p>
+                    <span class="category-link">View Collection &rarr;</span>
+                </a>
+                <a href="#" class="category-card">
+                    <div class="category-icon">🎨</div>
+                    <h3>Art &amp; Craft Materials</h3>
+                    <p>Acrylics, oil pastels, sketchbooks, canvases &amp; craft clay</p>
+                    <span class="category-link">View Collection &rarr;</span>
+                </a>
+                <a href="#" class="category-card">
+                    <div class="category-icon">🏢</div>
+                    <h3>Office Essentials</h3>
+                    <p>Files, staplers, adhesives, sticky notes &amp; desk organizers</p>
+                    <span class="category-link">View Collection &rarr;</span>
+                </a>
+                <a href="#" class="category-card">
+                    <div class="category-icon">🎒</div>
+                    <h3>Bags &amp; Novelty Gifts</h3>
+                    <p>Eco-friendly jute shopping bags, pouches &amp; novelty sharpeners</p>
+                    <span class="category-link">View Collection &rarr;</span>
+                </a>
             </div>
         </section>
 
         <!-- Live Products Showcase (Sample Preview of what WooCommerce renders) -->
-        <section id="featured-products" class="products-section" style="margin-top: 3.5rem;">
-            <h2 style="font-size: 1.75rem; color: var(--primary); margin-bottom: 0.5rem; text-align: center;">
-                Featured Products
-            </h2>
-            <p style="text-align: center; color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem;">
-                Sample preview of products populated from your Hostinger database
-            </p>
+        <section id="featured-products" class="products-section">
+            <div class="section-header">
+                <h2>Featured Products</h2>
+                <p>Top picks and daily essentials from our verified 66-item catalog.</p>
+            </div>
 
             <div class="sample-products-grid">
                 <!-- Product 1 -->
                 <div class="sample-product-card">
-                    <img src="./screenshot.png" alt="Train Sharpener" class="sample-product-img">
-                    <div class="sample-product-cat">Novelty &amp; Gifts</div>
-                    <div class="sample-product-title">Train Sharpener &amp; Eraser 2-in-1</div>
+                    <img src="./images/hero-product-1.jpg" alt="Classmate Long Book" class="sample-product-img">
+                    <div class="sample-product-title">Classmate Pulse Spiral Notebook (Single Line, 200 Pages)</div>
                     <div class="sample-price-box">
-                        <span class="sample-regular-price">₹149.00</span>
-                        <span class="sample-sale-price">₹110.00</span>
+                        <span class="regular">₹130.00</span>
+                        <span>₹110.00</span>
                     </div>
                     <a href="#" class="sample-add-to-cart">Add to cart</a>
                 </div>
 
                 <!-- Product 2 -->
                 <div class="sample-product-card">
-                    <img src="./screenshot.png" alt="Pilot V5" class="sample-product-img">
-                    <div class="sample-product-cat">School Essentials</div>
-                    <div class="sample-product-title">Pilot Hi-Tecpoint V5 (Black)</div>
+                    <img src="./images/hero-product-2.jpg" alt="Pilot V5" class="sample-product-img">
+                    <div class="sample-product-title">Pilot Hi-Tecpoint V5 Rollerball Pen (Pack of 3 - Blue, Black, Red)</div>
                     <div class="sample-price-box">
-                        <span class="sample-regular-price">₹75.00</span>
-                        <span class="sample-sale-price">₹68.00</span>
+                        <span class="regular">₹210.00</span>
+                        <span>₹195.00</span>
                     </div>
                     <a href="#" class="sample-add-to-cart">Add to cart</a>
                 </div>
 
                 <!-- Product 3 -->
                 <div class="sample-product-card">
-                    <img src="./screenshot.png" alt="Canvas Bag" class="sample-product-img">
-                    <div class="sample-product-cat">Bags &amp; Totes</div>
-                    <div class="sample-product-title">Handmade Canvas Tote Bag (Medium)</div>
+                    <img src="./images/hero-product-3.jpg" alt="Faber-Castell Art Kit" class="sample-product-img">
+                    <div class="sample-product-title">Faber-Castell Triangular Oil Pastels (Pack of 25 Shades)</div>
                     <div class="sample-price-box">
-                        <span class="sample-regular-price">₹129.00</span>
-                        <span class="sample-sale-price">₹99.00</span>
+                        <span class="regular">₹160.00</span>
+                        <span>₹140.00</span>
                     </div>
                     <a href="#" class="sample-add-to-cart">Add to cart</a>
                 </div>
 
                 <!-- Product 4 -->
                 <div class="sample-product-card">
-                    <img src="./screenshot.png" alt="Casio Calculator" class="sample-product-img">
-                    <div class="sample-product-cat">Office Supplies</div>
-                    <div class="sample-product-title">Casio fx-82MS 2nd Edition</div>
+                    <img src="./images/hero-product-8.jpg" alt="Eco Jute Shopping Bag" class="sample-product-img">
+                    <div class="sample-product-title">Sri Balaji Eco-Friendly Jute Tote Shopping Bag (Large)</div>
                     <div class="sample-price-box">
-                        <span class="sample-regular-price">₹595.00</span>
-                        <span class="sample-sale-price">₹545.00</span>
+                        <span class="regular">₹150.00</span>
+                        <span>₹120.00</span>
                     </div>
                     <a href="#" class="sample-add-to-cart">Add to cart</a>
                 </div>
+            </div>
+
+            <div class="products-footer-cta">
+                <a href="#" class="btn-primary">
+                    View All 66 Products &rarr;
+                </a>
+            </div>
+        </section>
+
+        <!-- Feature 3.1: "Frequently Bought Together" & Classroom Bundles (Interactive Demo) -->
+        <section class="fbt-preview-container" style="max-width: 1200px; margin: 0 auto 3.5rem auto; padding: 0 1.5rem;">
+            <div class="sribalaji-fbt-section">
+                <div class="fbt-header">
+                    <span class="fbt-badge">FEATURE 3.1 PREVIEW &bull; BUNDLE &amp; SAVE 5%</span>
+                    <h3 class="fbt-title">Frequently Bought Together</h3>
+                    <p class="fbt-subtitle">Live interactive preview of how this bundle displays automatically on single product pages across the store.</p>
+                </div>
+
+                <div class="fbt-bundle-wrap" id="previewFbtWrap">
+                    <!-- Item 1: Primary Product -->
+                    <div class="fbt-item" id="previewFbtItemPrimary">
+                        <div class="fbt-thumb-wrap">
+                            <img src="./images/hero-product-1.jpg" alt="Classmate Pulse Notebook" class="fbt-thumb" loading="lazy">
+                        </div>
+                        <div class="fbt-item-info">
+                            <span class="fbt-item-tag">[THIS ITEM]</span>
+                            <h4 class="fbt-item-title">Classmate Pulse Spiral Notebook (Single Line, 200 Pages)</h4>
+                            <div class="fbt-item-price">&#8377;110.00</div>
+                            <label class="fbt-toggle-label">
+                                <input type="checkbox" class="fbt-checkbox" id="previewCbPrimary" data-price="110.00" data-name="Classmate Notebook" checked>
+                                <span>Include this item</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="fbt-operator">+</div>
+
+                    <!-- Item 2: Paired Companion Product -->
+                    <div class="fbt-item" id="previewFbtItemPaired">
+                        <div class="fbt-thumb-wrap">
+                            <img src="./images/hero-product-2.jpg" alt="Pilot Hi-Tecpoint V5 Rollerball Pen" class="fbt-thumb" loading="lazy">
+                        </div>
+                        <div class="fbt-item-info">
+                            <span class="fbt-item-tag">[BEST MATCH]</span>
+                            <h4 class="fbt-item-title">Pilot Hi-Tecpoint V5 Rollerball Pen (Pack of 3 - Blue, Black, Red)</h4>
+                            <div class="fbt-item-price">&#8377;195.00</div>
+                            <label class="fbt-toggle-label">
+                                <input type="checkbox" class="fbt-checkbox" id="previewCbPaired" data-price="195.00" data-name="Pilot V5 Pen Pack" checked>
+                                <span>Include paired item</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="fbt-operator">=</div>
+
+                    <!-- Action Box / Checkout Callout -->
+                    <div class="fbt-action-box">
+                        <div class="fbt-total-label">Combined Total:</div>
+                        <div class="fbt-total-price-wrap">
+                            <span class="fbt-total-price" id="previewFbtTotalPrice">&#8377;289.75</span>
+                            <span class="fbt-savings-tag" id="previewFbtSavingsTag">Save 5% (&#8377;15.25)</span>
+                        </div>
+                        <button type="button" class="fbt-add-bundle-btn" id="previewFbtAddBtn">Add Both to Cart</button>
+                        <div class="fbt-bundle-status" id="previewFbtStatus" aria-live="polite"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+        (function() {
+            var cb1 = document.getElementById('previewCbPrimary');
+            var cb2 = document.getElementById('previewCbPaired');
+            var totalPriceEl = document.getElementById('previewFbtTotalPrice');
+            var savingsTag = document.getElementById('previewFbtSavingsTag');
+            var btn = document.getElementById('previewFbtAddBtn');
+            var statusEl = document.getElementById('previewFbtStatus');
+
+            if (!cb1 || !cb2 || !totalPriceEl || !btn) return;
+
+            var price1 = parseFloat(cb1.getAttribute('data-price')) || 0;
+            var price2 = parseFloat(cb2.getAttribute('data-price')) || 0;
+
+            function updatePreviewState() {
+                var has1 = cb1.checked;
+                var has2 = cb2.checked;
+
+                if (has1 && has2) {
+                    var regularTotal = price1 + price2;
+                    var bundleTotal = regularTotal * 0.95;
+                    var saveVal = regularTotal - bundleTotal;
+                    totalPriceEl.textContent = '₹' + bundleTotal.toFixed(2);
+                    savingsTag.style.display = 'inline-block';
+                    savingsTag.textContent = 'Save 5% (₹' + saveVal.toFixed(2) + ')';
+                    btn.disabled = false;
+                    btn.textContent = 'Add Both to Cart';
+                } else if (has1) {
+                    totalPriceEl.textContent = '₹' + price1.toFixed(2);
+                    savingsTag.style.display = 'none';
+                    btn.disabled = false;
+                    btn.textContent = 'Add 1 Item to Cart';
+                } else if (has2) {
+                    totalPriceEl.textContent = '₹' + price2.toFixed(2);
+                    savingsTag.style.display = 'none';
+                    btn.disabled = false;
+                    btn.textContent = 'Add 1 Item to Cart';
+                } else {
+                    totalPriceEl.textContent = '₹0.00';
+                    savingsTag.style.display = 'none';
+                    btn.disabled = true;
+                    btn.textContent = 'Select an Item';
+                }
+            }
+
+            cb1.addEventListener('change', updatePreviewState);
+            cb2.addEventListener('change', updatePreviewState);
+
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                btn.disabled = true;
+                btn.textContent = 'Adding to Cart...';
+                setTimeout(function() {
+                    btn.disabled = false;
+                    btn.textContent = 'Added! View Cart →';
+                    if (statusEl) {
+                        statusEl.textContent = 'Items added to cart successfully!';
+                    }
+                }, 600);
+            });
+        })();
+        </script>
+
+        <!-- Google Maps Reviews Single-Line Ticker (Feature 2.4 - Pause on Hover) -->
+        <section class="reviews-ticker-section" aria-label="Google Maps Verified Reviews">
+            <div class="reviews-ticker-container">
+                <!-- Permanent Store Anchor -->
+                <div class="reviews-ticker-badge">
+                    <div class="google-icon-box" title="Google Maps Verified Store">
+                        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+                    </div>
+                    <div class="reviews-ticker-badge-text">
+                        <span class="reviews-ticker-badge-title">
+                            Sri Balaji Books <span class="stars">★★★★★</span> <strong>5.0</strong>
+                        </span>
+                        <span class="reviews-ticker-badge-subtitle">Dwaraka Nagar, Visakhapatnam</span>
+                    </div>
+                    <a href="https://www.google.com/maps/place/Sri+Balaji+Books+And+Paper+Centre/@17.7269706,83.3081126,17z/data=!3m1!4b1!4m6!3m5!1s0x3a3943077486d6bf:0x722bfc7ce5ab24f0!8m2!3d17.7269655!4d83.3106875!16s%2Fg%2F11gjtz11_n?entry=ttu" target="_blank" rel="noopener noreferrer" class="reviews-ticker-rate-btn">
+                        Rate Us 5★ on Maps &rarr;
+                    </a>
+                </div>
+
+                <!-- Scrolling Viewport (Hover to Pause) -->
+                <div class="reviews-ticker-viewport" title="Hover over any review to pause and read">
+                    <div class="reviews-ticker-track">
+                        <!-- Pill 1: Prakash Vaishnav -->
+                        <div class="ticker-review-pill">
+                            <span class="ticker-avatar avatar-blue">PV</span>
+                            <div class="ticker-content">
+                                <span class="ticker-name">Prakash Vaishnav</span>
+                                <span class="ticker-stars">★★★★★</span>
+                                <span class="ticker-tag">📷 5 Photos</span>
+                                <span class="ticker-time">3 days ago</span>
+                                <span class="ticker-verified">✓ Verified</span>
+                            </div>
+                        </div>
+
+                        <!-- Pill 2: kuppala srinivas -->
+                        <div class="ticker-review-pill">
+                            <span class="ticker-avatar avatar-teal">KS</span>
+                            <div class="ticker-content">
+                                <span class="ticker-name">kuppala srinivas</span>
+                                <span class="ticker-stars">★★★★★</span>
+                                <span class="ticker-tag">📷 1 Photo</span>
+                                <span class="ticker-time">8 mos ago</span>
+                                <span class="ticker-verified">✓ Verified</span>
+                            </div>
+                        </div>
+
+                        <!-- Pill 3: Satish Kumar -->
+                        <div class="ticker-review-pill">
+                            <span class="ticker-avatar avatar-purple">SK</span>
+                            <div class="ticker-content">
+                                <span class="ticker-name">Satish Kumar</span>
+                                <span class="ticker-stars">★★★★★</span>
+                                <span class="ticker-tag">⭐ Local Guide &bull; 10 Photos</span>
+                                <span class="ticker-time">8 yrs ago</span>
+                                <span class="ticker-verified">✓ Verified</span>
+                            </div>
+                        </div>
+
+                        <!-- Pill 4: Joshu Bujji -->
+                        <div class="ticker-review-pill">
+                            <span class="ticker-avatar avatar-indigo">JB</span>
+                            <div class="ticker-content">
+                                <span class="ticker-name">Joshu Bujji</span>
+                                <span class="ticker-stars">★★★★★</span>
+                                <span class="ticker-tag">📍 Vizag Patron</span>
+                                <span class="ticker-time">8 yrs ago</span>
+                                <span class="ticker-verified">✓ Verified</span>
+                            </div>
+                        </div>
+
+                        <!-- Duplicated set for seamless continuous marquee loop -->
+                        <div class="ticker-review-pill" aria-hidden="true">
+                            <span class="ticker-avatar avatar-blue">PV</span>
+                            <div class="ticker-content">
+                                <span class="ticker-name">Prakash Vaishnav</span>
+                                <span class="ticker-stars">★★★★★</span>
+                                <span class="ticker-tag">📷 5 Photos</span>
+                                <span class="ticker-time">3 days ago</span>
+                                <span class="ticker-verified">✓ Verified</span>
+                            </div>
+                        </div>
+
+                        <div class="ticker-review-pill" aria-hidden="true">
+                            <span class="ticker-avatar avatar-teal">KS</span>
+                            <div class="ticker-content">
+                                <span class="ticker-name">kuppala srinivas</span>
+                                <span class="ticker-stars">★★★★★</span>
+                                <span class="ticker-tag">📷 1 Photo</span>
+                                <span class="ticker-time">8 mos ago</span>
+                                <span class="ticker-verified">✓ Verified</span>
+                            </div>
+                        </div>
+
+                        <div class="ticker-review-pill" aria-hidden="true">
+                            <span class="ticker-avatar avatar-purple">SK</span>
+                            <div class="ticker-content">
+                                <span class="ticker-name">Satish Kumar</span>
+                                <span class="ticker-stars">★★★★★</span>
+                                <span class="ticker-tag">⭐ Local Guide &bull; 10 Photos</span>
+                                <span class="ticker-time">8 yrs ago</span>
+                                <span class="ticker-verified">✓ Verified</span>
+                            </div>
+                        </div>
+
+                        <div class="ticker-review-pill" aria-hidden="true">
+                            <span class="ticker-avatar avatar-indigo">JB</span>
+                            <div class="ticker-content">
+                                <span class="ticker-name">Joshu Bujji</span>
+                                <span class="ticker-stars">★★★★★</span>
+                                <span class="ticker-tag">📍 Vizag Patron</span>
+                                <span class="ticker-time">8 yrs ago</span>
+                                <span class="ticker-verified">✓ Verified</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Secondary Information Hub (Compact Cards linking to dedicated FAQ & Bulk Orders Pages) -->
+        <section class="home-secondary-links-strip" aria-label="Customer Services and Institutional Orders">
+            <div class="hub-strip-grid">
+                <!-- Card 1: Frequently Asked Questions Hub -->
+                <a href="faq.html" class="hub-link-card">
+                    <div class="hub-card-left">
+                        <div class="hub-icon-wrap faq-icon-bg">
+                            <span>💬</span>
+                        </div>
+                        <div class="hub-card-text">
+                            <h3>Frequently Asked Questions</h3>
+                            <p>Quick answers on Vizag same-day delivery, Cash on Delivery, and brand authenticity guarantee.</p>
+                            <span class="hub-card-meta">Read 5 Common Questions &bull; WhatsApp Support &rarr;</span>
+                        </div>
+                    </div>
+                    <div class="hub-action-arrow">&rarr;</div>
+                </a>
+
+                <!-- Card 2: Bulk Stationery & School Book Kits Hub -->
+                <a href="bulk-orders.html" class="hub-link-card">
+                    <div class="hub-card-left">
+                        <div class="hub-icon-wrap bulk-icon-bg">
+                            <span>📦</span>
+                        </div>
+                        <div class="hub-card-text">
+                            <h3>Bulk Stationery &amp; School Book Kits</h3>
+                            <p>Tailored student bundles, GST invoices, and volume discounts for schools and corporate offices.</p>
+                            <span class="hub-card-meta">Explore Institutional Solutions &bull; Fast Quotes &rarr;</span>
+                        </div>
+                    </div>
+                    <div class="hub-action-arrow">&rarr;</div>
+                </a>
             </div>
         </section>
 
     </main>
 
-    <!-- Footer -->
+    <!-- Multi-Column E-Commerce Footer -->
     <footer class="site-footer">
         <div class="footer-container">
-            <p>&copy; 2026 <strong>Sri Balaji Books</strong>. All rights reserved.</p>
-            <p style="font-size: 0.8rem; margin-top: 0.35rem; color: #94a3b8;">
-                Deployed seamlessly from GitHub &bull; Powered by Hostinger MySQL &bull; Read . Create . Play
-            </p>
+            <div class="footer-grid">
+                
+                <!-- Column 1: Brand & About -->
+                <div class="footer-col brand-col">
+                    <div class="footer-brand">
+                        <span class="footer-logo-icon">📚</span>
+                        <span class="footer-brand-name">Sri Balaji Books</span>
+                    </div>
+                    <p class="footer-desc">
+                        Your premier neighborhood bookstore and stationery emporium. Supplying quality school essentials, office supplies, art materials, and novelty goods.
+                    </p>
+                    <div class="store-badge-pill">
+                        📍 Rama Talkies Road, Dwaraka Nagar, Visakhapatnam &bull; Since 2026
+                    </div>
+                </div>
+
+                <!-- Column 2: Quick Links -->
+                <div class="footer-col">
+                    <h4>Quick Navigation</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Full Catalog</a></li>
+                        <li><a href="faq.html">FAQs &amp; Help Desk</a></li>
+                        <li><a href="bulk-orders.html">Bulk &amp; Institutional Orders</a></li>
+                        <li><a href="#">Shopping Cart</a></li>
+                        <li><a href="#">My Account &amp; Orders</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Popular Categories -->
+                <div class="footer-col">
+                    <h4>Popular Categories</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Notebooks &amp; Registers</a></li>
+                        <li><a href="#">Pens, Pencils &amp; Writing</a></li>
+                        <li><a href="#">Art &amp; Craft Supplies</a></li>
+                        <li><a href="#">Office Stationery &amp; Files</a></li>
+                        <li><a href="#">Eco Jute Bags &amp; Gifts</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Customer Care & Store Info -->
+                <div class="footer-col">
+                    <h4>Customer Care &amp; Hours</h4>
+                    <ul class="footer-info-list">
+                        <li>
+                            <strong>🕒 Store Hours:</strong><br>
+                            Mon – Sat: 11:00 AM – 8:00 PM<br>
+                            Sunday: Closed (Holiday)
+                        </li>
+                        <li>
+                            <strong>📍 Store Location:</strong><br>
+                            D.No. 48-14-61/4, Rama Talkies Road, Sri Nagar, Dwaraka Nagar, Visakhapatnam - 530016
+                        </li>
+                        <li>
+                            <strong>💳 Payment &amp; Delivery:</strong><br>
+                            Cash on Delivery (COD) &bull; UPI &bull; Local Visakhapatnam Delivery &bull; Store Pickup
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 <strong>Sri Balaji Books &amp; Stationery</strong>. All rights reserved.</p>
+                <p class="footer-tagline">
+                    Read &bull; Create &bull; Learn &bull; Excel
+                </p>
+            </div>
         </div>
     </footer>
 
+    <!-- Prototype Mode Switcher Script -->
+    <script>
+    function setWideLensMode(isWide) {
+        var btnWide = document.getElementById('btnWideLens');
+        var btnClassic = document.getElementById('btnClassic');
+        if (isWide) {
+            document.body.classList.add('wide-lens-mode');
+            if (btnWide) btnWide.classList.add('is-active');
+            if (btnClassic) btnClassic.classList.remove('is-active');
+        } else {
+            document.body.classList.remove('wide-lens-mode');
+            if (btnWide) btnWide.classList.remove('is-active');
+            if (btnClassic) btnClassic.classList.add('is-active');
+        }
+    }
+
+    function toggleCompactHeight() {
+        var btn = document.getElementById('btnCompactHeight');
+        var isCompact = document.body.classList.toggle('compact-height-mode');
+        if (btn) {
+            if (isCompact) {
+                btn.classList.add('is-active');
+                btn.textContent = '⚡ 50% Sleek Height';
+            } else {
+                btn.classList.remove('is-active');
+                btn.textContent = 'Standard Height';
+            }
+        }
+    }
+
+    function setBgTheme(themeName) {
+        document.body.setAttribute('data-theme', themeName);
+        var pills = document.querySelectorAll('.palette-pill');
+        pills.forEach(function(pill) {
+            pill.classList.remove('is-active');
+        });
+        if (themeName === 'tea-green') {
+            var el = document.getElementById('palTeaGreen');
+            if (el) el.classList.add('is-active');
+        } else if (themeName === 'teal-mist') {
+            var el = document.getElementById('palTealMist');
+            if (el) el.classList.add('is-active');
+        } else if (themeName === 'parchment') {
+            var el = document.getElementById('palParchment');
+            if (el) el.classList.add('is-active');
+        } else if (themeName === 'white') {
+            var el = document.getElementById('palWhite');
+            if (el) el.classList.add('is-active');
+        }
+    }
+
+    function toggleWatermark(active) {
+        if (active) {
+            document.body.classList.add('watermark-active');
+        } else {
+            document.body.classList.remove('watermark-active');
+        }
+    }
+    </script>
+
 </body>
 </html>
+
