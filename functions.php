@@ -84,6 +84,32 @@ function sribalaji_theme_scripts() {
     $version   = file_exists( $theme_css ) ? filemtime( $theme_css ) : '1.0.2';
 
     wp_enqueue_style( 'sribalaji-main-style', get_stylesheet_uri(), $deps, $version );
+
+    // Enqueue Firebase Mobile OTP Auth scripts on My Account and Checkout pages for guest users
+    if ( ! is_user_logged_in() && ( is_account_page() || is_checkout() || is_page( 'my-account' ) ) ) {
+        wp_enqueue_script( 'firebase-app-compat', 'https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js', array(), '10.13.0', true );
+        wp_enqueue_script( 'firebase-auth-compat', 'https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js', array( 'firebase-app-compat' ), '10.13.0', true );
+        
+        $otp_js = get_stylesheet_directory() . '/js/firebase-otp-login.js';
+        $otp_ver = file_exists( $otp_js ) ? filemtime( $otp_js ) : '1.0.0';
+        wp_enqueue_script( 'sribalaji-otp-auth', get_stylesheet_directory_uri() . '/js/firebase-otp-login.js', array( 'jquery', 'firebase-auth-compat' ), $otp_ver, true );
+
+        $firebase_config = array(
+            'apiKey'            => 'AIzaSyCLan8TCX1X316PNU4v-E5h28Qw_lgf4i4',
+            'authDomain'        => 'sribalajibooks-1.firebaseapp.com',
+            'projectId'         => 'sribalajibooks-1',
+            'storageBucket'     => 'sribalajibooks-1.firebasestorage.app',
+            'messagingSenderId' => '677871426471',
+            'appId'             => '1:677871426471:web:25c3863e9c477728673482',
+        );
+
+        wp_localize_script( 'sribalaji-otp-auth', 'sribalaji_firebase_params', array(
+            'firebase_config' => $firebase_config,
+            'ajax_url'        => admin_url( 'admin-ajax.php' ),
+            'nonce'           => wp_create_nonce( 'sribalaji_otp_auth_nonce' ),
+            'redirect_url'    => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : home_url( '/my-account/' ),
+        ) );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'sribalaji_theme_scripts', 20 );
 
@@ -967,3 +993,115 @@ function sribalaji_ajax_add_bundle_to_cart() {
 }
 add_action( 'wp_ajax_sribalaji_add_bundle', 'sribalaji_ajax_add_bundle_to_cart' );
 add_action( 'wp_ajax_nopriv_sribalaji_add_bundle', 'sribalaji_ajax_add_bundle_to_cart' );
+
+/**
+ * AJAX Handler: Authenticate or Register Customer via Firebase Phone OTP
+ */
+function sribalaji_handle_phone_login_verify() {
+    check_ajax_referer( 'sribalaji_otp_auth_nonce', 'nonce' );
+
+    $phone_raw = isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '';
+    if ( empty( $phone_raw ) ) {
+        wp_send_json_error( array( 'message' => 'Phone number is required.' ) );
+    }
+
+    // Extract exactly 10 digits
+    $digits_only = preg_replace( '/[^0-9]/', '', $phone_raw );
+    if ( strlen( $digits_only ) > 10 && substr( $digits_only, 0, 2 ) === '91' ) {
+        $clean_10 = substr( $digits_only, 2 );
+    } else {
+        $clean_10 = substr( $digits_only, -10 );
+    }
+
+    if ( strlen( $clean_10 ) !== 10 ) {
+        wp_send_json_error( array( 'message' => 'Invalid Indian mobile number.' ) );
+    }
+
+    $full_phone_intl = '+91' . $clean_10;
+    $target_user = null;
+
+    // 1. Look for existing user by login name (+919876543210 or 9876543210 or cust_9876543210)
+    $possible_logins = array( $full_phone_intl, $clean_10, 'cust_' . $clean_10 );
+    foreach ( $possible_logins as $login_candidate ) {
+        $found = get_user_by( 'login', $login_candidate );
+        if ( $found ) {
+            $target_user = $found;
+            break;
+        }
+    }
+
+    // 2. Look for existing user by billing_phone meta
+    if ( ! $target_user ) {
+        $users_meta = get_users( array(
+            'meta_key'     => 'billing_phone',
+            'meta_value'   => $clean_10,
+            'number'       => 1,
+            'fields'       => 'all',
+        ) );
+        if ( empty( $users_meta ) ) {
+            $users_meta = get_users( array(
+                'meta_key'     => 'billing_phone',
+                'meta_value'   => $full_phone_intl,
+                'number'       => 1,
+                'fields'       => 'all',
+            ) );
+        }
+        if ( ! empty( $users_meta ) ) {
+            $target_user = $users_meta[0];
+        }
+    }
+
+    // 3. If new customer, auto-register account
+    if ( ! $target_user ) {
+        $username = 'cust_' . $clean_10;
+        $idx = 1;
+        while ( username_exists( $username ) ) {
+            $username = 'cust_' . $clean_10 . '_' . $idx;
+            $idx++;
+        }
+
+        $synthetic_email = $clean_10 . '@customer.sribalajibooks.com';
+        if ( email_exists( $synthetic_email ) ) {
+            $synthetic_email = $clean_10 . '_' . time() . '@customer.sribalajibooks.com';
+        }
+
+        $random_password = wp_generate_password( 24, true, true );
+        $user_id = wp_create_user( $username, $random_password, $synthetic_email );
+
+        if ( is_wp_error( $user_id ) ) {
+            wp_send_json_error( array( 'message' => 'Account creation failed: ' . $user_id->get_error_message() ) );
+        }
+
+        $target_user = get_user_by( 'id', $user_id );
+        if ( $target_user && method_exists( $target_user, 'set_role' ) ) {
+            $target_user->set_role( 'customer' );
+        }
+
+        update_user_meta( $user_id, 'billing_phone', $clean_10 );
+        update_user_meta( $user_id, 'shipping_phone', $clean_10 );
+        update_user_meta( $user_id, 'sribalaji_phone_verified', 1 );
+        update_user_meta( $user_id, 'first_name', 'Customer' );
+        update_user_meta( $user_id, 'billing_first_name', 'Customer' );
+        update_user_meta( $user_id, 'billing_country', 'IN' );
+        update_user_meta( $user_id, 'billing_state', 'AP' );
+        update_user_meta( $user_id, 'billing_city', 'Visakhapatnam' );
+    }
+
+    // Authenticate and log in
+    wp_clear_auth_cookie();
+    wp_set_current_user( $target_user->ID, $target_user->user_login );
+    wp_set_auth_cookie( $target_user->ID, true, is_ssl() );
+    do_action( 'wp_login', $target_user->user_login, $target_user );
+
+    $redirect_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : home_url( '/my-account/' );
+    if ( ! empty( $_POST['redirect_to'] ) ) {
+        $redirect_url = esc_url_raw( wp_unslash( $_POST['redirect_to'] ) );
+    }
+
+    wp_send_json_success( array(
+        'message'      => 'Login successful! Redirecting...',
+        'redirect_url' => $redirect_url,
+    ) );
+}
+add_action( 'wp_ajax_nopriv_sribalaji_phone_login_verify', 'sribalaji_handle_phone_login_verify' );
+add_action( 'wp_ajax_sribalaji_phone_login_verify', 'sribalaji_handle_phone_login_verify' );
