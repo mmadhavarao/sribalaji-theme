@@ -1030,24 +1030,31 @@ function sribalaji_handle_phone_login_verify() {
         }
     }
 
-    // 2. Look for existing user by billing_phone meta
+    // 2. Look for existing user by billing_phone or shipping_phone meta (supports formatted numbers like +91 98450 12345, 09845012345, etc.)
     if ( ! $target_user ) {
-        $users_meta = get_users( array(
-            'meta_key'     => 'billing_phone',
-            'meta_value'   => $clean_10,
-            'number'       => 1,
-            'fields'       => 'all',
-        ) );
-        if ( empty( $users_meta ) ) {
+        $meta_queries = array(
+            array(
+                'key'     => 'billing_phone',
+                'value'   => $clean_10,
+                'compare' => 'LIKE',
+            ),
+            array(
+                'key'     => 'shipping_phone',
+                'value'   => $clean_10,
+                'compare' => 'LIKE',
+            ),
+        );
+
+        foreach ( $meta_queries as $mq ) {
             $users_meta = get_users( array(
-                'meta_key'     => 'billing_phone',
-                'meta_value'   => $full_phone_intl,
-                'number'       => 1,
-                'fields'       => 'all',
+                'meta_query' => array( $mq ),
+                'number'     => 1,
+                'fields'     => 'all',
             ) );
-        }
-        if ( ! empty( $users_meta ) ) {
-            $target_user = $users_meta[0];
+            if ( ! empty( $users_meta ) ) {
+                $target_user = $users_meta[0];
+                break;
+            }
         }
     }
 
