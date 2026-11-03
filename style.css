@@ -4001,3 +4001,414 @@ details[open] > summary > .cat-toggle-icon::before {
     line-height: 1.45;
     margin: 0;
 }
+
+/* ==========================================================================
+   ZEPTO / BLINKIT QUICK-COMMERCE MOBILE ENGINE (< 768px)
+   ========================================================================== */
+
+/* 1. Universal Responsive Typography (Fluid clamp across all screens) */
+:root {
+    --font-heading-hero: clamp(1.4rem, 4.5vw, 2.75rem);
+    --font-heading-section: clamp(1.15rem, 3.5vw, 1.85rem);
+    --font-heading-card: clamp(0.95rem, 2.5vw, 1.25rem);
+    --font-body-base: clamp(0.85rem, 2vw, 0.95rem);
+    --font-body-small: clamp(0.72rem, 1.6vw, 0.82rem);
+}
+
+/* 2. Desktop Hide for Mobile Bottom App Bar */
+@media (min-width: 769px) {
+    .mobile-app-bottom-nav {
+        display: none !important;
+    }
+}
+
+/* 3. Mobile (< 768px) Zepto / Blinkit Quick-Commerce Transformation */
+@media (max-width: 768px) {
+    /* Prevent content being covered by sticky bottom app bar */
+    body {
+        padding-bottom: 72px !important;
+        font-size: var(--font-body-base);
+    }
+
+    /* Suppress any developer prototype bars on mobile */
+    .prototype-control-bar,
+    .ctrl-toolbar,
+    .palette-switcher,
+    #btnCompactHeight,
+    #btnWideLens,
+    #btnClassic {
+        display: none !important;
+    }
+
+    /* Site Header: Compact App-Style Header */
+    .site-header {
+        padding: 0.6rem 0.9rem !important;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .header-container {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+        align-items: stretch !important;
+    }
+
+    .site-branding {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .brand-title {
+        font-size: 1.2rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em;
+    }
+
+    .brand-tagline {
+        font-size: 0.72rem !important;
+        display: inline-block;
+        margin-left: 0.5rem;
+    }
+
+    /* Hide desktop nav links on mobile (Bottom App Bar handles this!) */
+    .header-nav {
+        display: none !important;
+    }
+
+    /* Zepto Full-Width Sticky Search Bar */
+    .header-search-container {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .header-product-search {
+        display: flex;
+        align-items: center;
+        background: #f1f5f9;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 999px;
+        padding: 0.25rem 0.5rem 0.25rem 0.9rem;
+        height: 42px;
+        transition: all 0.2s ease;
+    }
+
+    .header-product-search:focus-within {
+        background: #ffffff;
+        border-color: #059669;
+        box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+    }
+
+    .header-product-search .search-field {
+        border: none;
+        background: transparent;
+        font-size: 0.88rem;
+        color: #1e293b;
+        width: 100%;
+        outline: none;
+    }
+
+    .header-product-search .search-field::placeholder {
+        color: #94a3b8;
+        font-size: 0.82rem;
+    }
+
+    .header-product-search .search-submit {
+        background: #059669;
+        border: none;
+        color: #ffffff;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        cursor: pointer;
+    }
+
+    /* Hero Split Section: Stack cleanly on mobile with zero overflow */
+    .hero-split-section {
+        grid-template-columns: 1fr !important;
+        padding: 1.5rem 1.15rem !important;
+        gap: 1.5rem !important;
+        border-radius: 16px !important;
+        margin-bottom: 2rem !important;
+    }
+
+    .hero-badge-pill {
+        font-size: 0.7rem !important;
+        padding: 0.25rem 0.65rem !important;
+    }
+
+    .hero-split-title {
+        font-size: 1.45rem !important;
+        line-height: 1.25 !important;
+    }
+
+    .hero-split-desc {
+        font-size: 0.85rem !important;
+        line-height: 1.45 !important;
+        margin-bottom: 1.25rem !important;
+    }
+
+    .hero-cta-group {
+        flex-direction: column !important;
+        gap: 0.65rem !important;
+    }
+
+    .hero-cta-btn {
+        width: 100% !important;
+        text-align: center !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.88rem !important;
+    }
+
+    /* Hero Product Carousel on mobile */
+    .hero-split-right {
+        max-width: 100% !important;
+        overflow: hidden !important;
+    }
+
+    .ajio-carousel-track {
+        gap: 0.75rem !important;
+        padding: 0.5rem 0 !important;
+    }
+
+    .ajio-card {
+        width: 160px !important;
+        height: 220px !important;
+        flex-shrink: 0 !important;
+        border-radius: 12px !important;
+    }
+
+    .ajio-card-img-wrap {
+        height: 145px !important;
+        padding: 0.5rem !important;
+    }
+
+    .ajio-card-info {
+        padding: 0.4rem 0.6rem !important;
+    }
+
+    .ajio-item-title {
+        font-size: 0.75rem !important;
+    }
+
+    .ajio-item-offer {
+        font-size: 0.78rem !important;
+    }
+
+    /* Zepto / Blinkit Style 2-Column Product Grid */
+    .site-main {
+        padding: 0 0.85rem !important;
+        margin: 1.25rem auto !important;
+    }
+
+    ul.products {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        margin: 0 0 1.5rem 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+    }
+
+    .woocommerce ul.products li.product,
+    ul.products li.product {
+        margin: 0 !important;
+        width: 100% !important;
+        float: none !important;
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        padding: 8px 8px 12px 8px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02) !important;
+        transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+        position: relative !important;
+    }
+
+    /* Zepto Product Card Image */
+    .woocommerce ul.products li.product a img,
+    ul.products li.product a img {
+        width: 100% !important;
+        height: 125px !important;
+        object-fit: contain !important;
+        background: #f8fafc !important;
+        border-radius: 8px !important;
+        padding: 6px !important;
+        margin: 0 0 8px 0 !important;
+    }
+
+    /* Zepto Product Card Title (2 lines clamp) */
+    .woocommerce ul.products li.product .woocommerce-loop-product__title,
+    ul.products li.product h2,
+    ul.products li.product h3 {
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
+        line-height: 1.25 !important;
+        color: #1e293b !important;
+        margin: 0 0 4px 0 !important;
+        height: 2rem !important;
+        overflow: hidden !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+    }
+
+    /* Zepto Product Price Row */
+    .woocommerce ul.products li.product .price,
+    ul.products li.product .price {
+        font-size: 0.88rem !important;
+        font-weight: 800 !important;
+        color: #065f46 !important;
+        margin-bottom: 6px !important;
+        display: block !important;
+    }
+
+    .woocommerce ul.products li.product .price del,
+    ul.products li.product .price del {
+        font-size: 0.72rem !important;
+        color: #94a3b8 !important;
+        font-weight: 500 !important;
+    }
+
+    /* Zepto "+ ADD" Quick Action Button */
+    .woocommerce ul.products li.product .button,
+    .woocommerce ul.products li.product a.button,
+    ul.products li.product .button {
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+        background: #ecfdf5 !important;
+        border: 1.5px solid #059669 !important;
+        color: #047857 !important;
+        font-weight: 800 !important;
+        font-size: 0.75rem !important;
+        letter-spacing: 0.04em !important;
+        padding: 0.4rem 0.5rem !important;
+        border-radius: 8px !important;
+        text-transform: uppercase !important;
+        box-shadow: none !important;
+        transition: all 0.15s ease !important;
+        margin: 0 !important;
+    }
+
+    .woocommerce ul.products li.product .button:hover,
+    ul.products li.product .button:hover {
+        background: #059669 !important;
+        color: #ffffff !important;
+    }
+
+    /* Category Cards Grid on Mobile */
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    .category-card {
+        padding: 0.85rem !important;
+        min-height: 100px !important;
+        border-radius: 12px !important;
+    }
+
+    .category-icon {
+        font-size: 1.5rem !important;
+        margin-bottom: 0.35rem !important;
+    }
+
+    .category-card h3 {
+        font-size: 0.85rem !important;
+    }
+
+    /* Footer on Mobile */
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.75rem !important;
+    }
+}
+
+/* ==========================================================================
+   STICKY MOBILE APP BOTTOM NAVIGATION BAR (Zepto / Blinkit Inspired)
+   ========================================================================== */
+.mobile-app-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid #e2e8f0;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 0.25rem env(safe-area-inset-bottom, 0) 0.25rem;
+}
+
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 100%;
+    color: #64748b;
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: color 0.15s ease, transform 0.15s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-nav-item:hover,
+.mobile-nav-item:active,
+.mobile-nav-item.is-active {
+    color: #059669;
+}
+
+.mobile-nav-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.mobile-nav-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.mobile-nav-cart-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.mobile-cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.6rem;
+    font-weight: 800;
+    min-width: 16px;
+    height: 16px;
+    line-height: 16px;
+    border-radius: 999px;
+    text-align: center;
+    padding: 0 3px;
+    box-shadow: 0 1px 3px rgba(239, 68, 68, 0.4);
+}

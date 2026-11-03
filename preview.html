@@ -338,6 +338,17 @@
             gap: 0.85rem !important;
         }
 
+        /* Hide Developer Prototyping Controls completely on Mobile screens */
+        @media (max-width: 768px) {
+            .prototype-control-bar,
+            .palette-switcher,
+            #btnCompactHeight,
+            #btnWideLens,
+            #btnClassic {
+                display: none !important;
+            }
+        }
+
         /* Slimmer Ajio Carousel Cards in Hero */
         body.compact-height-mode .ajio-card {
             width: 215px !important;

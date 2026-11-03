@@ -86,6 +86,38 @@
     </div>
 </footer>
 
+<!-- Zepto / Blinkit Style Sticky Mobile App Bottom Bar (screens < 768px) -->
+<nav class="mobile-app-bottom-nav" aria-label="Mobile Navigation">
+    <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="mobile-nav-item <?php echo is_front_page() ? 'is-active' : ''; ?>">
+        <span class="mobile-nav-icon">🏠</span>
+        <span class="mobile-nav-label">Home</span>
+    </a>
+    <a href="<?php echo esc_url( class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop' ) ); ?>" class="mobile-nav-item <?php echo ( function_exists( 'is_shop' ) && is_shop() ) ? 'is-active' : ''; ?>">
+        <span class="mobile-nav-icon">🏷️</span>
+        <span class="mobile-nav-label">Categories</span>
+    </a>
+    <button type="button" class="mobile-nav-item mobile-search-trigger" onclick="var s = document.querySelector('.header-search-container input[type=search], .search-field'); if(s) { s.focus(); window.scrollTo({top: 0, behavior: 'smooth'}); }">
+        <span class="mobile-nav-icon">🔍</span>
+        <span class="mobile-nav-label">Search</span>
+    </button>
+    <?php if ( class_exists( 'WooCommerce' ) ) : ?>
+    <a href="<?php echo esc_url( wc_get_cart_url() ); ?>" class="mobile-nav-item <?php echo ( function_exists( 'is_cart' ) && is_cart() ) ? 'is-active' : ''; ?>">
+        <div class="mobile-nav-cart-wrap">
+            <span class="mobile-nav-icon">🛒</span>
+            <?php 
+            $cart_count = ( WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0; 
+            ?>
+            <span class="mobile-cart-badge" id="mobileCartCount"><?php echo esc_html( $cart_count ); ?></span>
+        </div>
+        <span class="mobile-nav-label">Cart</span>
+    </a>
+    <a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="mobile-nav-item <?php echo ( function_exists( 'is_account_page' ) && is_account_page() ) ? 'is-active' : ''; ?>">
+        <span class="mobile-nav-icon">👤</span>
+        <span class="mobile-nav-label">Account</span>
+    </a>
+    <?php endif; ?>
+</nav>
+
 <?php wp_footer(); ?>
 </body>
 </html>
