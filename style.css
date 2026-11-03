@@ -3912,3 +3912,72 @@ details[open] > summary > .cat-toggle-icon::before {
     color: #14532d;
     margin-bottom: 0.15rem;
 }
+
+/* Smart Account Merger Card */
+.sribalaji-merge-card {
+    background: #f8fafc;
+    border: 2px dashed #93c5fd;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.merge-card-header .merge-badge {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+}
+
+.merge-card-header h3 {
+    margin: 0 0 0.4rem 0;
+    color: #1e3a8a;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.merge-card-header p {
+    color: #475569;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin: 0 0 1.25rem 0;
+}
+
+.merge-card-header code {
+    background: #e2e8f0;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    color: #0f172a;
+    font-size: 0.85em;
+}
+
+.merge-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 640px) {
+    .merge-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.merge-field-group label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 0.35rem;
+}
+
+.merge-field-group .optional {
+    font-weight: normal;
+    color: #64748b;
+    font-size: 0.78rem;
+}

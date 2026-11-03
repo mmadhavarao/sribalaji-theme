@@ -124,7 +124,7 @@ do_action( 'woocommerce_before_customer_login_form' );
                             Password <span class="required">*</span>
                         </label>
                         <a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" class="auth-text-link">
-                            Forgot?
+                            Forgot password?
                         </a>
                     </div>
                     <input class="woocommerce-Input woocommerce-Input--text input-text sribalaji-phone-field" 
