@@ -3981,3 +3981,23 @@ details[open] > summary > .cat-toggle-icon::before {
     color: #64748b;
     font-size: 0.78rem;
 }
+
+/* Onboarding Step Header */
+.onboarding-step-header {
+    margin-bottom: 1.25rem;
+    text-align: left;
+}
+
+.onboarding-step-header h3 {
+    font-size: 1.15rem;
+    color: #1e3a8a;
+    margin: 0 0 0.35rem 0;
+    font-weight: 700;
+}
+
+.onboarding-step-header p {
+    font-size: 0.82rem;
+    color: #475569;
+    line-height: 1.45;
+    margin: 0;
+}

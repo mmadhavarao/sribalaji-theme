@@ -1,8 +1,9 @@
 /**
  * Sri Balaji Books & Stationery — Native Mobile Number + OTP Login Engine
  * 
- * Provides frictionless phone verification directly on /my-account/.
- * Works with zero third-party SMS bills on Local Sandbox and Staging.
+ * Features Mandatory Dual-Identifier Onboarding:
+ * - If user is new or has no email linked, immediately transitions to Step 3 (Confirm Email).
+ * - If user already has both verified phone and email, logs in instantly.
  */
 (function($) {
     'use strict';
@@ -16,6 +17,7 @@
     var redirectUrl = sribalaji_auth_params.redirect_url;
     var resendTimer = null;
     var countdown = 30;
+    var verifiedPhone = '';
 
     function showNotice(msg, type) {
         var $alert = $('#sribalaji-auth-alert');
@@ -86,6 +88,7 @@
                 success: function(res) {
                     $btn.prop('disabled', false).html(originalText);
                     if (res && res.success) {
+                        verifiedPhone = phone;
                         $('#sribalaji-display-phone').text('+91 ' + phone);
                         $('#sribalaji-step-phone').slideUp(200, function() {
                             $('#sribalaji-step-otp').slideDown(200);
@@ -134,13 +137,25 @@
                     otp: otp
                 },
                 success: function(res) {
+                    $btn.prop('disabled', false).html(originalText);
                     if (res && res.success) {
-                        showNotice(res.data.message || 'Login successful! Redirecting...', 'success');
-                        setTimeout(function() {
-                            window.location.href = res.data.redirect_url || redirectUrl;
-                        }, 800);
+                        verifiedPhone = phone;
+
+                        // Check if customer needs to confirm their email (First-time / unlinked user)
+                        if (res.data && res.data.needs_email) {
+                            showNotice('Phone number verified! Please confirm your email address below to finish setup.', 'success');
+                            $('#sribalaji-step-otp').slideUp(200, function() {
+                                $('#sribalaji-step-email').slideDown(200);
+                                $('#sribalaji-confirm-email').focus();
+                            });
+                        } else {
+                            // Returning user with both phone and email already linked
+                            showNotice(res.data.message || 'Login successful! Redirecting...', 'success');
+                            setTimeout(function() {
+                                window.location.href = res.data.redirect_url || redirectUrl;
+                            }, 800);
+                        }
                     } else {
-                        $btn.prop('disabled', false).html(originalText);
                         var err = (res && res.data && res.data.message) ? res.data.message : 'Invalid OTP code. Please try again.';
                         showNotice(err, 'error');
                     }
@@ -152,7 +167,55 @@
             });
         });
 
-        // 3. Edit Phone Number
+        // 3. Complete Email Onboarding (Mandatory Dual-Identifier Step)
+        $('#sribalaji-complete-onboarding-btn').on('click', function(e) {
+            e.preventDefault();
+            clearNotice();
+
+            var email = $.trim($('#sribalaji-confirm-email').val());
+            var password = $.trim($('#sribalaji-confirm-password').val());
+
+            if (!email || email.indexOf('@') === -1 || email.indexOf('.') === -1) {
+                showNotice('Please enter a valid email address to complete your account.', 'error');
+                $('#sribalaji-confirm-email').focus();
+                return;
+            }
+
+            var $btn = $(this);
+            var originalText = $btn.html();
+            $btn.prop('disabled', true).html('Saving Profile...');
+
+            $.ajax({
+                url: ajaxUrl,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'sribalaji_complete_email_onboarding',
+                    nonce: nonce,
+                    phone: verifiedPhone,
+                    email: email,
+                    password: password
+                },
+                success: function(res) {
+                    if (res && res.success) {
+                        showNotice(res.data.message || 'Account verified and ready! Redirecting...', 'success');
+                        setTimeout(function() {
+                            window.location.href = res.data.redirect_url || redirectUrl;
+                        }, 800);
+                    } else {
+                        $btn.prop('disabled', false).html(originalText);
+                        var err = (res && res.data && res.data.message) ? res.data.message : 'Could not link email. Please check and try again.';
+                        showNotice(err, 'error');
+                    }
+                },
+                error: function() {
+                    $btn.prop('disabled', false).html(originalText);
+                    showNotice('A server error occurred. Please try again.', 'error');
+                }
+            });
+        });
+
+        // 4. Edit Phone Number
         $('#sribalaji-edit-phone-btn').on('click', function(e) {
             e.preventDefault();
             clearNotice();
@@ -163,7 +226,7 @@
             });
         });
 
-        // 4. Resend OTP
+        // 5. Resend OTP
         $('#sribalaji-resend-btn').on('click', function(e) {
             e.preventDefault();
             if ($(this).hasClass('is-disabled')) {
@@ -172,7 +235,7 @@
             $('#sribalaji-send-otp-btn').trigger('click');
         });
 
-        // 5. Toggle Views between OTP and Email/Password
+        // 6. Toggle Views between OTP and Email/Password
         $('#sribalaji-toggle-password-view').on('click', function(e) {
             e.preventDefault();
             clearNotice();
@@ -189,7 +252,7 @@
             });
         });
 
-        // Allow Enter key to submit
+        // Enter key bindings
         $('#sribalaji-phone-input').on('keypress', function(e) {
             if (e.which === 13) {
                 e.preventDefault();
@@ -201,6 +264,13 @@
             if (e.which === 13) {
                 e.preventDefault();
                 $('#sribalaji-verify-otp-btn').trigger('click');
+            }
+        });
+
+        $('#sribalaji-confirm-email, #sribalaji-confirm-password').on('keypress', function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                $('#sribalaji-complete-onboarding-btn').trigger('click');
             }
         });
 

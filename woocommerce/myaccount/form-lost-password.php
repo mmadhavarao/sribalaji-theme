@@ -34,7 +34,7 @@ do_action( 'woocommerce_before_lost_password_form' );
                        type="text" 
                        name="user_login" 
                        id="user_login" 
-                       placeholder="Enter registered email (e.g. madhavamrao@gmail.com)" 
+                       placeholder="Enter registered email (e.g. user@example.com)" 
                        autocomplete="username" 
                        required />
                 <p class="auth-field-hint">A secure link to create a new password will be sent to your email.</p>
