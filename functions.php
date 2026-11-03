@@ -1156,7 +1156,8 @@ add_action( 'wp_ajax_nopriv_sribalaji_send_otp', 'sribalaji_handle_ajax_send_otp
 add_action( 'wp_ajax_sribalaji_send_otp', 'sribalaji_handle_ajax_send_otp' );
 
 /**
- * 4. Native AJAX Handler: Verify OTP & Sign In / Register Customer
+ * 4. Native AJAX Handler: Verify OTP & Sign In / Auto-Provision Customer
+ * Implements Zero-Friction 1-Step Mobile Authentication.
  */
 function sribalaji_handle_ajax_verify_otp() {
     check_ajax_referer( 'sribalaji_native_otp_nonce', 'nonce' );
@@ -1235,101 +1236,8 @@ function sribalaji_handle_ajax_verify_otp() {
         }
     }
 
-    // Check if target user has a verified real email address (not synthetic)
-    $has_real_email = false;
-    if ( $target_user && ! empty( $target_user->user_email ) ) {
-        if ( false === strpos( $target_user->user_email, '@customer.sribalajibooks.com' ) ) {
-            $has_real_email = true;
-        }
-    }
-
-    // If returning customer with BOTH verified phone and real email, log them in immediately!
-    if ( $target_user && $has_real_email ) {
-        wp_clear_auth_cookie();
-        wp_set_current_user( $target_user->ID, $target_user->user_login );
-        wp_set_auth_cookie( $target_user->ID, true, is_ssl() );
-        do_action( 'wp_login', $target_user->user_login, $target_user );
-
-        $redirect_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : home_url( '/my-account/' );
-        if ( ! empty( $_POST['redirect_to'] ) ) {
-            $redirect_url = esc_url_raw( wp_unslash( $_POST['redirect_to'] ) );
-        }
-
-        wp_send_json_success( array(
-            'message'      => 'Login successful! Redirecting...',
-            'needs_email'  => false,
-            'redirect_url' => $redirect_url,
-        ) );
-    }
-
-    // First-time customer OR unlinked account: Save verified phone in transient and require email confirmation
-    set_transient( 'sribalaji_verified_phone_' . $clean_10, time(), 15 * MINUTE_IN_SECONDS );
-
-    wp_send_json_success( array(
-        'message'     => 'Phone number verified! Please confirm your email address to complete your account.',
-        'needs_email' => true,
-        'phone'       => $clean_10,
-    ) );
-}
-add_action( 'wp_ajax_nopriv_sribalaji_verify_otp', 'sribalaji_handle_ajax_verify_otp' );
-add_action( 'wp_ajax_sribalaji_verify_otp', 'sribalaji_handle_ajax_verify_otp' );
-
-/**
- * 5. Mandatory Dual-Identifier Onboarding: Link or Create Account with Email + Phone
- */
-function sribalaji_handle_ajax_complete_email_onboarding() {
-    check_ajax_referer( 'sribalaji_native_otp_nonce', 'nonce' );
-
-    $phone_raw = isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '';
-    $email_raw = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
-    $password  = isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
-
-    $digits = preg_replace( '/[^0-9]/', '', $phone_raw );
-    $clean_10 = substr( $digits, -10 );
-
-    if ( strlen( $clean_10 ) !== 10 ) {
-        wp_send_json_error( array( 'message' => 'Invalid mobile number session. Please request OTP again.' ) );
-    }
-
-    // Verify phone was actually authenticated via OTP
-    $phone_auth_token = get_transient( 'sribalaji_verified_phone_' . $clean_10 );
-    if ( ! $phone_auth_token ) {
-        wp_send_json_error( array( 'message' => 'OTP verification expired. Please request OTP again.' ) );
-    }
-
-    if ( empty( $email_raw ) || ! is_email( $email_raw ) ) {
-        wp_send_json_error( array( 'message' => 'Please enter a valid email address.' ) );
-    }
-
-    // Check if an existing account already exists with this email address
-    $existing_user = get_user_by( 'email', $email_raw );
-    $target_user_id = 0;
-
-    if ( $existing_user ) {
-        // CASE A: User previously created an account with this email -> MERGE & LINK!
-        $target_user_id = $existing_user->ID;
-
-        // Permanently bind verified mobile number to this master user
-        update_user_meta( $target_user_id, 'billing_phone', $clean_10 );
-        update_user_meta( $target_user_id, 'shipping_phone', $clean_10 );
-        update_user_meta( $target_user_id, 'sribalaji_phone_verified', 1 );
-
-        // If customer provided a new password, update it now (solves lost password without email!)
-        if ( ! empty( $password ) ) {
-            wp_set_password( $password, $target_user_id );
-        }
-
-        // Clean up any temporary synthetic account matching this phone
-        $temp_user = get_user_by( 'login', 'cust_' . $clean_10 );
-        if ( $temp_user && $temp_user->ID !== $target_user_id ) {
-            require_once( ABSPATH . 'wp-admin/includes/user.php' );
-            wp_delete_user( $temp_user->ID, $target_user_id );
-        }
-
-        $success_msg = 'Account linked! Your mobile number and email are now unified.';
-
-    } else {
-        // CASE B: Brand new customer -> Create unified account with BOTH Phone and Email
+    // Step B: Auto-provision account if new customer
+    if ( ! $target_user ) {
         $username = 'cust_' . $clean_10;
         $idx = 1;
         while ( username_exists( $username ) ) {
@@ -1337,82 +1245,275 @@ function sribalaji_handle_ajax_complete_email_onboarding() {
             $idx++;
         }
 
-        $final_pass = ! empty( $password ) ? $password : wp_generate_password( 24, true, true );
-        $user_id = wp_create_user( $username, $final_pass, $email_raw );
+        $synthetic_email = $clean_10 . '@customer.sribalajibooks.com';
+        if ( email_exists( $synthetic_email ) ) {
+            $synthetic_email = $clean_10 . '_' . time() . '@customer.sribalajibooks.com';
+        }
+
+        $random_password = wp_generate_password( 24, true, true );
+        $user_id = wp_create_user( $username, $random_password, $synthetic_email );
 
         if ( is_wp_error( $user_id ) ) {
-            wp_send_json_error( array( 'message' => 'Could not complete registration: ' . $user_id->get_error_message() ) );
+            wp_send_json_error( array( 'message' => 'Could not create user account: ' . $user_id->get_error_message() ) );
         }
 
-        $target_user_id = $user_id;
-        $new_user = get_user_by( 'id', $target_user_id );
-        if ( $new_user && method_exists( $new_user, 'set_role' ) ) {
-            $new_user->set_role( 'customer' );
+        $target_user = get_user_by( 'id', $user_id );
+        if ( $target_user && method_exists( $target_user, 'set_role' ) ) {
+            $target_user->set_role( 'customer' );
         }
 
-        update_user_meta( $target_user_id, 'billing_phone', $clean_10 );
-        update_user_meta( $target_user_id, 'shipping_phone', $clean_10 );
-        update_user_meta( $target_user_id, 'sribalaji_phone_verified', 1 );
-        update_user_meta( $target_user_id, 'first_name', 'Customer' );
-        update_user_meta( $target_user_id, 'billing_first_name', 'Customer' );
-        update_user_meta( $target_user_id, 'billing_country', 'IN' );
-        update_user_meta( $target_user_id, 'billing_state', 'AP' );
-        update_user_meta( $target_user_id, 'billing_city', 'Visakhapatnam' );
-
-        $success_msg = 'Registration complete! Welcome to Sri Balaji Books & Stationery.';
+        update_user_meta( $user_id, 'billing_phone', $clean_10 );
+        update_user_meta( $user_id, 'shipping_phone', $clean_10 );
+        update_user_meta( $user_id, 'sribalaji_phone_verified', 1 );
+        update_user_meta( $user_id, 'first_name', 'Customer' );
+        update_user_meta( $user_id, 'billing_first_name', 'Customer' );
+        update_user_meta( $user_id, 'billing_country', 'IN' );
+        update_user_meta( $user_id, 'billing_state', 'AP' );
+        update_user_meta( $user_id, 'billing_city', 'Visakhapatnam' );
     }
 
-    // Reassign all orders placed with this phone or email to this unified user
-    $orders = wc_get_orders( array(
-        'billing_phone' => $clean_10,
-        'limit'         => -1,
-    ) );
-    foreach ( $orders as $ord ) {
-        $ord->set_customer_id( $target_user_id );
-        $ord->save();
-        update_post_meta( $ord->get_id(), '_customer_user', $target_user_id );
+    // Step C: Link past guest orders matching this phone number
+    if ( function_exists( 'wc_get_orders' ) ) {
+        $guest_orders = wc_get_orders( array(
+            'billing_phone' => $clean_10,
+            'limit'         => -1,
+        ) );
+        foreach ( $guest_orders as $ord ) {
+            if ( ! $ord->get_customer_id() ) {
+                $ord->set_customer_id( $target_user->ID );
+                $ord->save();
+                update_post_meta( $ord->get_id(), '_customer_user', $target_user->ID );
+            }
+        }
     }
 
-    // Consume the verified phone transient
-    delete_transient( 'sribalaji_verified_phone_' . $clean_10 );
-
-    // Authenticate and log in the user
-    $final_user = get_user_by( 'id', $target_user_id );
+    // Step D: Log in the user and set auth cookies
     wp_clear_auth_cookie();
-    wp_set_current_user( $final_user->ID, $final_user->user_login );
-    wp_set_auth_cookie( $final_user->ID, true, is_ssl() );
-    do_action( 'wp_login', $final_user->user_login, $final_user );
+    wp_set_current_user( $target_user->ID, $target_user->user_login );
+    wp_set_auth_cookie( $target_user->ID, true, is_ssl() );
+    do_action( 'wp_login', $target_user->user_login, $target_user );
 
     $redirect_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : home_url( '/my-account/' );
+    if ( ! empty( $_POST['redirect_to'] ) ) {
+        $redirect_url = esc_url_raw( wp_unslash( $_POST['redirect_to'] ) );
+    }
 
     wp_send_json_success( array(
-        'message'      => $success_msg,
+        'message'      => 'Login successful! Redirecting...',
         'redirect_url' => $redirect_url,
     ) );
 }
-add_action( 'wp_ajax_nopriv_sribalaji_complete_email_onboarding', 'sribalaji_handle_ajax_complete_email_onboarding' );
-add_action( 'wp_ajax_sribalaji_complete_email_onboarding', 'sribalaji_handle_ajax_complete_email_onboarding' );
+add_action( 'wp_ajax_nopriv_sribalaji_verify_otp', 'sribalaji_handle_ajax_verify_otp' );
+add_action( 'wp_ajax_sribalaji_verify_otp', 'sribalaji_handle_ajax_verify_otp' );
 
 /**
- * 6. Mandatory 10-Digit Mobile Number on Standard WooCommerce Email Registration
+ * 5. Progressive Account Unification Banner on "My Account" Dashboard
+ * Allows customers who logged in via Mobile OTP to optionally link their real email
+ * (e.g. user@example.com) and set/reset their password anytime in 1 click.
  */
-function sribalaji_validate_registration_phone( $errors, $username, $email ) {
-    $phone = isset( $_POST['billing_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_phone'] ) ) : '';
-    $digits = preg_replace( '/[^0-9]/', '', $phone );
-    if ( strlen( $digits ) > 10 && substr( $digits, 0, 2 ) === '91' ) {
-        $clean_10 = substr( $digits, 2 );
-    } else {
-        $clean_10 = substr( $digits, -10 );
+function sribalaji_render_account_link_banner() {
+    if ( ! is_user_logged_in() ) {
+        return;
     }
 
-    if ( strlen( $clean_10 ) !== 10 ) {
-        $errors->add( 'billing_phone_error', __( 'A valid 10-digit Indian mobile number is mandatory to register.', 'woocommerce' ) );
+    $current_user = wp_get_current_user();
+    $email = $current_user->user_email;
+    $phone = get_user_meta( $current_user->ID, 'billing_phone', true );
+
+    // Show banner only if customer is currently using a temporary synthetic mobile email
+    $is_synthetic = ( false !== strpos( $email, '@customer.sribalajibooks.com' ) );
+    if ( ! $is_synthetic ) {
+        return;
     }
 
-    return $errors;
+    ?>
+    <div id="sribalaji-merge-card" class="sribalaji-merge-card">
+        <div class="merge-card-header">
+            <span class="merge-badge">🔗 OPTIONAL: SYNC EMAIL &amp; ORDERS</span>
+            <h3>Connect Your Email &amp; Sync Previous Orders</h3>
+            <p>You are logged in with your mobile number <strong>+91 <?php echo esc_html( $phone ? $phone : 'XXXXXXXXXX' ); ?></strong>. If you previously registered or ordered using an email address (e.g. <code>user@example.com</code>), link it below to unify your orders and enable password login across all devices.</p>
+        </div>
+
+        <div id="sribalaji-merge-alert" style="display:none;" class="sribalaji-auth-alert"></div>
+
+        <div class="merge-form-grid">
+            <div class="merge-field-group">
+                <label for="merge_email">Email Address <span class="required">*</span></label>
+                <input type="email" id="merge_email" class="sribalaji-phone-field" placeholder="e.g. user@example.com" required />
+            </div>
+
+            <div class="merge-field-group">
+                <label for="merge_password">Set New Password <span class="optional">(Optional / to reset password)</span></label>
+                <input type="password" id="merge_password" class="sribalaji-phone-field" placeholder="Create a password (optional)" />
+            </div>
+        </div>
+
+        <button type="button" id="sribalaji-merge-btn" class="sribalaji-btn-primary" style="margin-top: 1rem;">
+            <span>Link Email &amp; Consolidate Account</span> &rarr;
+        </button>
+    </div>
+
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $('#sribalaji-merge-btn').on('click', function(e) {
+            e.preventDefault();
+            var email = $.trim($('#merge_email').val());
+            var password = $.trim($('#merge_password').val());
+            var $alert = $('#sribalaji-merge-alert');
+
+            if (!email || email.indexOf('@') === -1) {
+                $alert.removeClass('alert-success').addClass('alert-error').html('Please enter a valid email address.').slideDown();
+                return;
+            }
+
+            var $btn = $(this);
+            var origText = $btn.html();
+            $btn.prop('disabled', true).html('Linking Accounts...');
+
+            $.ajax({
+                url: '<?php echo esc_url( admin_url( "admin-ajax.php" ) ); ?>',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'sribalaji_merge_account',
+                    nonce: '<?php echo esc_attr( wp_create_nonce( "sribalaji_merge_nonce" ) ); ?>',
+                    email: email,
+                    password: password
+                },
+                success: function(res) {
+                    if (res && res.success) {
+                        $alert.removeClass('alert-error').addClass('alert-success').html(res.data.message || 'Accounts successfully linked!').slideDown();
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1200);
+                    } else {
+                        var err = (res && res.data && res.data.message) ? res.data.message : 'Could not link email. Please check and try again.';
+                        $alert.removeClass('alert-success').addClass('alert-error').html(err).slideDown();
+                        $btn.prop('disabled', false).html(origText);
+                    }
+                },
+                error: function() {
+                    $btn.prop('disabled', false).html(origText);
+                    $alert.removeClass('alert-success').addClass('alert-error').html('A server error occurred. Please try again.').slideDown();
+                }
+            });
+        });
+    });
+    </script>
+    <?php
 }
-add_filter( 'woocommerce_registration_errors', 'sribalaji_validate_registration_phone', 10, 3 );
+add_action( 'woocommerce_account_dashboard', 'sribalaji_render_account_link_banner', 5 );
 
+/**
+ * 6. AJAX Handler: Merge Existing Email Account with Verified Phone Account
+ */
+function sribalaji_handle_ajax_merge_account() {
+    check_ajax_referer( 'sribalaji_merge_nonce', 'nonce' );
+
+    if ( ! is_user_logged_in() ) {
+        wp_send_json_error( array( 'message' => 'Please log in first.' ) );
+    }
+
+    $email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+    $new_password = isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
+
+    if ( empty( $email ) || ! is_email( $email ) ) {
+        wp_send_json_error( array( 'message' => 'Please provide a valid email address.' ) );
+    }
+
+    $current_user = wp_get_current_user();
+    $current_user_id = $current_user->ID;
+    $verified_phone = get_user_meta( $current_user_id, 'billing_phone', true );
+
+    // Look for existing user with this email
+    $existing_user = get_user_by( 'email', $email );
+
+    if ( $existing_user ) {
+        // CASE 1: Account already exists with this email -> MERGE & LINK!
+        $master_user_id = $existing_user->ID;
+
+        // If it's already the same user
+        if ( $master_user_id === $current_user_id ) {
+            if ( ! empty( $new_password ) ) {
+                wp_set_password( $new_password, $master_user_id );
+                wp_set_current_user( $master_user_id, $existing_user->user_login );
+                wp_set_auth_cookie( $master_user_id, true, is_ssl() );
+            }
+            wp_send_json_success( array( 'message' => 'Your account profile and password have been updated!' ) );
+        }
+
+        // Link verified phone to master user
+        if ( ! empty( $verified_phone ) ) {
+            update_user_meta( $master_user_id, 'billing_phone', $verified_phone );
+            update_user_meta( $master_user_id, 'shipping_phone', $verified_phone );
+            update_user_meta( $master_user_id, 'sribalaji_phone_verified', 1 );
+        }
+
+        // Reassign any orders placed on current temporary account to master account
+        $temp_orders = wc_get_orders( array(
+            'customer_id' => $current_user_id,
+            'limit'       => -1,
+        ) );
+        foreach ( $temp_orders as $ord ) {
+            $ord->set_customer_id( $master_user_id );
+            $ord->save();
+            update_post_meta( $ord->get_id(), '_customer_user', $master_user_id );
+        }
+
+        // Update password if provided
+        if ( ! empty( $new_password ) ) {
+            wp_set_password( $new_password, $master_user_id );
+        }
+
+        // Switch active session to master user
+        wp_clear_auth_cookie();
+        wp_set_current_user( $master_user_id, $existing_user->user_login );
+        wp_set_auth_cookie( $master_user_id, true, is_ssl() );
+        do_action( 'wp_login', $existing_user->user_login, $existing_user );
+
+        // Clean up temporary synthetic account
+        if ( false !== strpos( $current_user->user_email, '@customer.sribalajibooks.com' ) ) {
+            require_once( ABSPATH . 'wp-admin/includes/user.php' );
+            wp_delete_user( $current_user_id, $master_user_id );
+        }
+
+        wp_send_json_success( array(
+            'message' => 'Successfully linked! All previous orders are merged and your password has been updated.',
+        ) );
+
+    } else {
+        // CASE 2: No existing user with this email — update current user's email
+        $update_data = array(
+            'ID'         => $current_user_id,
+            'user_email' => $email,
+        );
+
+        if ( ! empty( $new_password ) ) {
+            $update_data['user_pass'] = $new_password;
+        }
+
+        $result = wp_update_user( $update_data );
+
+        if ( is_wp_error( $result ) ) {
+            wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+        }
+
+        if ( ! empty( $new_password ) ) {
+            wp_set_current_user( $current_user_id, $current_user->user_login );
+            wp_set_auth_cookie( $current_user_id, true, is_ssl() );
+        }
+
+        wp_send_json_success( array(
+            'message' => 'Email updated to ' . esc_html( $email ) . ' successfully!',
+        ) );
+    }
+}
+add_action( 'wp_ajax_sribalaji_merge_account', 'sribalaji_handle_ajax_merge_account' );
+
+/**
+ * 7. Optional 10-Digit Mobile Number on Standard WooCommerce Email Registration
+ * Mobile number is optional at registration. If provided, it is validated and saved.
+ */
 function sribalaji_save_registration_phone( $customer_id ) {
     if ( ! empty( $_POST['billing_phone'] ) ) {
         $digits = preg_replace( '/[^0-9]/', '', sanitize_text_field( wp_unslash( $_POST['billing_phone'] ) ) );
@@ -1425,5 +1526,3 @@ function sribalaji_save_registration_phone( $customer_id ) {
     }
 }
 add_action( 'woocommerce_created_customer', 'sribalaji_save_registration_phone', 10, 1 );
-}
-add_action( 'wp_ajax_sribalaji_merge_account', 'sribalaji_handle_ajax_merge_account' );

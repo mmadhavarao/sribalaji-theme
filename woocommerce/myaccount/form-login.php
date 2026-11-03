@@ -2,10 +2,11 @@
 /**
  * Login / Register Form Override for Sri Balaji Books & Stationery
  *
- * Implements Mandatory Dual-Identifier Onboarding:
- * - Every account is guaranteed to have BOTH a verified 10-digit Mobile Number AND an Email Address.
- * - OTP login prompts new users to confirm their email, automatically linking any existing orders/accounts.
- * - Email registration strictly requires a 10-digit mobile number.
+ * Implements Zero-Friction Progressive Identity Model:
+ * - 1-Click Mobile OTP login/registration (Phone -> OTP -> Instantly Logged In).
+ * - Zero mandatory gates or forced email prompts.
+ * - Email registration with optional mobile phone number.
+ * - Seamless progressive unification across devices, accounts, and checkout.
  *
  * @package SriBalajiTheme
  */
@@ -80,7 +81,7 @@ do_action( 'woocommerce_before_customer_login_form' );
                                required />
 
                         <button type="button" id="sribalaji-verify-otp-btn" class="sribalaji-btn-primary">
-                            <span>Verify OTP</span> &rarr;
+                            <span>Verify &amp; Sign In</span> &rarr;
                         </button>
 
                         <div class="auth-resend-wrap">
@@ -89,43 +90,6 @@ do_action( 'woocommerce_before_customer_login_form' );
                                 Resend OTP <span id="sribalaji-timer-text"></span>
                             </button>
                         </div>
-                    </div>
-
-                    <!-- STEP 3: Mandatory Email Confirmation (Shown for New / Unlinked Users) -->
-                    <div id="sribalaji-step-email" class="auth-step-block" style="display: none;">
-                        <div class="onboarding-step-header">
-                            <span class="auth-trust-pill" style="margin-bottom: 0.35rem;">STEP 2 OF 2</span>
-                            <h3 style="font-size: 1.15rem; color: #1e3a8a; margin: 0 0 0.35rem 0;">Confirm Your Email Address</h3>
-                            <p style="font-size: 0.82rem; color: #475569; margin: 0 0 1rem 0;">
-                                Please confirm your email address to complete registration. If you already have past orders or an account with this email, they will be automatically linked!
-                            </p>
-                        </div>
-
-                        <div style="margin-bottom: 1rem;">
-                            <label for="sribalaji-confirm-email" class="auth-input-label">Email Address <span class="required">*</span></label>
-                            <input type="email" 
-                                   id="sribalaji-confirm-email" 
-                                   class="sribalaji-phone-field" 
-                                   placeholder="e.g. user@example.com" 
-                                   autocomplete="email" 
-                                   required />
-                        </div>
-
-                        <div style="margin-bottom: 1.25rem;">
-                            <div class="auth-label-row">
-                                <label for="sribalaji-confirm-password" class="auth-input-label">Create Password <span class="optional">(Optional)</span></label>
-                            </div>
-                            <input type="password" 
-                                   id="sribalaji-confirm-password" 
-                                   class="sribalaji-phone-field" 
-                                   placeholder="Create a password for email login" 
-                                   autocomplete="new-password" />
-                            <p class="auth-field-hint">Allows you to sign in with either your Mobile OTP or Email + Password.</p>
-                        </div>
-
-                        <button type="button" id="sribalaji-complete-onboarding-btn" class="sribalaji-btn-primary">
-                            <span>Complete &amp; Access My Account</span> &rarr;
-                        </button>
                     </div>
 
                     <div class="auth-divider">
@@ -234,16 +198,16 @@ do_action( 'woocommerce_before_customer_login_form' );
                             </p>
                         <?php endif; ?>
 
-                        <!-- Mandatory Email -->
+                        <!-- Email Address -->
                         <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                             <label for="reg_email"><?php esc_html_e( 'Email address', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
                             <input type="email" class="woocommerce-Input woocommerce-Input--text input-text sribalaji-phone-field" name="email" id="reg_email" autocomplete="email" placeholder="e.g. user@example.com" value="<?php echo ( ! empty( $_POST['email'] ) ) ? esc_attr( wp_unslash( $_POST['email'] ) ) : ''; ?>" required />
                         </p>
 
-                        <!-- Mandatory 10-Digit Mobile Number -->
+                        <!-- Optional 10-Digit Mobile Number -->
                         <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                            <label for="reg_billing_phone">Mobile Number (10 digits)&nbsp;<span class="required">*</span></label>
-                            <input type="tel" class="woocommerce-Input woocommerce-Input--text input-text sribalaji-phone-field" name="billing_phone" id="reg_billing_phone" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" required />
+                            <label for="reg_billing_phone">Mobile Number (10 digits)&nbsp;<span class="optional">(Optional)</span></label>
+                            <input type="tel" class="woocommerce-Input woocommerce-Input--text input-text sribalaji-phone-field" name="billing_phone" id="reg_billing_phone" placeholder="Enter 10-digit mobile number (optional)" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" />
                         </p>
 
                         <?php if ( 'no' === get_option( 'woocommerce_registration_generate_password' ) ) : ?>
