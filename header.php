@@ -329,7 +329,7 @@ function toggleDeviceSwitcher() {
                 </button>
                 <button type="button" class="reversed-u-cat-card" data-category="notebooks" onclick="selectCategoryTab('notebooks', this)">
                     <div class="reversed-u-tab-header">
-                        <span class="reversed-u-header-badge">UP TO 22% OFF</span>
+                        <span class="reversed-u-header-badge">BEST VALUE</span>
                     </div>
                     <div class="reversed-u-tab-body">
                         <div class="reversed-u-thumb-box">
@@ -342,7 +342,7 @@ function toggleDeviceSwitcher() {
                 </button>
                 <button type="button" class="reversed-u-cat-card" data-category="pens" onclick="selectCategoryTab('pens', this)">
                     <div class="reversed-u-tab-header">
-                        <span class="reversed-u-header-badge">UP TO 17% OFF</span>
+                        <span class="reversed-u-header-badge">TOP BRANDS</span>
                     </div>
                     <div class="reversed-u-tab-body">
                         <div class="reversed-u-thumb-box">
@@ -355,7 +355,7 @@ function toggleDeviceSwitcher() {
                 </button>
                 <button type="button" class="reversed-u-cat-card" data-category="art" onclick="selectCategoryTab('art', this)">
                     <div class="reversed-u-tab-header">
-                        <span class="reversed-u-header-badge">UP TO 24% OFF</span>
+                        <span class="reversed-u-header-badge">CREATIVE</span>
                     </div>
                     <div class="reversed-u-tab-body">
                         <div class="reversed-u-thumb-box">
@@ -368,7 +368,7 @@ function toggleDeviceSwitcher() {
                 </button>
                 <button type="button" class="reversed-u-cat-card" data-category="office" onclick="selectCategoryTab('office', this)">
                     <div class="reversed-u-tab-header">
-                        <span class="reversed-u-header-badge">SAVE ₹50</span>
+                        <span class="reversed-u-header-badge">ESSENTIALS</span>
                     </div>
                     <div class="reversed-u-tab-body">
                         <div class="reversed-u-thumb-box">
@@ -381,7 +381,7 @@ function toggleDeviceSwitcher() {
                 </button>
                 <button type="button" class="reversed-u-cat-card" data-category="geometry" onclick="selectCategoryTab('geometry', this)">
                     <div class="reversed-u-tab-header">
-                        <span class="reversed-u-header-badge">UP TO 24% OFF</span>
+                        <span class="reversed-u-header-badge">EXAM KITS</span>
                     </div>
                     <div class="reversed-u-tab-body">
                         <div class="reversed-u-thumb-box">

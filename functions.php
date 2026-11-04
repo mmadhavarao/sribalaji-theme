@@ -173,7 +173,7 @@ function sribalaji_render_reversed_u_category_bar() {
         $active_cat = sanitize_text_field( $_GET['product_cat'] );
     }
 
-    // Curated stationery category definitions with icons and offer badges
+    // Curated stationery category definitions with icons and honest merchandising badges
     $category_defs = array(
         'all' => array(
             'name'  => 'All Categories',
@@ -184,31 +184,31 @@ function sribalaji_render_reversed_u_category_bar() {
         'notebooks' => array(
             'name'  => 'Notebooks & Registers',
             'icon'  => '📓',
-            'badge' => 'UP TO 22% OFF',
+            'badge' => 'BEST VALUE',
             'url'   => add_query_arg( 'product_cat', 'notebooks', $shop_url ),
         ),
         'pens' => array(
             'name'  => 'Pens & Writing',
             'icon'  => '🖊️',
-            'badge' => 'UP TO 17% OFF',
+            'badge' => 'TOP BRANDS',
             'url'   => add_query_arg( 'product_cat', 'pens', $shop_url ),
         ),
         'art' => array(
             'name'  => 'Art & Craft',
             'icon'  => '🎨',
-            'badge' => 'UP TO 24% OFF',
+            'badge' => 'CREATIVE',
             'url'   => add_query_arg( 'product_cat', 'art', $shop_url ),
         ),
         'office' => array(
             'name'  => 'Office & Files',
             'icon'  => '📁',
-            'badge' => 'SAVE ₹50',
+            'badge' => 'ESSENTIALS',
             'url'   => add_query_arg( 'product_cat', 'office', $shop_url ),
         ),
         'geometry' => array(
             'name'  => 'School Kits',
             'icon'  => '📐',
-            'badge' => 'UP TO 24% OFF',
+            'badge' => 'EXAM KITS',
             'url'   => add_query_arg( 'product_cat', 'geometry', $shop_url ),
         ),
         'books' => array(
@@ -220,7 +220,7 @@ function sribalaji_render_reversed_u_category_bar() {
         'diaries' => array(
             'name'  => 'Diaries & Planners',
             'icon'  => '📖',
-            'badge' => 'NEW 2026',
+            'badge' => 'POPULAR',
             'url'   => add_query_arg( 'product_cat', 'diaries', $shop_url ),
         ),
     );
@@ -247,15 +247,15 @@ function sribalaji_render_reversed_u_category_bar() {
                     $icon = '🏷️';
                     $badge = 'POPULAR';
                     if ( strpos( $slug_lower, 'notebook' ) !== false || strpos( $slug_lower, 'register' ) !== false || strpos( $slug_lower, 'copy' ) !== false ) {
-                        $icon = '📓'; $badge = 'UP TO 22% OFF';
+                        $icon = '📓'; $badge = 'BEST VALUE';
                     } elseif ( strpos( $slug_lower, 'pen' ) !== false || strpos( $slug_lower, 'pencil' ) !== false || strpos( $slug_lower, 'write' ) !== false ) {
-                        $icon = '🖊️'; $badge = 'UP TO 17% OFF';
+                        $icon = '🖊️'; $badge = 'TOP BRANDS';
                     } elseif ( strpos( $slug_lower, 'art' ) !== false || strpos( $slug_lower, 'craft' ) !== false || strpos( $slug_lower, 'color' ) !== false || strpos( $slug_lower, 'paint' ) !== false ) {
-                        $icon = '🎨'; $badge = 'UP TO 24% OFF';
+                        $icon = '🎨'; $badge = 'CREATIVE';
                     } elseif ( strpos( $slug_lower, 'office' ) !== false || strpos( $slug_lower, 'file' ) !== false || strpos( $slug_lower, 'folder' ) !== false ) {
-                        $icon = '📁'; $badge = 'SAVE ₹50';
+                        $icon = '📁'; $badge = 'ESSENTIALS';
                     } elseif ( strpos( $slug_lower, 'geometry' ) !== false || strpos( $slug_lower, 'school' ) !== false || strpos( $slug_lower, 'kit' ) !== false ) {
-                        $icon = '📐'; $badge = 'UP TO 24% OFF';
+                        $icon = '📐'; $badge = 'EXAM KITS';
                     } elseif ( strpos( $slug_lower, 'book' ) !== false || strpos( $slug_lower, 'guide' ) !== false ) {
                         $icon = '📚'; $badge = 'BESTSELLER';
                     }

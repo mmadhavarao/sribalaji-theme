@@ -28,45 +28,45 @@ get_header(); ?>
                         'id'       => 101,
                         'title'    => 'Classmate Pulse Spiral Notebook A5',
                         'pack'     => '300 pgs',
-                        'price'    => '₹110',
+                        'price'    => '₹126',
                         'mrp'      => '₹140',
-                        'discount' => '21% OFF',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-1.jpg',
                     ),
                     array(
                         'id'       => 102,
                         'title'    => 'Classmate Long Exercise Notebook',
                         'pack'     => '172 pgs',
-                        'price'    => '₹70',
+                        'price'    => '₹81',
                         'mrp'      => '₹90',
-                        'discount' => '22% OFF',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-8.jpg',
                     ),
                     array(
                         'id'       => 103,
                         'title'    => 'Paperkraft Premium Hardbound Journal',
                         'pack'     => '192 pgs',
-                        'price'    => '₹199',
+                        'price'    => '₹225',
                         'mrp'      => '₹250',
-                        'discount' => '20% OFF',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-1.jpg',
                     ),
                     array(
                         'id'       => 104,
                         'title'    => 'Classmate Drawing Book Unruled',
                         'pack'     => '40 pgs',
-                        'price'    => '₹55',
+                        'price'    => '₹63',
                         'mrp'      => '₹70',
-                        'discount' => '21% OFF',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-8.jpg',
                     ),
                     array(
                         'id'       => 105,
                         'title'    => 'Classmate Interleaf Practical Notebook',
                         'pack'     => '128 pgs',
-                        'price'    => '₹85',
+                        'price'    => '₹95',
                         'mrp'      => '₹105',
-                        'discount' => '19% OFF',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-1.jpg',
                     ),
                 ),
@@ -84,26 +84,26 @@ get_header(); ?>
                         'title'    => 'Pilot Hi-Tecpoint V5 Rollerball Pen',
                         'pack'     => 'Single',
                         'price'    => '₹195',
-                        'mrp'      => '₹230',
-                        'discount' => '15% OFF',
+                        'mrp'      => '',
+                        'discount' => '',
                         'image'    => $img_dir . 'hero-product-2.jpg',
                     ),
                     array(
                         'id'       => 202,
                         'title'    => 'Reynolds 045 Fine Carbure Ball Pen',
                         'pack'     => 'Pack of 10',
-                        'price'    => '₹100',
-                        'mrp'      => '₹120',
-                        'discount' => '17% OFF',
+                        'price'    => '₹90',
+                        'mrp'      => '₹100',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'SCH-PEN-REY-045BLU.jpg',
                     ),
                     array(
                         'id'       => 203,
                         'title'    => 'Faber-Castell Textliner Highlighters',
                         'pack'     => 'Set of 5',
-                        'price'    => '₹125',
+                        'price'    => '₹135',
                         'mrp'      => '₹150',
-                        'discount' => '17% OFF',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-3.jpg',
                     ),
                     array(
@@ -111,17 +111,17 @@ get_header(); ?>
                         'title'    => 'Pilot V7 Cartridge Rollerball Pen',
                         'pack'     => 'Single',
                         'price'    => '₹180',
-                        'mrp'      => '₹210',
-                        'discount' => '14% OFF',
+                        'mrp'      => '₹200',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-2.jpg',
                     ),
                     array(
                         'id'       => 205,
                         'title'    => 'Reynolds Trimax Liquid Gel Pen Set',
                         'pack'     => 'Pack of 3',
-                        'price'    => '₹165',
-                        'mrp'      => '₹195',
-                        'discount' => '15% OFF',
+                        'price'    => '₹162',
+                        'mrp'      => '₹180',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'SCH-PEN-REY-TRIMBLU.jpg',
                     ),
                 ),
@@ -139,8 +139,8 @@ get_header(); ?>
                         'title'    => 'Faber-Castell Triangular Oil Pastels',
                         'pack'     => '24 Shades',
                         'price'    => '₹140',
-                        'mrp'      => '₹175',
-                        'discount' => '20% OFF',
+                        'mrp'      => '₹155',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-3.jpg',
                     ),
                     array(
@@ -148,17 +148,17 @@ get_header(); ?>
                         'title'    => 'Camel Oil Pastels (10 Shades Set)',
                         'pack'     => '10 Shades',
                         'price'    => '₹65',
-                        'mrp'      => '₹85',
-                        'discount' => '24% OFF',
+                        'mrp'      => '',
+                        'discount' => '',
                         'image'    => $img_dir . 'hero-product-5.jpg',
                     ),
                     array(
                         'id'       => 303,
                         'title'    => 'Pidilite Fevicryl Acrylic Colors Kit',
                         'pack'     => '12 Shades',
-                        'price'    => '₹220',
-                        'mrp'      => '₹260',
-                        'discount' => '15% OFF',
+                        'price'    => '₹225',
+                        'mrp'      => '₹250',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-5.jpg',
                     ),
                     array(
@@ -174,9 +174,9 @@ get_header(); ?>
                         'id'       => 305,
                         'title'    => 'Camlin Stretched Canvas Board 8x10',
                         'pack'     => '1 Piece',
-                        'price'    => '₹95',
-                        'mrp'      => '₹120',
-                        'discount' => '21% OFF',
+                        'price'    => '₹99',
+                        'mrp'      => '₹110',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-3.jpg',
                     ),
                 ),
@@ -203,26 +203,26 @@ get_header(); ?>
                         'title'    => 'Solo Executive Display Folder A4',
                         'pack'     => '20 Pockets',
                         'price'    => '₹135',
-                        'mrp'      => '₹160',
-                        'discount' => '16% OFF',
+                        'mrp'      => '₹150',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-7.jpg',
                     ),
                     array(
                         'id'       => 403,
                         'title'    => 'Kangaro Stapler #10 & Pin Box Bundle',
                         'pack'     => 'Combo Pack',
-                        'price'    => '₹85',
+                        'price'    => '₹90',
                         'mrp'      => '₹100',
-                        'discount' => '15% OFF',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-4.jpg',
                     ),
                     array(
                         'id'       => 404,
                         'title'    => '3M Scotch Magic Tape with Dispenser',
                         'pack'     => '1 Roll',
-                        'price'    => '₹115',
-                        'mrp'      => '₹135',
-                        'discount' => '15% OFF',
+                        'price'    => '₹117',
+                        'mrp'      => '₹130',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-6.jpg',
                     ),
                     array(
@@ -230,8 +230,8 @@ get_header(); ?>
                         'title'    => 'Post-it Sticky Notes Cube Yellow 3x3',
                         'pack'     => '100 Sheets',
                         'price'    => '₹90',
-                        'mrp'      => '₹110',
-                        'discount' => '18% OFF',
+                        'mrp'      => '₹100',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-7.jpg',
                     ),
                 ),
@@ -248,18 +248,18 @@ get_header(); ?>
                         'id'       => 501,
                         'title'    => 'Apsara Platinum Kit (Pencils & Scale)',
                         'pack'     => 'Complete Kit',
-                        'price'    => '₹120',
+                        'price'    => '₹135',
                         'mrp'      => '₹150',
-                        'discount' => '20% OFF',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-4.jpg',
                     ),
                     array(
                         'id'       => 502,
                         'title'    => 'Doms Mathematical Drawing Instruments',
                         'pack'     => 'Tin Box',
-                        'price'    => '₹145',
-                        'mrp'      => '₹175',
-                        'discount' => '17% OFF',
+                        'price'    => '₹144',
+                        'mrp'      => '₹160',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-6.jpg',
                     ),
                     array(
@@ -267,8 +267,8 @@ get_header(); ?>
                         'title'    => 'Train 2-in-1 Sharpener & Eraser',
                         'pack'     => 'Single',
                         'price'    => '₹110',
-                        'mrp'      => '₹145',
-                        'discount' => '24% OFF',
+                        'mrp'      => '',
+                        'discount' => '',
                         'image'    => $img_dir . 'hero-product-4.jpg',
                     ),
                     array(
@@ -276,17 +276,17 @@ get_header(); ?>
                         'title'    => 'Sri Balaji Canvas School Tote Bag',
                         'pack'     => 'Heavy Duty',
                         'price'    => '₹119',
-                        'mrp'      => '₹149',
-                        'discount' => '20% OFF',
+                        'mrp'      => '',
+                        'discount' => '',
                         'image'    => $img_dir . 'hero-product-7.jpg',
                     ),
                     array(
                         'id'       => 505,
                         'title'    => 'Camlin Scholar Geometry Box Set',
                         'pack'     => 'Premium Set',
-                        'price'    => '₹130',
-                        'mrp'      => '₹155',
-                        'discount' => '16% OFF',
+                        'price'    => '₹135',
+                        'mrp'      => '₹150',
+                        'discount' => '10% OFF',
                         'image'    => $img_dir . 'hero-product-6.jpg',
                     ),
                 ),
@@ -322,17 +322,21 @@ get_header(); ?>
                         $reg_price  = $product ? $product->get_regular_price() : '';
                         $sale_price = $product ? $product->get_sale_price() : '';
                         $curr_price = $product ? $product->get_price() : '99';
-                        $discount_badge = 'SPECIAL';
+                        $discount_badge = '';
+                        $mrp_display    = '';
                         if ( $reg_price && $sale_price && (float) $reg_price > (float) $sale_price ) {
                             $pct = round( ( ( (float) $reg_price - (float) $sale_price ) / (float) $reg_price ) * 100 );
-                            $discount_badge = $pct . '% OFF';
+                            if ( $pct > 0 ) {
+                                $discount_badge = $pct . '% OFF';
+                                $mrp_display    = '₹' . $reg_price;
+                            }
                         }
                         $live_prods[] = array(
                             'id'       => get_the_ID(),
                             'title'    => get_the_title(),
                             'pack'     => 'Standard',
                             'price'    => '₹' . ( $curr_price ? $curr_price : '99' ),
-                            'mrp'      => $reg_price ? '₹' . $reg_price : '',
+                            'mrp'      => $mrp_display,
                             'discount' => $discount_badge,
                             'image'    => $thumb,
                         );
@@ -476,13 +480,36 @@ get_header(); ?>
                     elseif ( stripos( $title, 'Pidilite' ) !== false || stripos( $title, 'Fevicol' ) !== false || stripos( $title, 'Fevicryl' ) !== false || stripos( $title, 'Fevicreate' ) !== false ) $brand = 'Pidilite';
                     elseif ( stripos( $title, 'Reynolds' ) !== false ) $brand = 'Reynolds';
 
+                    $badge = 'POPULAR';
+                    if ( $product && $product->is_on_sale() ) {
+                        $reg_p  = (float) $product->get_regular_price();
+                        $sale_p = (float) $product->get_sale_price();
+                        if ( $reg_p > 0 && $sale_p > 0 && $reg_p > $sale_p ) {
+                            $calc_pct = (int) round( ( ( $reg_p - $sale_p ) / $reg_p ) * 100 );
+                            if ( $calc_pct > 0 ) {
+                                $badge = $calc_pct . '% OFF';
+                            }
+                        }
+                    } elseif ( $product && $product->is_featured() ) {
+                        $badge = 'FEATURED';
+                    } elseif ( $idx === 0 ) {
+                        $badge = 'BESTSELLER';
+                    } elseif ( $idx === 1 ) {
+                        $badge = 'TOP PICK';
+                    } elseif ( $idx === 2 ) {
+                        $badge = 'TRENDING';
+                    } else {
+                        $curated_badges = array( 'POPULAR', 'ESSENTIAL', 'CAMPUS PICK', 'STAFF PICK', 'TOP VALUE' );
+                        $badge = $curated_badges[ $idx % count( $curated_badges ) ];
+                    }
+
                     $hero_products[] = array(
                         'title' => $title,
                         'url'   => get_permalink(),
                         'image' => $thumb,
                         'price' => $price_html ? $price_html : '₹99.00',
                         'brand' => $brand,
-                        'badge' => ( $idx % 2 === 0 ) ? 'MIN. 20% OFF*' : 'BESTSELLER',
+                        'badge' => $badge,
                     );
                     $idx++;
                 }
@@ -493,70 +520,71 @@ get_header(); ?>
         // Fallback to verified catalog products if WooCommerce is empty or inactive
         if ( empty( $hero_products ) ) {
             $img_dir = get_template_directory_uri() . '/images/';
+            $shop_url = class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' ) : '#';
             $hero_products = array(
                 array(
                     'title' => 'Classmate Pulse Spiral Notebook',
-                    'url'   => '#',
+                    'url'   => $shop_url,
                     'image' => $img_dir . 'hero-product-1.jpg',
-                    'price' => 'MIN. 20% OFF* &bull; ₹110',
+                    'price' => '<del>₹130</del> ₹117',
                     'brand' => 'Classmate',
-                    'badge' => 'MIN. 20% OFF*',
+                    'badge' => '10% OFF',
                 ),
                 array(
                     'title' => 'Pilot Hi-Tecpoint V5 Rollerball Pen',
-                    'url'   => '#',
+                    'url'   => $shop_url,
                     'image' => $img_dir . 'hero-product-2.jpg',
-                    'price' => 'SPECIAL &bull; ₹195',
+                    'price' => '₹195',
                     'brand' => 'Pilot',
                     'badge' => 'TOP SELLER',
                 ),
                 array(
                     'title' => 'Faber-Castell Triangular Oil Pastels',
-                    'url'   => '#',
+                    'url'   => $shop_url,
                     'image' => $img_dir . 'hero-product-3.jpg',
-                    'price' => 'MIN. 15% OFF* &bull; ₹140',
+                    'price' => '<del>₹155</del> ₹140',
                     'brand' => 'Faber-Castell',
-                    'badge' => 'ART ESSENTIAL',
+                    'badge' => '10% OFF',
                 ),
                 array(
                     'title' => 'Casio fx-82MS Scientific Calculator',
-                    'url'   => '#',
+                    'url'   => $shop_url,
                     'image' => $img_dir . 'hero-product-6.jpg',
-                    'price' => 'SAVE ₹50 &bull; ₹545',
+                    'price' => '<del>₹595</del> ₹545',
                     'brand' => 'Casio',
-                    'badge' => 'EXAM SPECIAL',
+                    'badge' => 'SAVE ₹50',
                 ),
                 array(
                     'title' => 'Camel Oil Pastels (10 Shades Set)',
-                    'url'   => '#',
+                    'url'   => $shop_url,
                     'image' => $img_dir . 'hero-product-5.jpg',
-                    'price' => 'MIN. 20% OFF* &bull; ₹65',
+                    'price' => '₹65',
                     'brand' => 'Camlin',
                     'badge' => 'POPULAR',
                 ),
                 array(
                     'title' => 'Sri Balaji Canvas Tote Shopping Bag',
-                    'url'   => '#',
+                    'url'   => $shop_url,
                     'image' => $img_dir . 'hero-product-7.jpg',
-                    'price' => 'FLAT 20% OFF* &bull; ₹119',
+                    'price' => '₹119',
                     'brand' => 'Sri Balaji',
                     'badge' => 'ECO TOTE',
                 ),
                 array(
                     'title' => 'Train Sharpener & Eraser 2-in-1',
-                    'url'   => '#',
+                    'url'   => $shop_url,
                     'image' => $img_dir . 'hero-product-4.jpg',
-                    'price' => 'MIN. 25% OFF* &bull; ₹110',
+                    'price' => '₹110',
                     'brand' => 'Sri Balaji',
                     'badge' => 'KIDS PICK',
                 ),
                 array(
                     'title' => 'Classmate Long Exercise Notebook',
-                    'url'   => '#',
+                    'url'   => $shop_url,
                     'image' => $img_dir . 'hero-product-8.jpg',
-                    'price' => 'MIN. 25% OFF* &bull; ₹70',
+                    'price' => '<del>₹80</del> ₹72',
                     'brand' => 'Classmate',
-                    'badge' => 'CAMPUS PICK',
+                    'badge' => '10% OFF',
                 ),
             );
         }
