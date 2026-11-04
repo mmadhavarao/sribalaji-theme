@@ -287,6 +287,12 @@ function toggleDeviceSwitcher() {
         if ( function_exists( 'is_cart' ) && is_cart() ) {
             $sribalaji_hide_search_and_tabs = true;
         }
+
+        // On WooCommerce shop, category archive, and product pages, category navigation is handled by the dedicated Reversed-U Shop Title Bar
+        $sribalaji_hide_category_tabs = $sribalaji_hide_search_and_tabs;
+        if ( ( function_exists( 'is_shop' ) && is_shop() ) || ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) || ( function_exists( 'is_product_category' ) && is_product_category() ) || ( function_exists( 'is_product' ) && is_product() ) ) {
+            $sribalaji_hide_category_tabs = true;
+        }
         ?>
 
         <?php if ( ! $sribalaji_hide_search_and_tabs ) : ?>
@@ -302,33 +308,65 @@ function toggleDeviceSwitcher() {
                 </form>
             <?php endif; ?>
         </div>
+        <?php endif; ?>
 
-        <!-- Sticky Blinkit Horizontal Category Tabs (Shown on Mobile / Tablet) -->
-        <nav class="mobile-category-tabs-bar" id="mobileCategoryTabsBar" aria-label="Product Categories">
-            <div class="category-tabs-scroll">
-                <button type="button" class="category-tab-btn is-active" data-category="all" onclick="selectCategoryTab('all', this)">
-                    <span class="tab-icon">✨</span>
-                    <span class="tab-label">All</span>
+        <?php if ( ! $sribalaji_hide_category_tabs ) : ?>
+        <!-- Sticky Blinkit Horizontal Reversed-U Category Tabs (Shown on Mobile / Tablet) -->
+        <nav class="mobile-category-tabs-bar sribalaji-reversed-u-bar" id="mobileCategoryTabsBar" aria-label="Product Categories">
+            <div class="reversed-u-scroll-track">
+                <button type="button" class="reversed-u-cat-card is-active" data-category="all" onclick="selectCategoryTab('all', this)">
+                    <span class="reversed-u-offer-pill">EXPLORE ALL</span>
+                    <div class="reversed-u-card-body">
+                        <div class="reversed-u-icon-wrap">
+                            <span class="reversed-u-icon">✨</span>
+                        </div>
+                        <span class="reversed-u-title">All Categories</span>
+                    </div>
                 </button>
-                <button type="button" class="category-tab-btn" data-category="notebooks" onclick="selectCategoryTab('notebooks', this)">
-                    <span class="tab-icon">📓</span>
-                    <span class="tab-label">Notebooks</span>
+                <button type="button" class="reversed-u-cat-card" data-category="notebooks" onclick="selectCategoryTab('notebooks', this)">
+                    <span class="reversed-u-offer-pill">UP TO 22% OFF</span>
+                    <div class="reversed-u-card-body">
+                        <div class="reversed-u-icon-wrap">
+                            <span class="reversed-u-icon">📓</span>
+                        </div>
+                        <span class="reversed-u-title">Notebooks &amp; Registers</span>
+                    </div>
                 </button>
-                <button type="button" class="category-tab-btn" data-category="pens" onclick="selectCategoryTab('pens', this)">
-                    <span class="tab-icon">🖊️</span>
-                    <span class="tab-label">Pens &amp; Writing</span>
+                <button type="button" class="reversed-u-cat-card" data-category="pens" onclick="selectCategoryTab('pens', this)">
+                    <span class="reversed-u-offer-pill">UP TO 17% OFF</span>
+                    <div class="reversed-u-card-body">
+                        <div class="reversed-u-icon-wrap">
+                            <span class="reversed-u-icon">🖊️</span>
+                        </div>
+                        <span class="reversed-u-title">Pens &amp; Writing</span>
+                    </div>
                 </button>
-                <button type="button" class="category-tab-btn" data-category="art" onclick="selectCategoryTab('art', this)">
-                    <span class="tab-icon">🎨</span>
-                    <span class="tab-label">Art &amp; Craft</span>
+                <button type="button" class="reversed-u-cat-card" data-category="art" onclick="selectCategoryTab('art', this)">
+                    <span class="reversed-u-offer-pill">UP TO 24% OFF</span>
+                    <div class="reversed-u-card-body">
+                        <div class="reversed-u-icon-wrap">
+                            <span class="reversed-u-icon">🎨</span>
+                        </div>
+                        <span class="reversed-u-title">Art &amp; Craft</span>
+                    </div>
                 </button>
-                <button type="button" class="category-tab-btn" data-category="office" onclick="selectCategoryTab('office', this)">
-                    <span class="tab-icon">📁</span>
-                    <span class="tab-label">Office &amp; Files</span>
+                <button type="button" class="reversed-u-cat-card" data-category="office" onclick="selectCategoryTab('office', this)">
+                    <span class="reversed-u-offer-pill">SAVE ₹50</span>
+                    <div class="reversed-u-card-body">
+                        <div class="reversed-u-icon-wrap">
+                            <span class="reversed-u-icon">📁</span>
+                        </div>
+                        <span class="reversed-u-title">Office &amp; Files</span>
+                    </div>
                 </button>
-                <button type="button" class="category-tab-btn" data-category="geometry" onclick="selectCategoryTab('geometry', this)">
-                    <span class="tab-icon">📐</span>
-                    <span class="tab-label">School Kits</span>
+                <button type="button" class="reversed-u-cat-card" data-category="geometry" onclick="selectCategoryTab('geometry', this)">
+                    <span class="reversed-u-offer-pill">UP TO 24% OFF</span>
+                    <div class="reversed-u-card-body">
+                        <div class="reversed-u-icon-wrap">
+                            <span class="reversed-u-icon">📐</span>
+                        </div>
+                        <span class="reversed-u-title">School Kits</span>
+                    </div>
                 </button>
             </div>
         </nav>
@@ -387,7 +425,7 @@ document.addEventListener('click', function(e) {
 });
 
 function selectCategoryTab(categoryKey, btn) {
-    var tabs = document.querySelectorAll('.category-tab-btn');
+    var tabs = document.querySelectorAll('.category-tab-btn, .reversed-u-cat-card');
     tabs.forEach(function(t) { t.classList.remove('is-active'); });
     if (btn) btn.classList.add('is-active');
 

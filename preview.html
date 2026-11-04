@@ -1217,32 +1217,62 @@
                 </form>
             </div>
 
-            <!-- Sticky Blinkit Horizontal Category Tabs (Shown on Mobile / Tablet) -->
-            <nav class="mobile-category-tabs-bar" id="mobileCategoryTabsBar" aria-label="Product Categories">
-                <div class="category-tabs-scroll">
-                    <button type="button" class="category-tab-btn is-active" data-category="all" onclick="selectCategoryTab('all', this)">
-                        <span class="tab-icon">✨</span>
-                        <span class="tab-label">All</span>
+            <!-- Sticky Blinkit Horizontal Reversed-U Category Tabs (Shown on Mobile / Tablet) -->
+            <nav class="mobile-category-tabs-bar sribalaji-reversed-u-bar" id="mobileCategoryTabsBar" aria-label="Product Categories">
+                <div class="reversed-u-scroll-track">
+                    <button type="button" class="reversed-u-cat-card is-active" data-category="all" onclick="selectCategoryTab('all', this)">
+                        <span class="reversed-u-offer-pill">EXPLORE ALL</span>
+                        <div class="reversed-u-card-body">
+                            <div class="reversed-u-icon-wrap">
+                                <span class="reversed-u-icon">✨</span>
+                            </div>
+                            <span class="reversed-u-title">All Categories</span>
+                        </div>
                     </button>
-                    <button type="button" class="category-tab-btn" data-category="notebooks" onclick="selectCategoryTab('notebooks', this)">
-                        <span class="tab-icon">📓</span>
-                        <span class="tab-label">Notebooks</span>
+                    <button type="button" class="reversed-u-cat-card" data-category="notebooks" onclick="selectCategoryTab('notebooks', this)">
+                        <span class="reversed-u-offer-pill">UP TO 22% OFF</span>
+                        <div class="reversed-u-card-body">
+                            <div class="reversed-u-icon-wrap">
+                                <span class="reversed-u-icon">📓</span>
+                            </div>
+                            <span class="reversed-u-title">Notebooks &amp; Registers</span>
+                        </div>
                     </button>
-                    <button type="button" class="category-tab-btn" data-category="pens" onclick="selectCategoryTab('pens', this)">
-                        <span class="tab-icon">🖊️</span>
-                        <span class="tab-label">Pens &amp; Writing</span>
+                    <button type="button" class="reversed-u-cat-card" data-category="pens" onclick="selectCategoryTab('pens', this)">
+                        <span class="reversed-u-offer-pill">UP TO 17% OFF</span>
+                        <div class="reversed-u-card-body">
+                            <div class="reversed-u-icon-wrap">
+                                <span class="reversed-u-icon">🖊️</span>
+                            </div>
+                            <span class="reversed-u-title">Pens &amp; Writing</span>
+                        </div>
                     </button>
-                    <button type="button" class="category-tab-btn" data-category="art" onclick="selectCategoryTab('art', this)">
-                        <span class="tab-icon">🎨</span>
-                        <span class="tab-label">Art &amp; Craft</span>
+                    <button type="button" class="reversed-u-cat-card" data-category="art" onclick="selectCategoryTab('art', this)">
+                        <span class="reversed-u-offer-pill">UP TO 24% OFF</span>
+                        <div class="reversed-u-card-body">
+                            <div class="reversed-u-icon-wrap">
+                                <span class="reversed-u-icon">🎨</span>
+                            </div>
+                            <span class="reversed-u-title">Art &amp; Craft</span>
+                        </div>
                     </button>
-                    <button type="button" class="category-tab-btn" data-category="office" onclick="selectCategoryTab('office', this)">
-                        <span class="tab-icon">📁</span>
-                        <span class="tab-label">Office &amp; Files</span>
+                    <button type="button" class="reversed-u-cat-card" data-category="office" onclick="selectCategoryTab('office', this)">
+                        <span class="reversed-u-offer-pill">SAVE ₹50</span>
+                        <div class="reversed-u-card-body">
+                            <div class="reversed-u-icon-wrap">
+                                <span class="reversed-u-icon">📁</span>
+                            </div>
+                            <span class="reversed-u-title">Office &amp; Files</span>
+                        </div>
                     </button>
-                    <button type="button" class="category-tab-btn" data-category="geometry" onclick="selectCategoryTab('geometry', this)">
-                        <span class="tab-icon">📐</span>
-                        <span class="tab-label">School Kits</span>
+                    <button type="button" class="reversed-u-cat-card" data-category="geometry" onclick="selectCategoryTab('geometry', this)">
+                        <span class="reversed-u-offer-pill">UP TO 24% OFF</span>
+                        <div class="reversed-u-card-body">
+                            <div class="reversed-u-icon-wrap">
+                                <span class="reversed-u-icon">📐</span>
+                            </div>
+                            <span class="reversed-u-title">School Kits</span>
+                        </div>
                     </button>
                 </div>
             </nav>
@@ -2101,13 +2131,73 @@
         <!-- Live Products Showcase (Sample Preview of what WooCommerce renders) -->
         <section id="featured-products" class="products-section">
             <div class="section-header">
-                <h2>Featured Products</h2>
-                <p>Top picks and daily essentials from our verified 66-item catalog.</p>
+                <h2>Featured Products &amp; Store Catalog</h2>
+                <p>Browse stationery essentials by category with our Blinkit-style quick navigation.</p>
             </div>
 
-            <div class="sample-products-grid">
-                <!-- Product 1 -->
-                <div class="sample-product-card">
+            <!-- Blinkit-Style Reversed-U Shape Category Title Bar -->
+            <nav class="sribalaji-reversed-u-bar" id="shopReversedUBar" aria-label="Product Categories Title Bar">
+                <div class="reversed-u-scroll-track">
+                    <button type="button" class="reversed-u-cat-card is-active" data-shop-cat="all" onclick="filterShopCatalog('all', this)">
+                        <span class="reversed-u-offer-pill">EXPLORE ALL</span>
+                        <div class="reversed-u-card-body">
+                            <div class="reversed-u-icon-wrap">
+                                <span class="reversed-u-icon">✨</span>
+                            </div>
+                            <span class="reversed-u-title">All Categories</span>
+                        </div>
+                    </button>
+                    <button type="button" class="reversed-u-cat-card" data-shop-cat="notebooks" onclick="filterShopCatalog('notebooks', this)">
+                        <span class="reversed-u-offer-pill">UP TO 22% OFF</span>
+                        <div class="reversed-u-card-body">
+                            <div class="reversed-u-icon-wrap">
+                                <span class="reversed-u-icon">📓</span>
+                            </div>
+                            <span class="reversed-u-title">Notebooks &amp; Registers</span>
+                        </div>
+                    </button>
+                    <button type="button" class="reversed-u-cat-card" data-shop-cat="pens" onclick="filterShopCatalog('pens', this)">
+                        <span class="reversed-u-offer-pill">UP TO 17% OFF</span>
+                        <div class="reversed-u-card-body">
+                            <div class="reversed-u-icon-wrap">
+                                <span class="reversed-u-icon">🖊️</span>
+                            </div>
+                            <span class="reversed-u-title">Pens &amp; Writing</span>
+                        </div>
+                    </button>
+                    <button type="button" class="reversed-u-cat-card" data-shop-cat="art" onclick="filterShopCatalog('art', this)">
+                        <span class="reversed-u-offer-pill">UP TO 24% OFF</span>
+                        <div class="reversed-u-card-body">
+                            <div class="reversed-u-icon-wrap">
+                                <span class="reversed-u-icon">🎨</span>
+                            </div>
+                            <span class="reversed-u-title">Art &amp; Craft</span>
+                        </div>
+                    </button>
+                    <button type="button" class="reversed-u-cat-card" data-shop-cat="office" onclick="filterShopCatalog('office', this)">
+                        <span class="reversed-u-offer-pill">SAVE ₹50</span>
+                        <div class="reversed-u-card-body">
+                            <div class="reversed-u-icon-wrap">
+                                <span class="reversed-u-icon">📁</span>
+                            </div>
+                            <span class="reversed-u-title">Office &amp; Files</span>
+                        </div>
+                    </button>
+                    <button type="button" class="reversed-u-cat-card" data-shop-cat="geometry" onclick="filterShopCatalog('geometry', this)">
+                        <span class="reversed-u-offer-pill">UP TO 24% OFF</span>
+                        <div class="reversed-u-card-body">
+                            <div class="reversed-u-icon-wrap">
+                                <span class="reversed-u-icon">📐</span>
+                            </div>
+                            <span class="reversed-u-title">School Kits</span>
+                        </div>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="sample-products-grid" id="sampleProductsGrid">
+                <!-- Product 1 (Notebooks) -->
+                <div class="sample-product-card" data-product-cat="notebooks">
                     <img src="./images/hero-product-1.jpg" alt="Classmate Long Book" class="sample-product-img">
                     <div class="sample-product-title">Classmate Pulse Spiral Notebook (Single Line, 200 Pages)</div>
                     <div class="sample-price-box">
@@ -2117,8 +2207,8 @@
                     <a href="#" class="sample-add-to-cart">Add to cart</a>
                 </div>
 
-                <!-- Product 2 -->
-                <div class="sample-product-card">
+                <!-- Product 2 (Pens) -->
+                <div class="sample-product-card" data-product-cat="pens">
                     <img src="./images/hero-product-2.jpg" alt="Pilot V5" class="sample-product-img">
                     <div class="sample-product-title">Pilot Hi-Tecpoint V5 Rollerball Pen (Pack of 3 - Blue, Black, Red)</div>
                     <div class="sample-price-box">
@@ -2128,8 +2218,8 @@
                     <a href="#" class="sample-add-to-cart">Add to cart</a>
                 </div>
 
-                <!-- Product 3 -->
-                <div class="sample-product-card">
+                <!-- Product 3 (Art) -->
+                <div class="sample-product-card" data-product-cat="art">
                     <img src="./images/hero-product-3.jpg" alt="Faber-Castell Art Kit" class="sample-product-img">
                     <div class="sample-product-title">Faber-Castell Triangular Oil Pastels (Pack of 25 Shades)</div>
                     <div class="sample-price-box">
@@ -2139,13 +2229,35 @@
                     <a href="#" class="sample-add-to-cart">Add to cart</a>
                 </div>
 
-                <!-- Product 4 -->
-                <div class="sample-product-card">
+                <!-- Product 4 (Office / Eco) -->
+                <div class="sample-product-card" data-product-cat="office">
                     <img src="./images/hero-product-8.jpg" alt="Eco Jute Shopping Bag" class="sample-product-img">
                     <div class="sample-product-title">Sri Balaji Eco-Friendly Jute Tote Shopping Bag (Large)</div>
                     <div class="sample-price-box">
                         <span class="regular">₹150.00</span>
                         <span>₹120.00</span>
+                    </div>
+                    <a href="#" class="sample-add-to-cart">Add to cart</a>
+                </div>
+
+                <!-- Product 5 (Geometry) -->
+                <div class="sample-product-card" data-product-cat="geometry">
+                    <img src="./images/hero-product-3.jpg" alt="Camlin Geometry Box" class="sample-product-img">
+                    <div class="sample-product-title">Camlin Scholar Mathematical Drawing Instruments Geometry Box</div>
+                    <div class="sample-price-box">
+                        <span class="regular">₹185.00</span>
+                        <span>₹149.00</span>
+                    </div>
+                    <a href="#" class="sample-add-to-cart">Add to cart</a>
+                </div>
+
+                <!-- Product 6 (Notebooks) -->
+                <div class="sample-product-card" data-product-cat="notebooks">
+                    <img src="./images/hero-product-1.jpg" alt="Classmate Hardbound Register" class="sample-product-img">
+                    <div class="sample-product-title">Paperkraft Hardbound Premium Executive Journal (240 Pages)</div>
+                    <div class="sample-price-box">
+                        <span class="regular">₹260.00</span>
+                        <span>₹199.00</span>
                     </div>
                     <a href="#" class="sample-add-to-cart">Add to cart</a>
                 </div>
@@ -2597,9 +2709,9 @@
         }
     });
 
-    /* Quick-Commerce Category Tabs Filter Engine */
+    /* Quick-Commerce Category Tabs Filter Engine (Home Feed) */
     function selectCategoryTab(categoryKey, btn) {
-        var tabs = document.querySelectorAll('.category-tab-btn');
+        var tabs = document.querySelectorAll('#mobileCategoryTabsBar .reversed-u-cat-card, .category-tab-btn');
         tabs.forEach(function(t) { t.classList.remove('is-active'); });
         if (btn) btn.classList.add('is-active');
 
@@ -2626,6 +2738,29 @@
                 }
             });
         }
+    }
+
+    /* Blinkit Reversed-U Shop Catalog Filter Engine */
+    function filterShopCatalog(categoryKey, btn) {
+        var shopTabs = document.querySelectorAll('#shopReversedUBar .reversed-u-cat-card');
+        shopTabs.forEach(function(t) { t.classList.remove('is-active'); });
+        if (btn) btn.classList.add('is-active');
+
+        if (btn && btn.scrollIntoView) {
+            btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+
+        var cards = document.querySelectorAll('#sampleProductsGrid .sample-product-card');
+        if (!cards.length) return;
+
+        cards.forEach(function(card) {
+            var cardCat = card.getAttribute('data-product-cat');
+            if (categoryKey === 'all' || cardCat === categoryKey) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
     }
 
     /* Quick Commerce Add to Cart Animation */

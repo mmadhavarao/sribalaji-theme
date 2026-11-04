@@ -159,12 +159,165 @@ remove_action( 'woocommerce_after_main_content', 'woocommerce_output_content_wra
 // Remove the default WooCommerce sidebar so it doesn't appear at the bottom
 remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
 
+/**
+ * Blinkit-Style Reversed-U Shape Category Title Bar for Shop & Archives
+ */
+function sribalaji_render_reversed_u_category_bar() {
+    $shop_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink( 'shop' ) : home_url('/shop/');
+    
+    // Determine active category
+    $active_cat = 'all';
+    if ( function_exists('is_product_category') && is_product_category() ) {
+        $queried_obj = get_queried_object();
+        if ( $queried_obj && ! empty( $queried_obj->slug ) ) {
+            $active_cat = $queried_obj->slug;
+        }
+    } elseif ( ! empty( $_GET['product_cat'] ) ) {
+        $active_cat = sanitize_text_field( $_GET['product_cat'] );
+    }
+
+    // Curated stationery category definitions with icons and offer badges
+    $category_defs = array(
+        'all' => array(
+            'name'  => 'All Categories',
+            'icon'  => '✨',
+            'badge' => 'EXPLORE ALL',
+            'url'   => $shop_url,
+        ),
+        'notebooks' => array(
+            'name'  => 'Notebooks & Registers',
+            'icon'  => '📓',
+            'badge' => 'UP TO 22% OFF',
+            'url'   => add_query_arg( 'product_cat', 'notebooks', $shop_url ),
+        ),
+        'pens' => array(
+            'name'  => 'Pens & Writing',
+            'icon'  => '🖊️',
+            'badge' => 'UP TO 17% OFF',
+            'url'   => add_query_arg( 'product_cat', 'pens', $shop_url ),
+        ),
+        'art' => array(
+            'name'  => 'Art & Craft',
+            'icon'  => '🎨',
+            'badge' => 'UP TO 24% OFF',
+            'url'   => add_query_arg( 'product_cat', 'art', $shop_url ),
+        ),
+        'office' => array(
+            'name'  => 'Office & Files',
+            'icon'  => '📁',
+            'badge' => 'SAVE ₹50',
+            'url'   => add_query_arg( 'product_cat', 'office', $shop_url ),
+        ),
+        'geometry' => array(
+            'name'  => 'School Kits',
+            'icon'  => '📐',
+            'badge' => 'UP TO 24% OFF',
+            'url'   => add_query_arg( 'product_cat', 'geometry', $shop_url ),
+        ),
+        'books' => array(
+            'name'  => 'Textbooks & Guides',
+            'icon'  => '📚',
+            'badge' => 'BESTSELLER',
+            'url'   => add_query_arg( 'product_cat', 'books', $shop_url ),
+        ),
+        'diaries' => array(
+            'name'  => 'Diaries & Planners',
+            'icon'  => '📖',
+            'badge' => 'NEW 2026',
+            'url'   => add_query_arg( 'product_cat', 'diaries', $shop_url ),
+        ),
+    );
+
+    // If WordPress has dynamic terms in DB, merge / use actual term links
+    if ( taxonomy_exists( 'product_cat' ) ) {
+        $real_terms = get_terms( array(
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => 1,
+            'parent'     => 0,
+        ) );
+        if ( ! empty( $real_terms ) && ! is_wp_error( $real_terms ) ) {
+            foreach ( $real_terms as $term ) {
+                $term_link = get_term_link( $term );
+                if ( is_wp_error( $term_link ) ) {
+                    $term_link = add_query_arg( 'product_cat', $term->slug, $shop_url );
+                }
+                
+                if ( isset( $category_defs[ $term->slug ] ) ) {
+                    $category_defs[ $term->slug ]['url'] = $term_link;
+                    $category_defs[ $term->slug ]['name'] = $term->name;
+                } else {
+                    $slug_lower = strtolower( $term->slug . ' ' . $term->name );
+                    $icon = '🏷️';
+                    $badge = 'POPULAR';
+                    if ( strpos( $slug_lower, 'notebook' ) !== false || strpos( $slug_lower, 'register' ) !== false || strpos( $slug_lower, 'copy' ) !== false ) {
+                        $icon = '📓'; $badge = 'UP TO 22% OFF';
+                    } elseif ( strpos( $slug_lower, 'pen' ) !== false || strpos( $slug_lower, 'pencil' ) !== false || strpos( $slug_lower, 'write' ) !== false ) {
+                        $icon = '🖊️'; $badge = 'UP TO 17% OFF';
+                    } elseif ( strpos( $slug_lower, 'art' ) !== false || strpos( $slug_lower, 'craft' ) !== false || strpos( $slug_lower, 'color' ) !== false || strpos( $slug_lower, 'paint' ) !== false ) {
+                        $icon = '🎨'; $badge = 'UP TO 24% OFF';
+                    } elseif ( strpos( $slug_lower, 'office' ) !== false || strpos( $slug_lower, 'file' ) !== false || strpos( $slug_lower, 'folder' ) !== false ) {
+                        $icon = '📁'; $badge = 'SAVE ₹50';
+                    } elseif ( strpos( $slug_lower, 'geometry' ) !== false || strpos( $slug_lower, 'school' ) !== false || strpos( $slug_lower, 'kit' ) !== false ) {
+                        $icon = '📐'; $badge = 'UP TO 24% OFF';
+                    } elseif ( strpos( $slug_lower, 'book' ) !== false || strpos( $slug_lower, 'guide' ) !== false ) {
+                        $icon = '📚'; $badge = 'BESTSELLER';
+                    }
+                    $category_defs[ $term->slug ] = array(
+                        'name'  => $term->name,
+                        'icon'  => $icon,
+                        'badge' => $badge,
+                        'url'   => $term_link,
+                    );
+                }
+            }
+        }
+    }
+    ?>
+    <!-- Blinkit-Style Reversed-U Shape Category Title Bar -->
+    <nav class="sribalaji-reversed-u-bar" aria-label="Product Categories Title Bar">
+        <div class="reversed-u-scroll-track">
+            <?php foreach ( $category_defs as $cat_slug => $cat ): 
+                $is_active = ( $active_cat === $cat_slug );
+            ?>
+                <a href="<?php echo esc_url( $cat['url'] ); ?>" 
+                   class="reversed-u-cat-card <?php echo $is_active ? 'is-active' : ''; ?>" 
+                   data-category="<?php echo esc_attr( $cat_slug ); ?>"
+                   title="<?php echo esc_attr( $cat['name'] ); ?>">
+                    <span class="reversed-u-offer-pill"><?php echo esc_html( $cat['badge'] ); ?></span>
+                    <div class="reversed-u-card-body">
+                        <div class="reversed-u-icon-wrap">
+                            <span class="reversed-u-icon"><?php echo $cat['icon']; ?></span>
+                        </div>
+                        <span class="reversed-u-title"><?php echo esc_html( $cat['name'] ); ?></span>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </nav>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var activeTab = document.querySelector('.sribalaji-reversed-u-bar .reversed-u-cat-card.is-active');
+            if (activeTab && activeTab.scrollIntoView) {
+                try {
+                    activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                } catch(e) {}
+            }
+        });
+    </script>
+    <?php
+}
+
 add_action( 'woocommerce_before_main_content', 'sribalaji_wc_wrapper_start', 10 );
 function sribalaji_wc_wrapper_start() {
+    // 1. Output Blinkit Reversed-U Shape Category Title Bar for Shop & Archives
+    if ( ( function_exists('is_shop') && is_shop() ) || ( function_exists('is_product_taxonomy') && is_product_taxonomy() ) || ( function_exists('is_product_category') && is_product_category() ) ) {
+        sribalaji_render_reversed_u_category_bar();
+    }
+
     echo '<div class="sribalaji-wc-container">';
     
-    // Custom Left Sidebar
-    echo '<aside class="sribalaji-wc-sidebar">';
+    // Custom Left Sidebar (Replaced by Reversed-U Title Bar, hidden via CSS)
+    echo '<aside class="sribalaji-wc-sidebar" aria-hidden="true" style="display:none;">';
     echo '<div class="wc-sidebar-widget">';
     echo '<h3>Filter Categories</h3>';
     
