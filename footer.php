@@ -47,11 +47,11 @@
             <div class="footer-col">
                 <h4>Popular Categories</h4>
                 <ul class="footer-links">
-                    <li><a href="<?php echo esc_url( sribalaji_get_category_url( array( 'notebooks-exam-pads', 'paper-registers', 'school-essentials', 'books-notebooks' ), 'Notebooks & Exam Pads' ) ); ?>">Notebooks &amp; Registers</a></li>
-                    <li><a href="<?php echo esc_url( sribalaji_get_category_url( array( 'pens-refills', 'school-essentials', 'pens-pencils' ), 'Pens & Refills' ) ); ?>">Pens, Pencils &amp; Writing</a></li>
-                    <li><a href="<?php echo esc_url( sribalaji_get_category_url( array( 'art-craft', 'art-supplies', 'paints-canvases' ), 'Art & Craft' ) ); ?>">Art &amp; Craft Supplies</a></li>
-                    <li><a href="<?php echo esc_url( sribalaji_get_category_url( array( 'office-supplies', 'paper-registers' ), 'Office Supplies' ) ); ?>">Office Stationery &amp; Files</a></li>
-                    <li><a href="<?php echo esc_url( sribalaji_get_category_url( array( 'bags-totes', 'novelty-gifts', 'jute-bags' ), 'Bags & Totes' ) ); ?>">Eco Jute Bags &amp; Gifts</a></li>
+                    <li><a href="<?php echo esc_url( sribalaji_get_category_url( array( 'notebooks', 'notebooks-exam-pads', 'paper-registers', 'school-essentials', 'books-notebooks' ), 'Notebooks & Exam Pads' ) ); ?>">Notebooks &amp; Registers</a></li>
+                    <li><a href="<?php echo esc_url( sribalaji_get_category_url( array( 'pens', 'pens-refills', 'school-essentials', 'pens-pencils' ), 'Pens & Refills' ) ); ?>">Pens, Pencils &amp; Writing</a></li>
+                    <li><a href="<?php echo esc_url( sribalaji_get_category_url( array( 'art', 'art-craft', 'art-supplies', 'paints-canvases' ), 'Art & Craft' ) ); ?>">Art &amp; Craft Supplies</a></li>
+                    <li><a href="<?php echo esc_url( sribalaji_get_category_url( array( 'office', 'office-supplies', 'paper-registers' ), 'Office Supplies' ) ); ?>">Office Stationery &amp; Files</a></li>
+                    <li><a href="<?php echo esc_url( sribalaji_get_category_url( array( 'geometry', 'school-kits', 'bags-totes', 'novelty-gifts', 'jute-bags' ), 'Bags & Totes' ) ); ?>">Eco Jute Bags &amp; Gifts</a></li>
                 </ul>
             </div>
 

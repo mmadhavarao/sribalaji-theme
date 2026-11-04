@@ -2022,29 +2022,28 @@ ul.woocommerce-order-overview li strong {
 }
 
 /* ==========================================================================
-   BLINKIT REVERSED-U SHAPE CATEGORY TITLE BAR (Matches Exact Blinkit Design)
+   BLINKIT REVERSED-U SHAPE CATEGORY TITLE BAR (Exact Blinkit Overlapping Tabs)
    ========================================================================== */
 .sribalaji-reversed-u-bar {
     width: 100%;
     max-width: 100%;
-    background: #fffdfa;
-    border-bottom: 1px solid #f1e5d3;
-    padding: 0.4rem 0.4rem 0.65rem 0.4rem;
+    background: #fff9ea; /* Warm festive cream background behind tabs like Blinkit */
+    border-bottom: 2px solid #ffffff;
+    padding: 0.5rem 0.5rem 0 0.5rem;
     position: sticky;
     top: 0;
     z-index: 85;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0;
 }
 
 .reversed-u-scroll-track {
     display: flex;
-    gap: 0.65rem;
+    gap: 0; /* Tabs touch and overlap! */
     overflow-x: auto;
-    padding: 0.35rem 0.35rem 0.55rem 0.35rem;
+    padding: 0.25rem 0.35rem 0 0.35rem;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
-    align-items: stretch;
+    align-items: flex-end; /* Active tab sits on the baseline, inactive slightly higher */
     list-style: none;
     margin: 0;
 }
@@ -2053,40 +2052,86 @@ ul.woocommerce-order-overview li strong {
     display: none;
 }
 
-/* Inverted dome / Reversed-U shape category card (Exact Blinkit Spec) */
+/* Inverted dome / Reversed-U shape category card */
 .reversed-u-cat-card {
     display: flex;
     flex-direction: column;
-    min-width: 136px;
-    max-width: 152px;
-    border-radius: 20px 20px 8px 8px; /* Distinctive Reversed-U arched dome */
-    border: 1.5px solid #ebd9b8;
-    background: #fbf6ec; /* Warm pale cream/golden tone like Blinkit */
+    min-width: 138px;
+    max-width: 154px;
     text-decoration: none;
     color: inherit;
     flex-shrink: 0;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     user-select: none;
     cursor: pointer;
-    overflow: hidden; /* Cleanly contours the top header to the arch */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    margin-right: -5px; /* Distinctive Blinkit horizontal overlap! */
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reversed-u-cat-card:hover {
-    border-color: #0a7c71;
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    z-index: 6;
 }
 
-/* Top Arch Banner Header (Full width of top dome) */
+/* Inactive tabs: sit slightly recessed on warm cream backdrop */
+.reversed-u-cat-card:not(.is-active) {
+    border-radius: 18px 18px 6px 6px;
+    border: 1.5px solid #ebd9b8;
+    background: #fbf5e8;
+    margin-bottom: 4px;
+    opacity: 0.94;
+    z-index: 1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.reversed-u-cat-card:not(.is-active) .reversed-u-tab-header {
+    background: linear-gradient(180deg, #d97706 0%, #b45309 100%); /* Warm festive gold */
+    border-radius: 16px 16px 0 0;
+}
+
+/* Active tab: Taller, pure white, overlaps horizontally & opens directly into feed */
+.reversed-u-cat-card.is-active {
+    border-radius: 22px 22px 0 0;
+    border: 2px solid #0a7c71;
+    border-bottom: 2px solid #ffffff; /* Opens seamlessly into the content below! */
+    background: #ffffff;
+    z-index: 10;
+    margin-bottom: -2px; /* Overlaps bottom baseline into the content area */
+    box-shadow: 0 -3px 12px rgba(10, 124, 113, 0.16);
+    transform: translateY(0);
+}
+
+.reversed-u-cat-card.is-active .reversed-u-tab-header {
+    background: linear-gradient(180deg, #0a7c71 0%, #064e3b 100%); /* Rich emerald cap */
+    border-radius: 20px 20px 0 0;
+}
+
+.reversed-u-cat-card.is-active .reversed-u-header-badge {
+    color: #ffffff;
+    font-weight: 900;
+}
+
+.reversed-u-cat-card.is-active .reversed-u-tab-body {
+    background: #ffffff;
+}
+
+.reversed-u-cat-card.is-active .reversed-u-thumb-box {
+    background: #e6f4f2;
+    border-color: #a7f3d0;
+}
+
+.reversed-u-cat-card.is-active .reversed-u-title {
+    color: #064e3b;
+    font-weight: 800;
+}
+
+/* Top Arch Banner Header */
 .reversed-u-tab-header {
     width: 100%;
     padding: 3.5px 6px;
-    background: linear-gradient(180deg, #d97706 0%, #b45309 100%); /* Warm festive gold */
     text-align: center;
     line-height: 1.2;
-    transition: all 0.2s ease;
+    box-sizing: border-box;
 }
 
 .reversed-u-header-badge {
@@ -2111,6 +2156,7 @@ ul.woocommerce-order-overview li strong {
     width: 100%;
     background: transparent;
     flex: 1;
+    box-sizing: border-box;
 }
 
 /* Squircle Thumbnail / Icon Box */
@@ -2126,7 +2172,6 @@ ul.woocommerce-order-overview li strong {
     font-size: 1.3rem;
     flex-shrink: 0;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    transition: all 0.2s ease;
 }
 
 .reversed-u-icon {
@@ -2154,39 +2199,6 @@ ul.woocommerce-order-overview li strong {
     -webkit-box-orient: vertical;
     overflow: hidden;
     word-break: break-word;
-}
-
-/* ==========================================================================
-   ACTIVE TAB (Matches Blinkit "Diwali Decor" in user screenshot!)
-   ========================================================================== */
-.reversed-u-cat-card.is-active {
-    background: #ffffff; /* Crisp pure white body */
-    border: 2px solid #0a7c71; /* Rich emerald signature arch outline */
-    box-shadow: 0 4px 14px rgba(10, 124, 113, 0.2);
-    transform: translateY(-2px);
-}
-
-.reversed-u-cat-card.is-active .reversed-u-tab-header {
-    background: linear-gradient(180deg, #0a7c71 0%, #064e3b 100%); /* Deep emerald active cap */
-}
-
-.reversed-u-cat-card.is-active .reversed-u-header-badge {
-    color: #ffffff;
-    font-weight: 900;
-}
-
-.reversed-u-cat-card.is-active .reversed-u-tab-body {
-    background: #ffffff;
-}
-
-.reversed-u-cat-card.is-active .reversed-u-thumb-box {
-    background: #e6f4f2;
-    border-color: #a7f3d0;
-}
-
-.reversed-u-cat-card.is-active .reversed-u-title {
-    color: #064e3b;
-    font-weight: 800;
 }
 
 /* Hide legacy sidebar checklist completely — replaced by horizontal Reversed-U Title Bar */
@@ -5447,9 +5459,9 @@ body.preview-mode-tablet ul.products li.product a img {
    STICKY BLINKIT HORIZONTAL CATEGORY TABS BAR
    ========================================================================== */
 .mobile-category-tabs-bar {
-    background: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 0.45rem 0.5rem;
+    background: #fff9ea;
+    border-bottom: 2px solid #ffffff;
+    padding: 0.5rem 0.5rem 0 0.5rem;
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;

@@ -138,17 +138,14 @@ function sribalaji_get_category_url( $slugs, $fallback_name = '' ) {
 
     // 3. Fallback to shop page with query filter or permalink
     $primary_slug = ! empty( $candidates[0] ) ? $candidates[0] : '';
-    if ( function_exists( 'wc_get_page_permalink' ) ) {
-        $shop_url = wc_get_page_permalink( 'shop' );
-        if ( $shop_url && $primary_slug ) {
-            return add_query_arg( 'product_cat', $primary_slug, $shop_url );
-        }
-        if ( $shop_url ) {
-            return $shop_url;
-        }
+    $shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+    if ( empty( $shop_url ) || $shop_url === home_url( '/' ) || $shop_url === home_url() ) {
+        $shop_url = home_url( '/shop/' );
     }
-
-    return home_url( '/product-category/' . sanitize_title( $primary_slug ) . '/' );
+    if ( $primary_slug ) {
+        return add_query_arg( 'product_cat', $primary_slug, $shop_url );
+    }
+    return $shop_url;
 }
 
 /**

@@ -813,31 +813,31 @@ get_header(); ?>
         </div>
         
         <div class="category-grid">
-            <a href="<?php echo esc_url( sribalaji_get_category_url( array( 'notebooks-exam-pads', 'paper-registers', 'school-essentials', 'books-notebooks' ), 'Notebooks & Exam Pads' ) ); ?>" class="category-card">
+            <a href="<?php echo esc_url( sribalaji_get_category_url( array( 'notebooks', 'notebooks-exam-pads', 'paper-registers', 'school-essentials', 'books-notebooks' ), 'Notebooks & Exam Pads' ) ); ?>" class="category-card">
                 <div class="category-icon">📚</div>
                 <h3>Notebooks &amp; Registers</h3>
                 <p>Single line, unruled, long books, graph &amp; drawing books</p>
                 <span class="category-link">View Collection &rarr;</span>
             </a>
-            <a href="<?php echo esc_url( sribalaji_get_category_url( array( 'pens-refills', 'school-essentials', 'pens-pencils' ), 'Pens & Refills' ) ); ?>" class="category-card">
+            <a href="<?php echo esc_url( sribalaji_get_category_url( array( 'pens', 'pens-refills', 'school-essentials', 'pens-pencils' ), 'Pens & Refills' ) ); ?>" class="category-card">
                 <div class="category-icon">✍️</div>
                 <h3>Pens &amp; Writing</h3>
                 <p>Gel pens, rollerballs, fine liners, pencils &amp; markers</p>
                 <span class="category-link">View Collection &rarr;</span>
             </a>
-            <a href="<?php echo esc_url( sribalaji_get_category_url( array( 'art-craft', 'art-supplies', 'paints-canvases' ), 'Art & Craft' ) ); ?>" class="category-card">
+            <a href="<?php echo esc_url( sribalaji_get_category_url( array( 'art', 'art-craft', 'art-supplies', 'paints-canvases' ), 'Art & Craft' ) ); ?>" class="category-card">
                 <div class="category-icon">🎨</div>
                 <h3>Art &amp; Craft Materials</h3>
                 <p>Acrylics, oil pastels, sketchbooks, canvases &amp; craft clay</p>
                 <span class="category-link">View Collection &rarr;</span>
             </a>
-            <a href="<?php echo esc_url( sribalaji_get_category_url( array( 'office-supplies', 'paper-registers' ), 'Office Supplies' ) ); ?>" class="category-card">
+            <a href="<?php echo esc_url( sribalaji_get_category_url( array( 'office', 'office-supplies', 'paper-registers' ), 'Office Supplies' ) ); ?>" class="category-card">
                 <div class="category-icon">🏢</div>
                 <h3>Office Essentials</h3>
                 <p>Files, staplers, adhesives, sticky notes &amp; desk organizers</p>
                 <span class="category-link">View Collection &rarr;</span>
             </a>
-            <a href="<?php echo esc_url( sribalaji_get_category_url( array( 'bags-totes', 'novelty-gifts', 'jute-bags' ), 'Bags & Totes' ) ); ?>" class="category-card">
+            <a href="<?php echo esc_url( sribalaji_get_category_url( array( 'geometry', 'school-kits', 'bags-totes', 'novelty-gifts', 'jute-bags' ), 'School Kits' ) ); ?>" class="category-card">
                 <div class="category-icon">🎒</div>
                 <h3>Bags &amp; Novelty Gifts</h3>
                 <p>Eco-friendly jute shopping bags, pouches &amp; novelty sharpeners</p>
