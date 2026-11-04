@@ -315,57 +315,81 @@ function toggleDeviceSwitcher() {
         <nav class="mobile-category-tabs-bar sribalaji-reversed-u-bar" id="mobileCategoryTabsBar" aria-label="Product Categories">
             <div class="reversed-u-scroll-track">
                 <button type="button" class="reversed-u-cat-card is-active" data-category="all" onclick="selectCategoryTab('all', this)">
-                    <span class="reversed-u-offer-pill">EXPLORE ALL</span>
-                    <div class="reversed-u-card-body">
-                        <div class="reversed-u-icon-wrap">
+                    <div class="reversed-u-tab-header">
+                        <span class="reversed-u-header-badge">EXPLORE ALL</span>
+                    </div>
+                    <div class="reversed-u-tab-body">
+                        <div class="reversed-u-thumb-box">
                             <span class="reversed-u-icon">✨</span>
                         </div>
-                        <span class="reversed-u-title">All Categories</span>
+                        <div class="reversed-u-text-col">
+                            <span class="reversed-u-title">All Categories</span>
+                        </div>
                     </div>
                 </button>
                 <button type="button" class="reversed-u-cat-card" data-category="notebooks" onclick="selectCategoryTab('notebooks', this)">
-                    <span class="reversed-u-offer-pill">UP TO 22% OFF</span>
-                    <div class="reversed-u-card-body">
-                        <div class="reversed-u-icon-wrap">
+                    <div class="reversed-u-tab-header">
+                        <span class="reversed-u-header-badge">UP TO 22% OFF</span>
+                    </div>
+                    <div class="reversed-u-tab-body">
+                        <div class="reversed-u-thumb-box">
                             <span class="reversed-u-icon">📓</span>
                         </div>
-                        <span class="reversed-u-title">Notebooks &amp; Registers</span>
+                        <div class="reversed-u-text-col">
+                            <span class="reversed-u-title">Notebooks &amp; Registers</span>
+                        </div>
                     </div>
                 </button>
                 <button type="button" class="reversed-u-cat-card" data-category="pens" onclick="selectCategoryTab('pens', this)">
-                    <span class="reversed-u-offer-pill">UP TO 17% OFF</span>
-                    <div class="reversed-u-card-body">
-                        <div class="reversed-u-icon-wrap">
+                    <div class="reversed-u-tab-header">
+                        <span class="reversed-u-header-badge">UP TO 17% OFF</span>
+                    </div>
+                    <div class="reversed-u-tab-body">
+                        <div class="reversed-u-thumb-box">
                             <span class="reversed-u-icon">🖊️</span>
                         </div>
-                        <span class="reversed-u-title">Pens &amp; Writing</span>
+                        <div class="reversed-u-text-col">
+                            <span class="reversed-u-title">Pens &amp; Writing</span>
+                        </div>
                     </div>
                 </button>
                 <button type="button" class="reversed-u-cat-card" data-category="art" onclick="selectCategoryTab('art', this)">
-                    <span class="reversed-u-offer-pill">UP TO 24% OFF</span>
-                    <div class="reversed-u-card-body">
-                        <div class="reversed-u-icon-wrap">
+                    <div class="reversed-u-tab-header">
+                        <span class="reversed-u-header-badge">UP TO 24% OFF</span>
+                    </div>
+                    <div class="reversed-u-tab-body">
+                        <div class="reversed-u-thumb-box">
                             <span class="reversed-u-icon">🎨</span>
                         </div>
-                        <span class="reversed-u-title">Art &amp; Craft</span>
+                        <div class="reversed-u-text-col">
+                            <span class="reversed-u-title">Art &amp; Craft</span>
+                        </div>
                     </div>
                 </button>
                 <button type="button" class="reversed-u-cat-card" data-category="office" onclick="selectCategoryTab('office', this)">
-                    <span class="reversed-u-offer-pill">SAVE ₹50</span>
-                    <div class="reversed-u-card-body">
-                        <div class="reversed-u-icon-wrap">
+                    <div class="reversed-u-tab-header">
+                        <span class="reversed-u-header-badge">SAVE ₹50</span>
+                    </div>
+                    <div class="reversed-u-tab-body">
+                        <div class="reversed-u-thumb-box">
                             <span class="reversed-u-icon">📁</span>
                         </div>
-                        <span class="reversed-u-title">Office &amp; Files</span>
+                        <div class="reversed-u-text-col">
+                            <span class="reversed-u-title">Office &amp; Files</span>
+                        </div>
                     </div>
                 </button>
                 <button type="button" class="reversed-u-cat-card" data-category="geometry" onclick="selectCategoryTab('geometry', this)">
-                    <span class="reversed-u-offer-pill">UP TO 24% OFF</span>
-                    <div class="reversed-u-card-body">
-                        <div class="reversed-u-icon-wrap">
+                    <div class="reversed-u-tab-header">
+                        <span class="reversed-u-header-badge">UP TO 24% OFF</span>
+                    </div>
+                    <div class="reversed-u-tab-body">
+                        <div class="reversed-u-thumb-box">
                             <span class="reversed-u-icon">📐</span>
                         </div>
-                        <span class="reversed-u-title">School Kits</span>
+                        <div class="reversed-u-text-col">
+                            <span class="reversed-u-title">School Kits</span>
+                        </div>
                     </div>
                 </button>
             </div>

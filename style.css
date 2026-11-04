@@ -2022,14 +2022,14 @@ ul.woocommerce-order-overview li strong {
 }
 
 /* ==========================================================================
-   BLINKIT REVERSED-U SHAPE CATEGORY TITLE BAR (Shop & Category Archives)
+   BLINKIT REVERSED-U SHAPE CATEGORY TITLE BAR (Matches Exact Blinkit Design)
    ========================================================================== */
 .sribalaji-reversed-u-bar {
     width: 100%;
     max-width: 100%;
-    background: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 0.5rem 0.5rem 0.65rem 0.5rem;
+    background: #fffdfa;
+    border-bottom: 1px solid #f1e5d3;
+    padding: 0.4rem 0.4rem 0.65rem 0.4rem;
     position: sticky;
     top: 0;
     z-index: 85;
@@ -2041,7 +2041,7 @@ ul.woocommerce-order-overview li strong {
     display: flex;
     gap: 0.65rem;
     overflow-x: auto;
-    padding: 0.25rem 0.35rem 0.45rem 0.35rem;
+    padding: 0.35rem 0.35rem 0.55rem 0.35rem;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
     align-items: stretch;
@@ -2053,18 +2053,15 @@ ul.woocommerce-order-overview li strong {
     display: none;
 }
 
-/* Inverted dome / Reversed-U shape category card */
+/* Inverted dome / Reversed-U shape category card (Exact Blinkit Spec) */
 .reversed-u-cat-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-width: 88px;
-    max-width: 98px;
-    padding: 5px 6px 9px 6px;
-    border-radius: 20px 20px 8px 8px; /* Distinctive Reversed-U arch */
-    border: 1.5px solid #e2e8f0;
-    background: #ffffff;
+    min-width: 136px;
+    max-width: 152px;
+    border-radius: 20px 20px 8px 8px; /* Distinctive Reversed-U arched dome */
+    border: 1.5px solid #ebd9b8;
+    background: #fbf6ec; /* Warm pale cream/golden tone like Blinkit */
     text-decoration: none;
     color: inherit;
     flex-shrink: 0;
@@ -2072,52 +2069,63 @@ ul.woocommerce-order-overview li strong {
     position: relative;
     user-select: none;
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
+    overflow: hidden; /* Cleanly contours the top header to the arch */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .reversed-u-cat-card:hover {
     border-color: #0a7c71;
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(10, 124, 113, 0.12);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
-/* Top Arch Offer Pill Badge */
-.reversed-u-offer-pill {
-    display: inline-block;
-    font-size: 0.6rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.35px;
-    padding: 2px 7px;
-    border-radius: 999px;
-    background: #fef3c7;
-    color: #92400e;
-    margin-bottom: 5px;
-    white-space: nowrap;
+/* Top Arch Banner Header (Full width of top dome) */
+.reversed-u-tab-header {
+    width: 100%;
+    padding: 3.5px 6px;
+    background: linear-gradient(180deg, #d97706 0%, #b45309 100%); /* Warm festive gold */
+    text-align: center;
     line-height: 1.2;
     transition: all 0.2s ease;
 }
 
-.reversed-u-card-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    gap: 4px;
+.reversed-u-header-badge {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Circular Icon Badge */
-.reversed-u-icon-wrap {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+/* Card Body (Horizontal: Thumbnail on Left, 2-Line Title on Right) */
+.reversed-u-tab-body {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 9px 8px 8px;
+    width: 100%;
+    background: transparent;
+    flex: 1;
+}
+
+/* Squircle Thumbnail / Icon Box */
+.reversed-u-thumb-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.35rem;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     transition: all 0.2s ease;
 }
 
@@ -2126,44 +2134,59 @@ ul.woocommerce-order-overview li strong {
     display: inline-block;
 }
 
-/* Category 2-Line Clean Title */
+/* Category Title Column (2-Line bold text) */
+.reversed-u-text-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    flex: 1;
+}
+
 .reversed-u-title {
-    font-size: 0.74rem;
-    font-weight: 600;
-    color: #334155;
-    text-align: center;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: left;
     line-height: 1.15;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    height: 1.85rem;
     word-break: break-word;
 }
 
-/* Active State (Selected Category Highlight) */
+/* ==========================================================================
+   ACTIVE TAB (Matches Blinkit "Diwali Decor" in user screenshot!)
+   ========================================================================== */
 .reversed-u-cat-card.is-active {
-    border: 2px solid #0a7c71;
-    background: linear-gradient(180deg, #e6f4f2 0%, #ffffff 75%);
-    box-shadow: 0 4px 14px rgba(10, 124, 113, 0.18);
+    background: #ffffff; /* Crisp pure white body */
+    border: 2px solid #0a7c71; /* Rich emerald signature arch outline */
+    box-shadow: 0 4px 14px rgba(10, 124, 113, 0.2);
     transform: translateY(-2px);
 }
 
-.reversed-u-cat-card.is-active .reversed-u-offer-pill {
-    background: #0a7c71;
-    color: #ffffff;
-    box-shadow: 0 1px 4px rgba(10, 124, 113, 0.35);
+.reversed-u-cat-card.is-active .reversed-u-tab-header {
+    background: linear-gradient(180deg, #0a7c71 0%, #064e3b 100%); /* Deep emerald active cap */
 }
 
-.reversed-u-cat-card.is-active .reversed-u-icon-wrap {
-    background: #d1fae5;
-    border-color: #0a7c71;
-    transform: scale(1.05);
+.reversed-u-cat-card.is-active .reversed-u-header-badge {
+    color: #ffffff;
+    font-weight: 900;
+}
+
+.reversed-u-cat-card.is-active .reversed-u-tab-body {
+    background: #ffffff;
+}
+
+.reversed-u-cat-card.is-active .reversed-u-thumb-box {
+    background: #e6f4f2;
+    border-color: #a7f3d0;
 }
 
 .reversed-u-cat-card.is-active .reversed-u-title {
-    color: #065f46;
-    font-weight: 700;
+    color: #064e3b;
+    font-weight: 800;
 }
 
 /* Hide legacy sidebar checklist completely — replaced by horizontal Reversed-U Title Bar */
@@ -2346,19 +2369,24 @@ details[open] > summary > .cat-toggle-icon::before {
         gap: 1rem;
     }
     
+    .site-branding-row,
     .site-branding {
         order: 1;
     }
     
-    .header-nav {
-        order: 2;
-    }
-    
     .header-search-container {
-        order: 3;
+        order: 2 !important;
         max-width: 100%;
         width: 100%;
-        margin: 0;
+        margin: 0.25rem 0 0.45rem 0 !important;
+    }
+    
+    .mobile-category-tabs-bar {
+        order: 3 !important;
+    }
+    
+    .header-nav {
+        order: 4;
     }
 }
 

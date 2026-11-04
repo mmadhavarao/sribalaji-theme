@@ -283,12 +283,16 @@ function sribalaji_render_reversed_u_category_bar() {
                    class="reversed-u-cat-card <?php echo $is_active ? 'is-active' : ''; ?>" 
                    data-category="<?php echo esc_attr( $cat_slug ); ?>"
                    title="<?php echo esc_attr( $cat['name'] ); ?>">
-                    <span class="reversed-u-offer-pill"><?php echo esc_html( $cat['badge'] ); ?></span>
-                    <div class="reversed-u-card-body">
-                        <div class="reversed-u-icon-wrap">
+                    <div class="reversed-u-tab-header">
+                        <span class="reversed-u-header-badge"><?php echo esc_html( $cat['badge'] ); ?></span>
+                    </div>
+                    <div class="reversed-u-tab-body">
+                        <div class="reversed-u-thumb-box">
                             <span class="reversed-u-icon"><?php echo $cat['icon']; ?></span>
                         </div>
-                        <span class="reversed-u-title"><?php echo esc_html( $cat['name'] ); ?></span>
+                        <div class="reversed-u-text-col">
+                            <span class="reversed-u-title"><?php echo esc_html( $cat['name'] ); ?></span>
+                        </div>
                     </div>
                 </a>
             <?php endforeach; ?>
