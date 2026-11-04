@@ -275,6 +275,21 @@ function toggleDeviceSwitcher() {
             </div>
         </div>
 
+        <?php 
+        // Suppress search bar and category tabs on My Account, Login, Checkout, and Cart pages
+        $sribalaji_hide_search_and_tabs = false;
+        if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+            $sribalaji_hide_search_and_tabs = true;
+        }
+        if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+            $sribalaji_hide_search_and_tabs = true;
+        }
+        if ( function_exists( 'is_cart' ) && is_cart() ) {
+            $sribalaji_hide_search_and_tabs = true;
+        }
+        ?>
+
+        <?php if ( ! $sribalaji_hide_search_and_tabs ) : ?>
         <!-- Instant Product Search Bar -->
         <div class="header-search-container">
             <?php if ( class_exists( 'WooCommerce' ) ) : ?>
@@ -317,6 +332,7 @@ function toggleDeviceSwitcher() {
                 </button>
             </div>
         </nav>
+        <?php endif; ?>
 
         <nav class="header-nav">
             <?php
