@@ -9,6 +9,425 @@ get_header(); ?>
 
 <main class="site-main">
 
+    <!-- Blinkit / Zepto Quick-Commerce Feed for Mobile & Tablet -->
+    <div class="mobile-quick-commerce-feed" id="mobileQuickCommerceFeed">
+        <?php
+        $img_dir = get_template_directory_uri() . '/images/';
+
+        // Define the 5 approved categories
+        $categories_feed = array(
+            'notebooks' => array(
+                'id'       => 'notebooks',
+                'title'    => 'Notebooks & Registers',
+                'icon'     => '📓',
+                'count'    => '28 items',
+                'slugs'    => array( 'notebooks', 'stationery', 'books-notebooks' ),
+                'url'      => sribalaji_get_category_url( array( 'notebooks', 'stationery', 'books-notebooks' ), 'Notebooks' ),
+                'products' => array(
+                    array(
+                        'id'       => 101,
+                        'title'    => 'Classmate Pulse Spiral Notebook A5',
+                        'pack'     => '300 pgs',
+                        'price'    => '₹110',
+                        'mrp'      => '₹140',
+                        'discount' => '21% OFF',
+                        'image'    => $img_dir . 'hero-product-1.jpg',
+                    ),
+                    array(
+                        'id'       => 102,
+                        'title'    => 'Classmate Long Exercise Notebook',
+                        'pack'     => '172 pgs',
+                        'price'    => '₹70',
+                        'mrp'      => '₹90',
+                        'discount' => '22% OFF',
+                        'image'    => $img_dir . 'hero-product-8.jpg',
+                    ),
+                    array(
+                        'id'       => 103,
+                        'title'    => 'Paperkraft Premium Hardbound Journal',
+                        'pack'     => '192 pgs',
+                        'price'    => '₹199',
+                        'mrp'      => '₹250',
+                        'discount' => '20% OFF',
+                        'image'    => $img_dir . 'hero-product-1.jpg',
+                    ),
+                    array(
+                        'id'       => 104,
+                        'title'    => 'Classmate Drawing Book Unruled',
+                        'pack'     => '40 pgs',
+                        'price'    => '₹55',
+                        'mrp'      => '₹70',
+                        'discount' => '21% OFF',
+                        'image'    => $img_dir . 'hero-product-8.jpg',
+                    ),
+                    array(
+                        'id'       => 105,
+                        'title'    => 'Classmate Interleaf Practical Notebook',
+                        'pack'     => '128 pgs',
+                        'price'    => '₹85',
+                        'mrp'      => '₹105',
+                        'discount' => '19% OFF',
+                        'image'    => $img_dir . 'hero-product-1.jpg',
+                    ),
+                ),
+            ),
+            'pens' => array(
+                'id'       => 'pens',
+                'title'    => 'Pens & Writing Instruments',
+                'icon'     => '🖊️',
+                'count'    => '35 items',
+                'slugs'    => array( 'pens', 'writing', 'pens-refills', 'pens-pencils' ),
+                'url'      => sribalaji_get_category_url( array( 'pens', 'writing', 'pens-refills', 'pens-pencils' ), 'Pens' ),
+                'products' => array(
+                    array(
+                        'id'       => 201,
+                        'title'    => 'Pilot Hi-Tecpoint V5 Rollerball Pen',
+                        'pack'     => 'Single',
+                        'price'    => '₹195',
+                        'mrp'      => '₹230',
+                        'discount' => '15% OFF',
+                        'image'    => $img_dir . 'hero-product-2.jpg',
+                    ),
+                    array(
+                        'id'       => 202,
+                        'title'    => 'Reynolds 045 Fine Carbure Ball Pen',
+                        'pack'     => 'Pack of 10',
+                        'price'    => '₹100',
+                        'mrp'      => '₹120',
+                        'discount' => '17% OFF',
+                        'image'    => $img_dir . 'SCH-PEN-REY-045BLU.jpg',
+                    ),
+                    array(
+                        'id'       => 203,
+                        'title'    => 'Faber-Castell Textliner Highlighters',
+                        'pack'     => 'Set of 5',
+                        'price'    => '₹125',
+                        'mrp'      => '₹150',
+                        'discount' => '17% OFF',
+                        'image'    => $img_dir . 'hero-product-3.jpg',
+                    ),
+                    array(
+                        'id'       => 204,
+                        'title'    => 'Pilot V7 Cartridge Rollerball Pen',
+                        'pack'     => 'Single',
+                        'price'    => '₹180',
+                        'mrp'      => '₹210',
+                        'discount' => '14% OFF',
+                        'image'    => $img_dir . 'hero-product-2.jpg',
+                    ),
+                    array(
+                        'id'       => 205,
+                        'title'    => 'Reynolds Trimax Liquid Gel Pen Set',
+                        'pack'     => 'Pack of 3',
+                        'price'    => '₹165',
+                        'mrp'      => '₹195',
+                        'discount' => '15% OFF',
+                        'image'    => $img_dir . 'SCH-PEN-REY-TRIMBLU.jpg',
+                    ),
+                ),
+            ),
+            'art' => array(
+                'id'       => 'art',
+                'title'    => 'Art & Craft Supplies',
+                'icon'     => '🎨',
+                'count'    => '42 items',
+                'slugs'    => array( 'art', 'art-craft', 'art-supplies' ),
+                'url'      => sribalaji_get_category_url( array( 'art', 'art-craft', 'art-supplies' ), 'Art & Craft' ),
+                'products' => array(
+                    array(
+                        'id'       => 301,
+                        'title'    => 'Faber-Castell Triangular Oil Pastels',
+                        'pack'     => '24 Shades',
+                        'price'    => '₹140',
+                        'mrp'      => '₹175',
+                        'discount' => '20% OFF',
+                        'image'    => $img_dir . 'hero-product-3.jpg',
+                    ),
+                    array(
+                        'id'       => 302,
+                        'title'    => 'Camel Oil Pastels (10 Shades Set)',
+                        'pack'     => '10 Shades',
+                        'price'    => '₹65',
+                        'mrp'      => '₹85',
+                        'discount' => '24% OFF',
+                        'image'    => $img_dir . 'hero-product-5.jpg',
+                    ),
+                    array(
+                        'id'       => 303,
+                        'title'    => 'Pidilite Fevicryl Acrylic Colors Kit',
+                        'pack'     => '12 Shades',
+                        'price'    => '₹220',
+                        'mrp'      => '₹260',
+                        'discount' => '15% OFF',
+                        'image'    => $img_dir . 'hero-product-5.jpg',
+                    ),
+                    array(
+                        'id'       => 304,
+                        'title'    => 'Fevicol MR Squeezy Bottle Adhesive',
+                        'pack'     => '100g',
+                        'price'    => '₹45',
+                        'mrp'      => '₹50',
+                        'discount' => '10% OFF',
+                        'image'    => $img_dir . 'hero-product-4.jpg',
+                    ),
+                    array(
+                        'id'       => 305,
+                        'title'    => 'Camlin Stretched Canvas Board 8x10',
+                        'pack'     => '1 Piece',
+                        'price'    => '₹95',
+                        'mrp'      => '₹120',
+                        'discount' => '21% OFF',
+                        'image'    => $img_dir . 'hero-product-3.jpg',
+                    ),
+                ),
+            ),
+            'office' => array(
+                'id'       => 'office',
+                'title'    => 'Office & Filing Supplies',
+                'icon'     => '📁',
+                'count'    => '30 items',
+                'slugs'    => array( 'office', 'filing', 'office-supplies' ),
+                'url'      => sribalaji_get_category_url( array( 'office', 'filing', 'office-supplies' ), 'Office Supplies' ),
+                'products' => array(
+                    array(
+                        'id'       => 401,
+                        'title'    => 'Casio fx-82MS Scientific Calculator',
+                        'pack'     => '2nd Gen',
+                        'price'    => '₹545',
+                        'mrp'      => '₹595',
+                        'discount' => 'SAVE ₹50',
+                        'image'    => $img_dir . 'hero-product-6.jpg',
+                    ),
+                    array(
+                        'id'       => 402,
+                        'title'    => 'Solo Executive Display Folder A4',
+                        'pack'     => '20 Pockets',
+                        'price'    => '₹135',
+                        'mrp'      => '₹160',
+                        'discount' => '16% OFF',
+                        'image'    => $img_dir . 'hero-product-7.jpg',
+                    ),
+                    array(
+                        'id'       => 403,
+                        'title'    => 'Kangaro Stapler #10 & Pin Box Bundle',
+                        'pack'     => 'Combo Pack',
+                        'price'    => '₹85',
+                        'mrp'      => '₹100',
+                        'discount' => '15% OFF',
+                        'image'    => $img_dir . 'hero-product-4.jpg',
+                    ),
+                    array(
+                        'id'       => 404,
+                        'title'    => '3M Scotch Magic Tape with Dispenser',
+                        'pack'     => '1 Roll',
+                        'price'    => '₹115',
+                        'mrp'      => '₹135',
+                        'discount' => '15% OFF',
+                        'image'    => $img_dir . 'hero-product-6.jpg',
+                    ),
+                    array(
+                        'id'       => 405,
+                        'title'    => 'Post-it Sticky Notes Cube Yellow 3x3',
+                        'pack'     => '100 Sheets',
+                        'price'    => '₹90',
+                        'mrp'      => '₹110',
+                        'discount' => '18% OFF',
+                        'image'    => $img_dir . 'hero-product-7.jpg',
+                    ),
+                ),
+            ),
+            'geometry' => array(
+                'id'       => 'geometry',
+                'title'    => 'School Kits & Geometry',
+                'icon'     => '📐',
+                'count'    => '24 items',
+                'slugs'    => array( 'school', 'geometry', 'school-kits', 'bags-totes' ),
+                'url'      => sribalaji_get_category_url( array( 'school', 'geometry', 'school-kits' ), 'School Kits' ),
+                'products' => array(
+                    array(
+                        'id'       => 501,
+                        'title'    => 'Apsara Platinum Kit (Pencils & Scale)',
+                        'pack'     => 'Complete Kit',
+                        'price'    => '₹120',
+                        'mrp'      => '₹150',
+                        'discount' => '20% OFF',
+                        'image'    => $img_dir . 'hero-product-4.jpg',
+                    ),
+                    array(
+                        'id'       => 502,
+                        'title'    => 'Doms Mathematical Drawing Instruments',
+                        'pack'     => 'Tin Box',
+                        'price'    => '₹145',
+                        'mrp'      => '₹175',
+                        'discount' => '17% OFF',
+                        'image'    => $img_dir . 'hero-product-6.jpg',
+                    ),
+                    array(
+                        'id'       => 503,
+                        'title'    => 'Train 2-in-1 Sharpener & Eraser',
+                        'pack'     => 'Single',
+                        'price'    => '₹110',
+                        'mrp'      => '₹145',
+                        'discount' => '24% OFF',
+                        'image'    => $img_dir . 'hero-product-4.jpg',
+                    ),
+                    array(
+                        'id'       => 504,
+                        'title'    => 'Sri Balaji Canvas School Tote Bag',
+                        'pack'     => 'Heavy Duty',
+                        'price'    => '₹119',
+                        'mrp'      => '₹149',
+                        'discount' => '20% OFF',
+                        'image'    => $img_dir . 'hero-product-7.jpg',
+                    ),
+                    array(
+                        'id'       => 505,
+                        'title'    => 'Camlin Scholar Geometry Box Set',
+                        'pack'     => 'Premium Set',
+                        'price'    => '₹130',
+                        'mrp'      => '₹155',
+                        'discount' => '16% OFF',
+                        'image'    => $img_dir . 'hero-product-6.jpg',
+                    ),
+                ),
+            ),
+        );
+
+        // If WooCommerce is active, attempt to blend live category products
+        if ( class_exists( 'WooCommerce' ) ) {
+            foreach ( $categories_feed as $cat_key => &$cat_info ) {
+                $tax_query = array(
+                    array(
+                        'taxonomy' => 'product_cat',
+                        'field'    => 'slug',
+                        'terms'    => $cat_info['slugs'],
+                    ),
+                );
+                $wc_cat_query = new WP_Query( array(
+                    'post_type'      => 'product',
+                    'posts_per_page' => 6,
+                    'post_status'    => 'publish',
+                    'tax_query'      => $tax_query,
+                ) );
+
+                if ( $wc_cat_query->have_posts() ) {
+                    $live_prods = array();
+                    while ( $wc_cat_query->have_posts() ) {
+                        $wc_cat_query->the_post();
+                        global $product;
+                        $thumb = get_the_post_thumbnail_url( get_the_ID(), 'medium' );
+                        if ( ! $thumb ) {
+                            $thumb = $cat_info['products'][ count( $live_prods ) % count( $cat_info['products'] ) ]['image'];
+                        }
+                        $reg_price  = $product ? $product->get_regular_price() : '';
+                        $sale_price = $product ? $product->get_sale_price() : '';
+                        $curr_price = $product ? $product->get_price() : '99';
+                        $discount_badge = 'SPECIAL';
+                        if ( $reg_price && $sale_price && (float) $reg_price > (float) $sale_price ) {
+                            $pct = round( ( ( (float) $reg_price - (float) $sale_price ) / (float) $reg_price ) * 100 );
+                            $discount_badge = $pct . '% OFF';
+                        }
+                        $live_prods[] = array(
+                            'id'       => get_the_ID(),
+                            'title'    => get_the_title(),
+                            'pack'     => 'Standard',
+                            'price'    => '₹' . ( $curr_price ? $curr_price : '99' ),
+                            'mrp'      => $reg_price ? '₹' . $reg_price : '',
+                            'discount' => $discount_badge,
+                            'image'    => $thumb,
+                        );
+                    }
+                    wp_reset_postdata();
+                    if ( ! empty( $live_prods ) ) {
+                        $cat_info['products'] = $live_prods;
+                    }
+                }
+            }
+            unset( $cat_info );
+        }
+
+        // Render each category section
+        foreach ( $categories_feed as $cat_key => $cat ) :
+        ?>
+            <section class="mobile-category-section" data-category="<?php echo esc_attr( $cat['id'] ); ?>" id="catSection-<?php echo esc_attr( $cat['id'] ); ?>">
+                <div class="mobile-category-header">
+                    <h2 class="mobile-category-title">
+                        <span class="mobile-category-icon"><?php echo esc_html( $cat['icon'] ); ?></span>
+                        <span><?php echo esc_html( $cat['title'] ); ?></span>
+                    </h2>
+                    <span class="mobile-category-count"><?php echo esc_html( $cat['count'] ); ?></span>
+                </div>
+
+                <!-- 1-Row Compact Products Scroller (Blinkit Style) -->
+                <div class="mobile-product-scroller">
+                    <?php foreach ( $cat['products'] as $p ) : ?>
+                        <article class="mobile-product-card" data-product-id="<?php echo esc_attr( $p['id'] ); ?>">
+                            <div class="mobile-card-thumb-wrap">
+                                <span class="mobile-card-pack-pill"><?php echo esc_html( $p['pack'] ); ?></span>
+                                <?php if ( ! empty( $p['discount'] ) ) : ?>
+                                    <span class="mobile-card-discount-pill"><?php echo esc_html( $p['discount'] ); ?></span>
+                                <?php endif; ?>
+                                <img src="<?php echo esc_url( $p['image'] ); ?>" alt="<?php echo esc_attr( $p['title'] ); ?>" class="mobile-card-img" loading="lazy">
+                            </div>
+
+                            <div class="mobile-card-details">
+                                <h3 class="mobile-card-title" title="<?php echo esc_attr( $p['title'] ); ?>">
+                                    <?php echo esc_html( $p['title'] ); ?>
+                                </h3>
+
+                                <div class="mobile-card-pricing-row">
+                                    <span class="mobile-card-price"><?php echo esc_html( $p['price'] ); ?></span>
+                                    <?php if ( ! empty( $p['mrp'] ) ) : ?>
+                                        <span class="mobile-card-mrp"><?php echo esc_html( $p['mrp'] ); ?></span>
+                                    <?php endif; ?>
+                                </div>
+
+                                <button type="button" class="mobile-add-btn ajax_add_to_cart" 
+                                    data-product_id="<?php echo esc_attr( $p['id'] ); ?>" 
+                                    data-product_name="<?php echo esc_attr( $p['title'] ); ?>"
+                                    data-quantity="1"
+                                    onclick="handleQuickCommerceAdd(this, '<?php echo esc_attr( $p['id'] ); ?>', '<?php echo esc_js( $p['title'] ); ?>')">
+                                    + ADD
+                                </button>
+                            </div>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- "See all {Category} products ▸" Button (Option B: Links to category page) -->
+                <a href="<?php echo esc_url( $cat['url'] ); ?>" class="mobile-see-all-cat-btn" aria-label="See all <?php echo esc_attr( $cat['title'] ); ?> products">
+                    <div class="see-all-preview-thumbs">
+                        <img src="<?php echo esc_url( $cat['products'][0]['image'] ); ?>" alt="" class="see-all-thumb thumb-1">
+                        <img src="<?php echo esc_url( $cat['products'][1]['image'] ); ?>" alt="" class="see-all-thumb thumb-2">
+                        <img src="<?php echo esc_url( $cat['products'][2]['image'] ); ?>" alt="" class="see-all-thumb thumb-3">
+                    </div>
+                    <span class="see-all-text">See all <?php echo esc_html( $cat['title'] ); ?> products</span>
+                    <span class="see-all-arrow">&rarr;</span>
+                </a>
+            </section>
+        <?php endforeach; ?>
+    </div>
+
+    <script>
+    function handleQuickCommerceAdd(btn, prodId, prodTitle) {
+        if (!btn) return;
+        var origText = btn.innerHTML;
+        btn.innerHTML = '✓ ADDED';
+        btn.classList.add('is-added');
+
+        if (window.jQuery && typeof jQuery.fn.trigger === 'function') {
+            jQuery(document.body).trigger('added_to_cart', [{}, {}]);
+        }
+
+        setTimeout(function() {
+            btn.innerHTML = 'ADDED (1)';
+        }, 1200);
+    }
+    </script>
+
+    <!-- Desktop Flagship Storefront View (50/50 Ajio Hero, Ambient Drift, Full Banners) -->
+    <div class="desktop-storefront-view" id="desktopStorefrontView">
+
     <!-- 50/50 Split Storefront Hero Section (Ajio-Inspired) -->
     <section class="hero-split-section">
         <?php
@@ -616,6 +1035,8 @@ get_header(); ?>
             </a>
         </div>
     </section>
+
+    </div><!-- /desktop-storefront-view -->
 
 </main>
 

@@ -965,37 +965,51 @@
 </head>
 <body class="wide-lens-mode watermark-active compact-height-mode" data-theme="teal-mist">
 
-    <!-- Local Preview Banner & Prototype Controls -->
-    <div class="preview-ribbon">
-        <div class="preview-ribbon-content">
-            <div class="preview-ribbon-left">
-                <span class="preview-ribbon-title">PROTOTYPE LAB: Wide Lens &bull; 50% Height &bull; Background Tints</span>
+    <!-- Temporary Local Device Preview Switcher (Removable after testing) -->
+    <div class="local-device-switcher-bar" id="localDeviceSwitcherBar" role="region" aria-label="Device Simulation Bar">
+        <div class="device-switcher-inner">
+            <span class="switcher-tag">🧪 LOCAL PREVIEW:</span>
+            <div class="device-btns-group">
+                <button type="button" class="device-btn is-active" data-device="auto" onclick="setDevicePreview('auto')" title="Auto detect (follows window/device)">
+                    <span class="btn-icon">🔄</span> <span class="btn-text">Auto</span>
+                </button>
+                <button type="button" class="device-btn" data-device="mobile" onclick="setDevicePreview('mobile')" title="Mobile View (Phone screen ~390px)">
+                    <span class="btn-icon">📱</span> <span class="btn-text">Mobile</span>
+                </button>
+                <button type="button" class="device-btn" data-device="tablet" onclick="setDevicePreview('tablet')" title="Tablet View (~768px)">
+                    <span class="btn-icon">📟</span> <span class="btn-text">Tablet</span>
+                </button>
+                <button type="button" class="device-btn" data-device="desktop" onclick="setDevicePreview('desktop')" title="Desktop View (Full 50/50 hero)">
+                    <span class="btn-icon">💻</span> <span class="btn-text">Desktop</span>
+                </button>
             </div>
-            <div class="preview-controls-group">
-                <!-- Height Toggle -->
-                <button type="button" class="ctrl-mode-btn is-active" id="btnCompactHeight" onclick="toggleCompactHeight()">⚡ 50% Sleek Height</button>
-
-                <!-- Wide Lens Toggle -->
-                <button type="button" class="ctrl-mode-btn is-active" id="btnWideLens" onclick="setWideLensMode(true)">Wide Lens (1440px)</button>
-                <button type="button" class="ctrl-mode-btn" id="btnClassic" onclick="setWideLensMode(false)">Classic (1200px)</button>
-
-                <!-- Color Palette Switcher -->
-                <div class="palette-switcher">
-                    <span class="palette-label">Background:</span>
-                    <button type="button" class="palette-pill" id="palTeaGreen" onclick="setBgTheme('tea-green')" title="Pale Tea Green">🍵 Pale Tea Green</button>
-                    <button type="button" class="palette-pill is-active" id="palTealMist" onclick="setBgTheme('teal-mist')" title="Soft Teal Mist">🩵 Soft Teal Mist</button>
-                    <button type="button" class="palette-pill" id="palParchment" onclick="setBgTheme('parchment')" title="Bookstore Warm Ivory">📜 Warm Ivory</button>
-                    <button type="button" class="palette-pill" id="palWhite" onclick="setBgTheme('white')" title="Classic White">⚪ Crisp White</button>
-                </div>
-
-                <!-- Watermark Checkbox -->
-                <label class="ctrl-toggle-label">
-                    <input type="checkbox" id="watermarkToggle" onchange="toggleWatermark(this.checked)" checked>
-                    <span>10% Ambient Drift</span>
-                </label>
-            </div>
+            <button type="button" class="switcher-minimize-btn" onclick="toggleDeviceSwitcher()" title="Minimize preview bar" aria-label="Minimize preview bar">&minus;</button>
         </div>
     </div>
+    <script>
+    function setDevicePreview(mode) {
+        document.body.classList.remove('preview-mode-mobile', 'preview-mode-tablet', 'preview-mode-desktop');
+        document.querySelectorAll('.device-btn').forEach(function(b) {
+            b.classList.toggle('is-active', b.getAttribute('data-device') === mode);
+        });
+        if (mode !== 'auto') {
+            document.body.classList.add('preview-mode-' + mode);
+        }
+        try { localStorage.setItem('sb_device_preview', mode); } catch(e) {}
+    }
+    function toggleDeviceSwitcher() {
+        var bar = document.getElementById('localDeviceSwitcherBar');
+        if (bar) bar.classList.toggle('is-minimized');
+    }
+    (function() {
+        try {
+            var saved = localStorage.getItem('sb_device_preview');
+            if (saved && ['auto','mobile','tablet','desktop'].indexOf(saved) !== -1) {
+                setDevicePreview(saved);
+            }
+        } catch(e) {}
+    })();
+    </script>
 
     <!-- Top Announcement & Free Delivery Bar (Header Feature 1.1) -->
     <div class="top-announcement-bar" id="topAnnouncementBar" role="region" aria-label="Store Announcement">
@@ -1131,10 +1145,107 @@
     <!-- Header -->
     <header class="site-header">
         <div class="header-container">
-            <div class="site-branding">
-                <a href="#" class="brand-title">Sri Balaji Books</a>
-                <div class="brand-tagline">Books &bull; Stationery &bull; Art Supplies &bull; Office Essentials</div>
+            <div class="site-branding-row">
+                <div class="site-branding">
+                    <a href="preview.html" class="brand-title">Sri Balaji Books</a>
+                    <div class="brand-tagline">Books &bull; Stationery &bull; Art Supplies &bull; Office Essentials</div>
+                </div>
+
+                <!-- Top-Right Account & Profile Trigger -->
+                <div class="header-account-area" id="headerAccountArea">
+                    <div class="profile-dropdown-wrapper">
+                        <button type="button" class="profile-trigger-btn" id="profileTriggerBtn" onclick="toggleProfileDropdown(event)" aria-expanded="false" aria-haspopup="true">
+                            <span class="profile-avatar-circle">👤</span>
+                            <span class="profile-user-name">Madhav</span>
+                            <svg class="profile-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="profile-dropdown-menu" id="profileDropdownMenu" role="menu">
+                            <div class="profile-menu-header">
+                                <div class="profile-menu-name">👋 Hi, Madhava Rao</div>
+                                <div class="profile-menu-phone">+91 99851 81133</div>
+                            </div>
+                            <ul class="profile-menu-list">
+                                <li>
+                                    <a href="#" class="profile-menu-item">
+                                        <span class="p-item-icon">📦</span>
+                                        <div class="p-item-text">
+                                            <span class="p-item-title">My Orders</span>
+                                            <span class="p-item-sub">Track deliveries &amp; invoices</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="profile-menu-item">
+                                        <span class="p-item-icon">📍</span>
+                                        <div class="p-item-text">
+                                            <span class="p-item-title">Saved Addresses</span>
+                                            <span class="p-item-sub">Home, School &amp; Office locations</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="profile-menu-item">
+                                        <span class="p-item-icon">⚙️</span>
+                                        <div class="p-item-text">
+                                            <span class="p-item-title">Account Details</span>
+                                            <span class="p-item-sub">Profile, password &amp; preferences</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="profile-menu-divider"></li>
+                                <li>
+                                    <a href="#" class="profile-menu-item logout-item">
+                                        <span class="p-item-icon">🚪</span>
+                                        <div class="p-item-text">
+                                            <span class="p-item-title">Log Out</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- Instant Product Search Bar -->
+            <div class="header-search-container">
+                <form role="search" method="get" class="header-product-search" action="#">
+                    <input type="search" class="search-field" placeholder="Search notebooks, pens, art supplies..." name="s" required />
+                    <button type="submit" class="search-submit" aria-label="Search">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Sticky Blinkit Horizontal Category Tabs (Shown on Mobile / Tablet) -->
+            <nav class="mobile-category-tabs-bar" id="mobileCategoryTabsBar" aria-label="Product Categories">
+                <div class="category-tabs-scroll">
+                    <button type="button" class="category-tab-btn is-active" data-category="all" onclick="selectCategoryTab('all', this)">
+                        <span class="tab-icon">✨</span>
+                        <span class="tab-label">All</span>
+                    </button>
+                    <button type="button" class="category-tab-btn" data-category="notebooks" onclick="selectCategoryTab('notebooks', this)">
+                        <span class="tab-icon">📓</span>
+                        <span class="tab-label">Notebooks</span>
+                    </button>
+                    <button type="button" class="category-tab-btn" data-category="pens" onclick="selectCategoryTab('pens', this)">
+                        <span class="tab-icon">🖊️</span>
+                        <span class="tab-label">Pens &amp; Writing</span>
+                    </button>
+                    <button type="button" class="category-tab-btn" data-category="art" onclick="selectCategoryTab('art', this)">
+                        <span class="tab-icon">🎨</span>
+                        <span class="tab-label">Art &amp; Craft</span>
+                    </button>
+                    <button type="button" class="category-tab-btn" data-category="office" onclick="selectCategoryTab('office', this)">
+                        <span class="tab-icon">📁</span>
+                        <span class="tab-label">Office &amp; Files</span>
+                    </button>
+                    <button type="button" class="category-tab-btn" data-category="geometry" onclick="selectCategoryTab('geometry', this)">
+                        <span class="tab-icon">📐</span>
+                        <span class="tab-label">School Kits</span>
+                    </button>
+                </div>
+            </nav>
 
             <nav class="header-nav">
                 <ul>
@@ -1150,6 +1261,423 @@
 
     <!-- Main Content -->
     <main class="site-main">
+
+        <!-- Blinkit / Zepto Quick-Commerce Feed for Mobile & Tablet -->
+        <div class="mobile-quick-commerce-feed" id="mobileQuickCommerceFeed">
+            
+            <!-- Category 1: Notebooks & Registers -->
+            <section class="mobile-category-section" data-category="notebooks" id="catSection-notebooks">
+                <div class="mobile-category-header">
+                    <h2 class="mobile-category-title">
+                        <span class="mobile-category-icon">📓</span>
+                        <span>Notebooks &amp; Registers</span>
+                    </h2>
+                    <span class="mobile-category-count">28 items</span>
+                </div>
+                <div class="mobile-product-scroller">
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">300 pgs</span>
+                            <span class="mobile-card-discount-pill">21% OFF</span>
+                            <img src="./images/hero-product-1.jpg" alt="Classmate Pulse Spiral Notebook A5" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Classmate Pulse Spiral Notebook A5</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹110</span>
+                                <span class="mobile-card-mrp">₹140</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '101', 'Classmate Pulse Spiral')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">172 pgs</span>
+                            <span class="mobile-card-discount-pill">22% OFF</span>
+                            <img src="./images/hero-product-8.jpg" alt="Classmate Long Exercise Notebook" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Classmate Long Exercise Notebook</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹70</span>
+                                <span class="mobile-card-mrp">₹90</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '102', 'Classmate Long Exercise')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">192 pgs</span>
+                            <span class="mobile-card-discount-pill">20% OFF</span>
+                            <img src="./images/hero-product-1.jpg" alt="Paperkraft Premium Hardbound Journal" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Paperkraft Premium Hardbound Journal</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹199</span>
+                                <span class="mobile-card-mrp">₹250</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '103', 'Paperkraft Journal')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">40 pgs</span>
+                            <span class="mobile-card-discount-pill">21% OFF</span>
+                            <img src="./images/hero-product-8.jpg" alt="Classmate Drawing Book Unruled" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Classmate Drawing Book Unruled</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹55</span>
+                                <span class="mobile-card-mrp">₹70</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '104', 'Classmate Drawing Book')">+ ADD</button>
+                        </div>
+                    </article>
+                </div>
+                <a href="#featured-products" class="mobile-see-all-cat-btn" aria-label="See all Notebooks &amp; Registers products">
+                    <div class="see-all-preview-thumbs">
+                        <img src="./images/hero-product-1.jpg" alt="" class="see-all-thumb thumb-1">
+                        <img src="./images/hero-product-8.jpg" alt="" class="see-all-thumb thumb-2">
+                        <img src="./images/hero-product-1.jpg" alt="" class="see-all-thumb thumb-3">
+                    </div>
+                    <span class="see-all-text">See all Notebooks &amp; Registers products</span>
+                    <span class="see-all-arrow">&rarr;</span>
+                </a>
+            </section>
+
+            <!-- Category 2: Pens & Writing Instruments -->
+            <section class="mobile-category-section" data-category="pens" id="catSection-pens">
+                <div class="mobile-category-header">
+                    <h2 class="mobile-category-title">
+                        <span class="mobile-category-icon">🖊️</span>
+                        <span>Pens &amp; Writing Instruments</span>
+                    </h2>
+                    <span class="mobile-category-count">35 items</span>
+                </div>
+                <div class="mobile-product-scroller">
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">Single</span>
+                            <span class="mobile-card-discount-pill">15% OFF</span>
+                            <img src="./images/hero-product-2.jpg" alt="Pilot Hi-Tecpoint V5 Rollerball Pen" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Pilot Hi-Tecpoint V5 Rollerball Pen</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹195</span>
+                                <span class="mobile-card-mrp">₹230</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '201', 'Pilot V5')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">Pack of 10</span>
+                            <span class="mobile-card-discount-pill">17% OFF</span>
+                            <img src="./images/SCH-PEN-REY-045BLU.jpg" alt="Reynolds 045 Fine Carbure Ball Pen" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Reynolds 045 Fine Carbure Ball Pen</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹100</span>
+                                <span class="mobile-card-mrp">₹120</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '202', 'Reynolds 045')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">Set of 5</span>
+                            <span class="mobile-card-discount-pill">17% OFF</span>
+                            <img src="./images/hero-product-3.jpg" alt="Faber-Castell Textliner Highlighters" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Faber-Castell Textliner Highlighters</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹125</span>
+                                <span class="mobile-card-mrp">₹150</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '203', 'Faber Textliner')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">Pack of 3</span>
+                            <span class="mobile-card-discount-pill">15% OFF</span>
+                            <img src="./images/SCH-PEN-REY-TRIMBLU.jpg" alt="Reynolds Trimax Liquid Gel Pen Set" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Reynolds Trimax Liquid Gel Pen Set</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹165</span>
+                                <span class="mobile-card-mrp">₹195</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '204', 'Reynolds Trimax')">+ ADD</button>
+                        </div>
+                    </article>
+                </div>
+                <a href="#featured-products" class="mobile-see-all-cat-btn" aria-label="See all Pens &amp; Writing products">
+                    <div class="see-all-preview-thumbs">
+                        <img src="./images/hero-product-2.jpg" alt="" class="see-all-thumb thumb-1">
+                        <img src="./images/SCH-PEN-REY-045BLU.jpg" alt="" class="see-all-thumb thumb-2">
+                        <img src="./images/hero-product-3.jpg" alt="" class="see-all-thumb thumb-3">
+                    </div>
+                    <span class="see-all-text">See all Pens &amp; Writing products</span>
+                    <span class="see-all-arrow">&rarr;</span>
+                </a>
+            </section>
+
+            <!-- Category 3: Art & Craft Supplies -->
+            <section class="mobile-category-section" data-category="art" id="catSection-art">
+                <div class="mobile-category-header">
+                    <h2 class="mobile-category-title">
+                        <span class="mobile-category-icon">🎨</span>
+                        <span>Art &amp; Craft Supplies</span>
+                    </h2>
+                    <span class="mobile-category-count">42 items</span>
+                </div>
+                <div class="mobile-product-scroller">
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">24 Shades</span>
+                            <span class="mobile-card-discount-pill">20% OFF</span>
+                            <img src="./images/hero-product-3.jpg" alt="Faber-Castell Triangular Oil Pastels" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Faber-Castell Triangular Oil Pastels</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹140</span>
+                                <span class="mobile-card-mrp">₹175</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '301', 'Faber Pastels')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">10 Shades</span>
+                            <span class="mobile-card-discount-pill">24% OFF</span>
+                            <img src="./images/hero-product-5.jpg" alt="Camel Oil Pastels (10 Shades Set)" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Camel Oil Pastels (10 Shades Set)</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹65</span>
+                                <span class="mobile-card-mrp">₹85</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '302', 'Camel Pastels')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">12 Shades</span>
+                            <span class="mobile-card-discount-pill">15% OFF</span>
+                            <img src="./images/hero-product-5.jpg" alt="Pidilite Fevicryl Acrylic Colors Kit" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Pidilite Fevicryl Acrylic Colors Kit</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹220</span>
+                                <span class="mobile-card-mrp">₹260</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '303', 'Fevicryl Acrylic')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">100g</span>
+                            <span class="mobile-card-discount-pill">10% OFF</span>
+                            <img src="./images/hero-product-4.jpg" alt="Fevicol MR Squeezy Bottle Adhesive" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Fevicol MR Squeezy Bottle Adhesive</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹45</span>
+                                <span class="mobile-card-mrp">₹50</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '304', 'Fevicol MR')">+ ADD</button>
+                        </div>
+                    </article>
+                </div>
+                <a href="#featured-products" class="mobile-see-all-cat-btn" aria-label="See all Art &amp; Craft products">
+                    <div class="see-all-preview-thumbs">
+                        <img src="./images/hero-product-3.jpg" alt="" class="see-all-thumb thumb-1">
+                        <img src="./images/hero-product-5.jpg" alt="" class="see-all-thumb thumb-2">
+                        <img src="./images/hero-product-4.jpg" alt="" class="see-all-thumb thumb-3">
+                    </div>
+                    <span class="see-all-text">See all Art &amp; Craft products</span>
+                    <span class="see-all-arrow">&rarr;</span>
+                </a>
+            </section>
+
+            <!-- Category 4: Office & Filing Supplies -->
+            <section class="mobile-category-section" data-category="office" id="catSection-office">
+                <div class="mobile-category-header">
+                    <h2 class="mobile-category-title">
+                        <span class="mobile-category-icon">📁</span>
+                        <span>Office &amp; Filing Supplies</span>
+                    </h2>
+                    <span class="mobile-category-count">30 items</span>
+                </div>
+                <div class="mobile-product-scroller">
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">2nd Gen</span>
+                            <span class="mobile-card-discount-pill">SAVE ₹50</span>
+                            <img src="./images/hero-product-6.jpg" alt="Casio fx-82MS Scientific Calculator" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Casio fx-82MS Scientific Calculator</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹545</span>
+                                <span class="mobile-card-mrp">₹595</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '401', 'Casio Calculator')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">20 Pockets</span>
+                            <span class="mobile-card-discount-pill">16% OFF</span>
+                            <img src="./images/hero-product-7.jpg" alt="Solo Executive Display Folder A4" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Solo Executive Display Folder A4</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹135</span>
+                                <span class="mobile-card-mrp">₹160</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '402', 'Solo Folder')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">Combo Pack</span>
+                            <span class="mobile-card-discount-pill">15% OFF</span>
+                            <img src="./images/hero-product-4.jpg" alt="Kangaro Stapler #10 &amp; Pin Box Bundle" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Kangaro Stapler #10 &amp; Pin Box Bundle</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹85</span>
+                                <span class="mobile-card-mrp">₹100</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '403', 'Kangaro Stapler')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">1 Roll</span>
+                            <span class="mobile-card-discount-pill">15% OFF</span>
+                            <img src="./images/hero-product-6.jpg" alt="3M Scotch Magic Tape with Dispenser" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">3M Scotch Magic Tape with Dispenser</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹115</span>
+                                <span class="mobile-card-mrp">₹135</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '404', '3M Scotch Tape')">+ ADD</button>
+                        </div>
+                    </article>
+                </div>
+                <a href="#featured-products" class="mobile-see-all-cat-btn" aria-label="See all Office &amp; Filing products">
+                    <div class="see-all-preview-thumbs">
+                        <img src="./images/hero-product-6.jpg" alt="" class="see-all-thumb thumb-1">
+                        <img src="./images/hero-product-7.jpg" alt="" class="see-all-thumb thumb-2">
+                        <img src="./images/hero-product-4.jpg" alt="" class="see-all-thumb thumb-3">
+                    </div>
+                    <span class="see-all-text">See all Office &amp; Filing products</span>
+                    <span class="see-all-arrow">&rarr;</span>
+                </a>
+            </section>
+
+            <!-- Category 5: School Kits & Geometry -->
+            <section class="mobile-category-section" data-category="geometry" id="catSection-geometry">
+                <div class="mobile-category-header">
+                    <h2 class="mobile-category-title">
+                        <span class="mobile-category-icon">📐</span>
+                        <span>School Kits &amp; Geometry</span>
+                    </h2>
+                    <span class="mobile-category-count">24 items</span>
+                </div>
+                <div class="mobile-product-scroller">
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">Complete Kit</span>
+                            <span class="mobile-card-discount-pill">20% OFF</span>
+                            <img src="./images/hero-product-4.jpg" alt="Apsara Platinum Kit (Pencils &amp; Scale)" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Apsara Platinum Kit (Pencils &amp; Scale)</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹120</span>
+                                <span class="mobile-card-mrp">₹150</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '501', 'Apsara Kit')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">Tin Box</span>
+                            <span class="mobile-card-discount-pill">17% OFF</span>
+                            <img src="./images/hero-product-6.jpg" alt="Doms Mathematical Drawing Instruments" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Doms Mathematical Drawing Instruments</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹145</span>
+                                <span class="mobile-card-mrp">₹175</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '502', 'Doms Geometry')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">Single</span>
+                            <span class="mobile-card-discount-pill">24% OFF</span>
+                            <img src="./images/hero-product-4.jpg" alt="Train 2-in-1 Sharpener &amp; Eraser" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Train 2-in-1 Sharpener &amp; Eraser</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹110</span>
+                                <span class="mobile-card-mrp">₹145</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '503', 'Train Sharpener')">+ ADD</button>
+                        </div>
+                    </article>
+                    <article class="mobile-product-card">
+                        <div class="mobile-card-thumb-wrap">
+                            <span class="mobile-card-pack-pill">Heavy Duty</span>
+                            <span class="mobile-card-discount-pill">20% OFF</span>
+                            <img src="./images/hero-product-7.jpg" alt="Sri Balaji Canvas School Tote Bag" class="mobile-card-img" loading="lazy">
+                        </div>
+                        <div class="mobile-card-details">
+                            <h3 class="mobile-card-title">Sri Balaji Canvas School Tote Bag</h3>
+                            <div class="mobile-card-pricing-row">
+                                <span class="mobile-card-price">₹119</span>
+                                <span class="mobile-card-mrp">₹149</span>
+                            </div>
+                            <button type="button" class="mobile-add-btn" onclick="handleQuickCommerceAdd(this, '504', 'Sri Balaji Tote')">+ ADD</button>
+                        </div>
+                    </article>
+                </div>
+                <a href="#featured-products" class="mobile-see-all-cat-btn" aria-label="See all School Kits &amp; Geometry products">
+                    <div class="see-all-preview-thumbs">
+                        <img src="./images/hero-product-4.jpg" alt="" class="see-all-thumb thumb-1">
+                        <img src="./images/hero-product-6.jpg" alt="" class="see-all-thumb thumb-2">
+                        <img src="./images/hero-product-7.jpg" alt="" class="see-all-thumb thumb-3">
+                    </div>
+                    <span class="see-all-text">See all School Kits &amp; Geometry products</span>
+                    <span class="see-all-arrow">&rarr;</span>
+                </a>
+            </section>
+        </div>
+
+        <!-- Desktop Flagship Storefront View (50/50 Ajio Hero, Ambient Drift, Full Banners) -->
+        <div class="desktop-storefront-view" id="desktopStorefrontView">
 
         <!-- 50/50 Split Storefront Hero Section (Ajio-Inspired) -->
         <section class="hero-split-section">
@@ -1907,6 +2435,8 @@
             </div>
         </section>
 
+        </div><!-- /desktop-storefront-view -->
+
     </main>
 
     <!-- Multi-Column E-Commerce Footer -->
@@ -2041,6 +2571,71 @@
         } else {
             document.body.classList.remove('watermark-active');
         }
+    }
+
+    /* Top-Right Profile Dropdown Engine */
+    function toggleProfileDropdown(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        var menu = document.getElementById('profileDropdownMenu');
+        var btn = document.getElementById('profileTriggerBtn');
+        if (!menu) return;
+        var isOpen = menu.classList.toggle('is-open');
+        if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    document.addEventListener('click', function(e) {
+        var menu = document.getElementById('profileDropdownMenu');
+        var btn = document.getElementById('profileTriggerBtn');
+        if (menu && menu.classList.contains('is-open')) {
+            if (!menu.contains(e.target) && (!btn || !btn.contains(e.target))) {
+                menu.classList.remove('is-open');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+            }
+        }
+    });
+
+    /* Quick-Commerce Category Tabs Filter Engine */
+    function selectCategoryTab(categoryKey, btn) {
+        var tabs = document.querySelectorAll('.category-tab-btn');
+        tabs.forEach(function(t) { t.classList.remove('is-active'); });
+        if (btn) btn.classList.add('is-active');
+
+        if (btn && btn.scrollIntoView) {
+            btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+
+        var sections = document.querySelectorAll('.mobile-category-section');
+        if (!sections.length) return;
+
+        if (categoryKey === 'all') {
+            sections.forEach(function(sec) {
+                sec.style.display = 'block';
+                sec.classList.remove('is-filtered-single');
+            });
+        } else {
+            sections.forEach(function(sec) {
+                if (sec.getAttribute('data-category') === categoryKey) {
+                    sec.style.display = 'block';
+                    sec.classList.add('is-filtered-single');
+                } else {
+                    sec.style.display = 'none';
+                    sec.classList.remove('is-filtered-single');
+                }
+            });
+        }
+    }
+
+    /* Quick Commerce Add to Cart Animation */
+    function handleQuickCommerceAdd(btn, prodId, prodTitle) {
+        if (!btn) return;
+        btn.innerHTML = '✓ ADDED';
+        btn.classList.add('is-added');
+        setTimeout(function() {
+            btn.innerHTML = 'ADDED (1)';
+        }, 1200);
     }
     </script>
 

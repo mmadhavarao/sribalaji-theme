@@ -16,6 +16,52 @@
 <?php wp_body_open(); ?>
 
 <?php if ( function_exists( 'sribalaji_is_staging_or_sandbox' ) && sribalaji_is_staging_or_sandbox() ) : ?>
+<!-- Temporary Local Device Preview Switcher (Removable after testing) -->
+<div class="local-device-switcher-bar" id="localDeviceSwitcherBar" role="region" aria-label="Device Simulation Bar">
+    <div class="device-switcher-inner">
+        <span class="switcher-tag">🧪 LOCAL PREVIEW:</span>
+        <div class="device-btns-group">
+            <button type="button" class="device-btn is-active" data-device="auto" onclick="setDevicePreview('auto')" title="Auto detect (follows window/device)">
+                <span class="btn-icon">🔄</span> <span class="btn-text">Auto</span>
+            </button>
+            <button type="button" class="device-btn" data-device="mobile" onclick="setDevicePreview('mobile')" title="Mobile View (Phone screen ~390px)">
+                <span class="btn-icon">📱</span> <span class="btn-text">Mobile</span>
+            </button>
+            <button type="button" class="device-btn" data-device="tablet" onclick="setDevicePreview('tablet')" title="Tablet View (~768px)">
+                <span class="btn-icon">📟</span> <span class="btn-text">Tablet</span>
+            </button>
+            <button type="button" class="device-btn" data-device="desktop" onclick="setDevicePreview('desktop')" title="Desktop View (Full 50/50 hero)">
+                <span class="btn-icon">💻</span> <span class="btn-text">Desktop</span>
+            </button>
+        </div>
+        <button type="button" class="switcher-minimize-btn" onclick="toggleDeviceSwitcher()" title="Minimize preview bar" aria-label="Minimize preview bar">&minus;</button>
+    </div>
+</div>
+<script>
+function setDevicePreview(mode) {
+    document.body.classList.remove('preview-mode-mobile', 'preview-mode-tablet', 'preview-mode-desktop');
+    document.querySelectorAll('.device-btn').forEach(function(b) {
+        b.classList.toggle('is-active', b.getAttribute('data-device') === mode);
+    });
+    if (mode !== 'auto') {
+        document.body.classList.add('preview-mode-' + mode);
+    }
+    try { localStorage.setItem('sb_device_preview', mode); } catch(e) {}
+}
+function toggleDeviceSwitcher() {
+    var bar = document.getElementById('localDeviceSwitcherBar');
+    if (bar) bar.classList.toggle('is-minimized');
+}
+(function() {
+    try {
+        var saved = localStorage.getItem('sb_device_preview');
+        if (saved && ['auto','mobile','tablet','desktop'].indexOf(saved) !== -1) {
+            setDevicePreview(saved);
+        }
+    } catch(e) {}
+})();
+</script>
+
 <!-- Dynamic Staging / Testing Environment Alert Marquee Ribbon -->
 <div class="staging-alert-marquee-bar" id="stagingAlertBar" role="alert" aria-label="Staging Environment Notice">
     <div class="staging-alert-track">
@@ -147,12 +193,85 @@
 
 <header class="site-header">
     <div class="header-container">
-        <div class="site-branding">
-            <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="brand-title">
-                <?php bloginfo( 'name' ); ?>
-            </a>
-            <div class="brand-tagline">
-                <?php bloginfo( 'description' ); ?>
+        <div class="site-branding-row">
+            <div class="site-branding">
+                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="brand-title">
+                    <?php bloginfo( 'name' ); ?>
+                </a>
+                <div class="brand-tagline">
+                    <?php bloginfo( 'description' ); ?>
+                </div>
+            </div>
+
+            <!-- Top-Right Account & Profile Trigger -->
+            <div class="header-account-area" id="headerAccountArea">
+                <?php if ( is_user_logged_in() ) : 
+                    $current_user = wp_get_current_user();
+                    $display_name = ! empty( $current_user->first_name ) ? $current_user->first_name : ( ! empty( $current_user->display_name ) ? $current_user->display_name : 'Account' );
+                    $orders_url   = function_exists( 'wc_get_endpoint_url' ) ? wc_get_endpoint_url( 'orders', '', wc_get_page_permalink( 'myaccount' ) ) : home_url( '/my-account/' );
+                    $address_url  = function_exists( 'wc_get_endpoint_url' ) ? wc_get_endpoint_url( 'edit-address', '', wc_get_page_permalink( 'myaccount' ) ) : home_url( '/my-account/' );
+                    $account_url  = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : home_url( '/my-account/' );
+                    $logout_url   = wp_logout_url( home_url( '/' ) );
+                ?>
+                    <div class="profile-dropdown-wrapper">
+                        <button type="button" class="profile-trigger-btn" id="profileTriggerBtn" onclick="toggleProfileDropdown(event)" aria-expanded="false" aria-haspopup="true">
+                            <span class="profile-avatar-circle">👤</span>
+                            <span class="profile-user-name"><?php echo esc_html( $display_name ); ?></span>
+                            <svg class="profile-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="profile-dropdown-menu" id="profileDropdownMenu" role="menu">
+                            <div class="profile-menu-header">
+                                <div class="profile-menu-name">👋 Hi, <?php echo esc_html( $display_name ); ?></div>
+                                <div class="profile-menu-phone"><?php echo esc_html( $current_user->user_email ); ?></div>
+                            </div>
+                            <ul class="profile-menu-list">
+                                <li>
+                                    <a href="<?php echo esc_url( $orders_url ); ?>" class="profile-menu-item">
+                                        <span class="p-item-icon">📦</span>
+                                        <div class="p-item-text">
+                                            <span class="p-item-title">My Orders</span>
+                                            <span class="p-item-sub">Track deliveries &amp; invoices</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo esc_url( $address_url ); ?>" class="profile-menu-item">
+                                        <span class="p-item-icon">📍</span>
+                                        <div class="p-item-text">
+                                            <span class="p-item-title">Saved Addresses</span>
+                                            <span class="p-item-sub">Home, School &amp; Office locations</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo esc_url( $account_url ); ?>" class="profile-menu-item">
+                                        <span class="p-item-icon">⚙️</span>
+                                        <div class="p-item-text">
+                                            <span class="p-item-title">Account Details</span>
+                                            <span class="p-item-sub">Profile, password &amp; preferences</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="profile-menu-divider"></li>
+                                <li>
+                                    <a href="<?php echo esc_url( $logout_url ); ?>" class="profile-menu-item logout-item">
+                                        <span class="p-item-icon">🚪</span>
+                                        <div class="p-item-text">
+                                            <span class="p-item-title">Log Out</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                <?php else : 
+                    $login_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : home_url( '/my-account/' );
+                ?>
+                    <button type="button" class="header-login-btn" onclick="if(typeof sribalajiOpenOtpModal==='function'){sribalajiOpenOtpModal();}else{window.location.href='<?php echo esc_url( $login_url ); ?>';}">
+                        <span class="login-btn-icon">👤</span>
+                        <span class="login-btn-text">Sign In</span>
+                    </button>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -168,6 +287,36 @@
                 </form>
             <?php endif; ?>
         </div>
+
+        <!-- Sticky Blinkit Horizontal Category Tabs (Shown on Mobile / Tablet) -->
+        <nav class="mobile-category-tabs-bar" id="mobileCategoryTabsBar" aria-label="Product Categories">
+            <div class="category-tabs-scroll">
+                <button type="button" class="category-tab-btn is-active" data-category="all" onclick="selectCategoryTab('all', this)">
+                    <span class="tab-icon">✨</span>
+                    <span class="tab-label">All</span>
+                </button>
+                <button type="button" class="category-tab-btn" data-category="notebooks" onclick="selectCategoryTab('notebooks', this)">
+                    <span class="tab-icon">📓</span>
+                    <span class="tab-label">Notebooks</span>
+                </button>
+                <button type="button" class="category-tab-btn" data-category="pens" onclick="selectCategoryTab('pens', this)">
+                    <span class="tab-icon">🖊️</span>
+                    <span class="tab-label">Pens &amp; Writing</span>
+                </button>
+                <button type="button" class="category-tab-btn" data-category="art" onclick="selectCategoryTab('art', this)">
+                    <span class="tab-icon">🎨</span>
+                    <span class="tab-label">Art &amp; Craft</span>
+                </button>
+                <button type="button" class="category-tab-btn" data-category="office" onclick="selectCategoryTab('office', this)">
+                    <span class="tab-icon">📁</span>
+                    <span class="tab-label">Office &amp; Files</span>
+                </button>
+                <button type="button" class="category-tab-btn" data-category="geometry" onclick="selectCategoryTab('geometry', this)">
+                    <span class="tab-icon">📐</span>
+                    <span class="tab-label">School Kits</span>
+                </button>
+            </div>
+        </nav>
 
         <nav class="header-nav">
             <?php
@@ -196,3 +345,58 @@
         </nav>
     </div>
 </header>
+
+<script>
+function toggleProfileDropdown(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    var menu = document.getElementById('profileDropdownMenu');
+    var btn = document.getElementById('profileTriggerBtn');
+    if (!menu) return;
+    var isOpen = menu.classList.toggle('is-open');
+    if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
+document.addEventListener('click', function(e) {
+    var menu = document.getElementById('profileDropdownMenu');
+    var btn = document.getElementById('profileTriggerBtn');
+    if (menu && menu.classList.contains('is-open')) {
+        if (!menu.contains(e.target) && (!btn || !btn.contains(e.target))) {
+            menu.classList.remove('is-open');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+    }
+});
+
+function selectCategoryTab(categoryKey, btn) {
+    var tabs = document.querySelectorAll('.category-tab-btn');
+    tabs.forEach(function(t) { t.classList.remove('is-active'); });
+    if (btn) btn.classList.add('is-active');
+
+    if (btn && btn.scrollIntoView) {
+        btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+
+    var sections = document.querySelectorAll('.mobile-category-section');
+    if (!sections.length) return;
+
+    if (categoryKey === 'all') {
+        sections.forEach(function(sec) {
+            sec.style.display = 'block';
+            sec.classList.remove('is-filtered-single');
+        });
+    } else {
+        sections.forEach(function(sec) {
+            if (sec.getAttribute('data-category') === categoryKey) {
+                sec.style.display = 'block';
+                sec.classList.add('is-filtered-single');
+            } else {
+                sec.style.display = 'none';
+                sec.classList.remove('is-filtered-single');
+            }
+        });
+    }
+}
+</script>
