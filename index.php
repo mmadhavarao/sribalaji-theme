@@ -21,8 +21,8 @@ get_header(); ?>
                 'title'    => 'Notebooks & Registers',
                 'icon'     => '📓',
                 'count'    => '28 items',
-                'slugs'    => array( 'notebooks', 'stationery', 'books-notebooks' ),
-                'url'      => sribalaji_get_category_url( array( 'notebooks', 'stationery', 'books-notebooks' ), 'Notebooks' ),
+                'slugs'    => array( 'notebooks', 'notebooks-registers', 'stationery', 'books-notebooks', 'paper-registers' ),
+                'url'      => sribalaji_get_category_url( array( 'notebooks', 'notebooks-registers', 'stationery', 'books-notebooks', 'paper-registers' ), 'Notebooks & Registers' ),
                 'products' => array(
                     array(
                         'id'       => 101,
@@ -76,8 +76,8 @@ get_header(); ?>
                 'title'    => 'Pens & Writing Instruments',
                 'icon'     => '🖊️',
                 'count'    => '35 items',
-                'slugs'    => array( 'pens', 'writing', 'pens-refills', 'pens-pencils' ),
-                'url'      => sribalaji_get_category_url( array( 'pens', 'writing', 'pens-refills', 'pens-pencils' ), 'Pens' ),
+                'slugs'    => array( 'pens', 'pens-writing', 'writing-instruments', 'writing', 'pens-refills', 'pens-pencils', 'stationery' ),
+                'url'      => sribalaji_get_category_url( array( 'pens', 'pens-writing', 'writing-instruments', 'writing', 'pens-refills', 'pens-pencils' ), 'Pens & Writing Instruments' ),
                 'products' => array(
                     array(
                         'id'       => 201,
@@ -131,8 +131,8 @@ get_header(); ?>
                 'title'    => 'Art & Craft Supplies',
                 'icon'     => '🎨',
                 'count'    => '42 items',
-                'slugs'    => array( 'art', 'art-craft', 'art-supplies' ),
-                'url'      => sribalaji_get_category_url( array( 'art', 'art-craft', 'art-supplies' ), 'Art & Craft' ),
+                'slugs'    => array( 'art', 'art-craft', 'art-supplies', 'art-and-craft', 'arts-supplies', 'creative-art-and-craft', 'craft-supplies' ),
+                'url'      => sribalaji_get_category_url( array( 'art', 'art-craft', 'art-supplies', 'art-and-craft', 'arts-supplies', 'creative-art-and-craft' ), 'Art & Craft Supplies' ),
                 'products' => array(
                     array(
                         'id'       => 301,
@@ -186,8 +186,8 @@ get_header(); ?>
                 'title'    => 'Office & Filing Supplies',
                 'icon'     => '📁',
                 'count'    => '30 items',
-                'slugs'    => array( 'office', 'filing', 'office-supplies' ),
-                'url'      => sribalaji_get_category_url( array( 'office', 'filing', 'office-supplies' ), 'Office Supplies' ),
+                'slugs'    => array( 'office', 'office-supplies', 'office-files', 'filing', 'paper-registers' ),
+                'url'      => sribalaji_get_category_url( array( 'office', 'office-supplies', 'office-files', 'filing' ), 'Office & Filing Supplies' ),
                 'products' => array(
                     array(
                         'id'       => 401,
@@ -241,8 +241,8 @@ get_header(); ?>
                 'title'    => 'School Kits & Geometry',
                 'icon'     => '📐',
                 'count'    => '24 items',
-                'slugs'    => array( 'school', 'geometry', 'school-kits', 'bags-totes' ),
-                'url'      => sribalaji_get_category_url( array( 'school', 'geometry', 'school-kits' ), 'School Kits' ),
+                'slugs'    => array( 'school', 'school-essentials', 'geometry', 'school-kits', 'bags-totes' ),
+                'url'      => sribalaji_get_category_url( array( 'school', 'school-essentials', 'geometry', 'school-kits', 'bags-totes' ), 'School Kits & Geometry' ),
                 'products' => array(
                     array(
                         'id'       => 501,

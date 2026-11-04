@@ -111,9 +111,14 @@ function sribalaji_get_category_url( $slugs, $fallback_name = '' ) {
         return home_url( '/shop/' );
     }
 
-    $candidates = is_array( $slugs ) ? $slugs : array( $slugs );
+    $shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+    if ( empty( $shop_url ) || $shop_url === home_url( '/' ) || $shop_url === home_url() ) {
+        $shop_url = home_url( '/shop/' );
+    }
+
+    $candidates = is_array( $slugs ) ? array_filter( $slugs ) : array_filter( array( $slugs ) );
     
-    // 1. Try finding by slug candidates in order
+    // 1. Exact slug match
     foreach ( $candidates as $slug ) {
         if ( empty( $slug ) ) continue;
         $term = get_term_by( 'slug', $slug, 'product_cat' );
@@ -125,7 +130,7 @@ function sribalaji_get_category_url( $slugs, $fallback_name = '' ) {
         }
     }
 
-    // 2. Try finding by name if slug lookup failed
+    // 2. Exact name match
     if ( ! empty( $fallback_name ) ) {
         $term = get_term_by( 'name', $fallback_name, 'product_cat' );
         if ( $term && ! is_wp_error( $term ) ) {
@@ -136,15 +141,43 @@ function sribalaji_get_category_url( $slugs, $fallback_name = '' ) {
         }
     }
 
-    // 3. Fallback to shop page with query filter or permalink
-    $primary_slug = ! empty( $candidates[0] ) ? $candidates[0] : '';
-    $shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
-    if ( empty( $shop_url ) || $shop_url === home_url( '/' ) || $shop_url === home_url() ) {
-        $shop_url = home_url( '/shop/' );
+    // 3. Intelligent fuzzy/keyword matching across real terms in database
+    $search_tokens = array();
+    foreach ( $candidates as $c ) {
+        $search_tokens[] = strtolower( trim( $c ) );
     }
-    if ( $primary_slug ) {
-        return add_query_arg( 'product_cat', $primary_slug, $shop_url );
+    if ( ! empty( $fallback_name ) ) {
+        $words = preg_split( '/[\s,&+\-]+/', strtolower( $fallback_name ) );
+        foreach ( $words as $w ) {
+            if ( strlen( $w ) >= 3 ) {
+                $search_tokens[] = $w;
+            }
+        }
     }
+    $search_tokens = array_unique( array_filter( $search_tokens ) );
+
+    $all_terms = get_terms( array(
+        'taxonomy'   => 'product_cat',
+        'hide_empty' => 0,
+    ) );
+
+    if ( ! empty( $all_terms ) && ! is_wp_error( $all_terms ) ) {
+        foreach ( $all_terms as $term ) {
+            $t_slug = strtolower( $term->slug );
+            $t_name = strtolower( $term->name );
+
+            foreach ( $search_tokens as $token ) {
+                if ( strpos( $t_slug, $token ) !== false || strpos( $t_name, $token ) !== false ) {
+                    $link = get_term_link( $term, 'product_cat' );
+                    if ( ! is_wp_error( $link ) ) {
+                        return $link;
+                    }
+                }
+            }
+        }
+    }
+
+    // 4. Safe fallback: return shop URL directly (never append unverified ?product_cat= that causes redirects)
     return $shop_url;
 }
 
@@ -161,6 +194,9 @@ remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
  */
 function sribalaji_render_reversed_u_category_bar() {
     $shop_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink( 'shop' ) : home_url('/shop/');
+    if ( empty( $shop_url ) || $shop_url === home_url( '/' ) || $shop_url === home_url() ) {
+        $shop_url = home_url( '/shop/' );
+    }
     
     // Determine active category
     $active_cat = 'all';
@@ -173,101 +209,109 @@ function sribalaji_render_reversed_u_category_bar() {
         $active_cat = sanitize_text_field( $_GET['product_cat'] );
     }
 
-    // Curated stationery category definitions with icons and honest merchandising badges
-    $category_defs = array(
-        'all' => array(
-            'name'  => 'All Categories',
-            'icon'  => '✨',
-            'badge' => 'EXPLORE ALL',
-            'url'   => $shop_url,
-        ),
-        'notebooks' => array(
-            'name'  => 'Notebooks & Registers',
-            'icon'  => '📓',
-            'badge' => 'BEST VALUE',
-            'url'   => add_query_arg( 'product_cat', 'notebooks', $shop_url ),
-        ),
-        'pens' => array(
-            'name'  => 'Pens & Writing',
-            'icon'  => '🖊️',
-            'badge' => 'TOP BRANDS',
-            'url'   => add_query_arg( 'product_cat', 'pens', $shop_url ),
-        ),
-        'art' => array(
-            'name'  => 'Art & Craft',
-            'icon'  => '🎨',
-            'badge' => 'CREATIVE',
-            'url'   => add_query_arg( 'product_cat', 'art', $shop_url ),
-        ),
-        'office' => array(
-            'name'  => 'Office & Files',
-            'icon'  => '📁',
-            'badge' => 'ESSENTIALS',
-            'url'   => add_query_arg( 'product_cat', 'office', $shop_url ),
-        ),
-        'geometry' => array(
-            'name'  => 'School Kits',
-            'icon'  => '📐',
-            'badge' => 'EXAM KITS',
-            'url'   => add_query_arg( 'product_cat', 'geometry', $shop_url ),
-        ),
-        'books' => array(
-            'name'  => 'Textbooks & Guides',
-            'icon'  => '📚',
-            'badge' => 'BESTSELLER',
-            'url'   => add_query_arg( 'product_cat', 'books', $shop_url ),
-        ),
-        'diaries' => array(
-            'name'  => 'Diaries & Planners',
-            'icon'  => '📖',
-            'badge' => 'POPULAR',
-            'url'   => add_query_arg( 'product_cat', 'diaries', $shop_url ),
-        ),
-    );
+    $category_defs = array();
 
-    // If WordPress has dynamic terms in DB, merge / use actual term links
+    // 1. Populate strictly from authentic terms in WooCommerce database
     if ( taxonomy_exists( 'product_cat' ) ) {
         $real_terms = get_terms( array(
             'taxonomy'   => 'product_cat',
             'hide_empty' => 1,
             'parent'     => 0,
         ) );
+
         if ( ! empty( $real_terms ) && ! is_wp_error( $real_terms ) ) {
+            // "All Categories" is always the first tab
+            $category_defs['all'] = array(
+                'name'  => 'All Categories',
+                'icon'  => '✨',
+                'badge' => 'EXPLORE ALL',
+                'url'   => $shop_url,
+            );
+
             foreach ( $real_terms as $term ) {
                 $term_link = get_term_link( $term );
                 if ( is_wp_error( $term_link ) ) {
-                    $term_link = add_query_arg( 'product_cat', $term->slug, $shop_url );
+                    continue;
                 }
-                
-                if ( isset( $category_defs[ $term->slug ] ) ) {
-                    $category_defs[ $term->slug ]['url'] = $term_link;
-                    $category_defs[ $term->slug ]['name'] = $term->name;
-                } else {
-                    $slug_lower = strtolower( $term->slug . ' ' . $term->name );
-                    $icon = '🏷️';
-                    $badge = 'POPULAR';
-                    if ( strpos( $slug_lower, 'notebook' ) !== false || strpos( $slug_lower, 'register' ) !== false || strpos( $slug_lower, 'copy' ) !== false ) {
-                        $icon = '📓'; $badge = 'BEST VALUE';
-                    } elseif ( strpos( $slug_lower, 'pen' ) !== false || strpos( $slug_lower, 'pencil' ) !== false || strpos( $slug_lower, 'write' ) !== false ) {
-                        $icon = '🖊️'; $badge = 'TOP BRANDS';
-                    } elseif ( strpos( $slug_lower, 'art' ) !== false || strpos( $slug_lower, 'craft' ) !== false || strpos( $slug_lower, 'color' ) !== false || strpos( $slug_lower, 'paint' ) !== false ) {
-                        $icon = '🎨'; $badge = 'CREATIVE';
-                    } elseif ( strpos( $slug_lower, 'office' ) !== false || strpos( $slug_lower, 'file' ) !== false || strpos( $slug_lower, 'folder' ) !== false ) {
-                        $icon = '📁'; $badge = 'ESSENTIALS';
-                    } elseif ( strpos( $slug_lower, 'geometry' ) !== false || strpos( $slug_lower, 'school' ) !== false || strpos( $slug_lower, 'kit' ) !== false ) {
-                        $icon = '📐'; $badge = 'EXAM KITS';
-                    } elseif ( strpos( $slug_lower, 'book' ) !== false || strpos( $slug_lower, 'guide' ) !== false ) {
-                        $icon = '📚'; $badge = 'BESTSELLER';
-                    }
-                    $category_defs[ $term->slug ] = array(
-                        'name'  => $term->name,
-                        'icon'  => $icon,
-                        'badge' => $badge,
-                        'url'   => $term_link,
-                    );
+
+                $slug_lower = strtolower( $term->slug . ' ' . $term->name );
+                $icon = '🏷️';
+                $badge = 'POPULAR';
+
+                if ( strpos( $slug_lower, 'notebook' ) !== false || strpos( $slug_lower, 'register' ) !== false || strpos( $slug_lower, 'copy' ) !== false ) {
+                    $icon = '📓'; $badge = 'BEST VALUE';
+                } elseif ( strpos( $slug_lower, 'pen' ) !== false || strpos( $slug_lower, 'pencil' ) !== false || strpos( $slug_lower, 'write' ) !== false || strpos( $slug_lower, 'writing' ) !== false ) {
+                    $icon = '🖊️'; $badge = 'TOP BRANDS';
+                } elseif ( strpos( $slug_lower, 'art' ) !== false || strpos( $slug_lower, 'craft' ) !== false || strpos( $slug_lower, 'color' ) !== false || strpos( $slug_lower, 'paint' ) !== false ) {
+                    $icon = '🎨'; $badge = 'CREATIVE';
+                } elseif ( strpos( $slug_lower, 'office' ) !== false || strpos( $slug_lower, 'file' ) !== false || strpos( $slug_lower, 'folder' ) !== false ) {
+                    $icon = '📁'; $badge = 'ESSENTIALS';
+                } elseif ( strpos( $slug_lower, 'geometry' ) !== false || strpos( $slug_lower, 'school' ) !== false || strpos( $slug_lower, 'kit' ) !== false ) {
+                    $icon = '📐'; $badge = 'EXAM KITS';
+                } elseif ( strpos( $slug_lower, 'bag' ) !== false || strpos( $slug_lower, 'tote' ) !== false ) {
+                    $icon = '🎒'; $badge = 'POPULAR';
+                } elseif ( strpos( $slug_lower, 'kid' ) !== false || strpos( $slug_lower, 'toy' ) !== false || strpos( $slug_lower, 'lifestyle' ) !== false ) {
+                    $icon = '🧸'; $badge = 'KIDS PICK';
+                } elseif ( strpos( $slug_lower, 'novelty' ) !== false || strpos( $slug_lower, 'gift' ) !== false ) {
+                    $icon = '🎁'; $badge = 'SPECIAL';
+                } elseif ( strpos( $slug_lower, 'stationery' ) !== false ) {
+                    $icon = '📐'; $badge = 'TOP PICKS';
+                } elseif ( strpos( $slug_lower, 'book' ) !== false || strpos( $slug_lower, 'guide' ) !== false || strpos( $slug_lower, 'textbook' ) !== false ) {
+                    $icon = '📚'; $badge = 'BESTSELLER';
+                } elseif ( strpos( $slug_lower, 'diar' ) !== false || strpos( $slug_lower, 'planner' ) !== false ) {
+                    $icon = '📖'; $badge = 'POPULAR';
                 }
+
+                $category_defs[ $term->slug ] = array(
+                    'name'  => $term->name,
+                    'icon'  => $icon,
+                    'badge' => $badge,
+                    'url'   => $term_link,
+                );
             }
         }
+    }
+
+    // 2. Fallback only if no terms exist in database (e.g. empty catalog)
+    if ( empty( $category_defs ) ) {
+        $category_defs = array(
+            'all' => array(
+                'name'  => 'All Categories',
+                'icon'  => '✨',
+                'badge' => 'EXPLORE ALL',
+                'url'   => $shop_url,
+            ),
+            'notebooks' => array(
+                'name'  => 'Notebooks & Registers',
+                'icon'  => '📓',
+                'badge' => 'BEST VALUE',
+                'url'   => sribalaji_get_category_url( array( 'notebooks', 'stationery' ), 'Notebooks' ),
+            ),
+            'pens' => array(
+                'name'  => 'Pens & Writing',
+                'icon'  => '🖊️',
+                'badge' => 'TOP BRANDS',
+                'url'   => sribalaji_get_category_url( array( 'pens', 'writing' ), 'Pens' ),
+            ),
+            'art' => array(
+                'name'  => 'Art & Craft',
+                'icon'  => '🎨',
+                'badge' => 'CREATIVE',
+                'url'   => sribalaji_get_category_url( array( 'art', 'art-craft', 'art-supplies' ), 'Art & Craft' ),
+            ),
+            'office' => array(
+                'name'  => 'Office & Files',
+                'icon'  => '📁',
+                'badge' => 'ESSENTIALS',
+                'url'   => sribalaji_get_category_url( array( 'office', 'office-supplies' ), 'Office Supplies' ),
+            ),
+            'geometry' => array(
+                'name'  => 'School Kits',
+                'icon'  => '📐',
+                'badge' => 'EXAM KITS',
+                'url'   => sribalaji_get_category_url( array( 'school', 'geometry', 'school-kits' ), 'School Kits' ),
+            ),
+        );
     }
     ?>
     <!-- Blinkit-Style Reversed-U Shape Category Title Bar -->
