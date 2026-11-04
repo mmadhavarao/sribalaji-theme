@@ -339,6 +339,7 @@ get_header(); ?>
                             'mrp'      => $mrp_display,
                             'discount' => $discount_badge,
                             'image'    => $thumb,
+                            'url'      => get_permalink( get_the_ID() ),
                         );
                     }
                     wp_reset_postdata();
@@ -349,6 +350,23 @@ get_header(); ?>
             }
             unset( $cat_info );
         }
+
+        // Ensure every product in the feed has a valid url for instant mobile navigation
+        foreach ( $categories_feed as &$cf_cat ) {
+            foreach ( $cf_cat['products'] as &$cf_prod ) {
+                if ( empty( $cf_prod['url'] ) ) {
+                    if ( function_exists( 'get_permalink' ) && get_post_status( $cf_prod['id'] ) === 'publish' ) {
+                        $cf_prod['url'] = get_permalink( $cf_prod['id'] );
+                    } elseif ( ! empty( $cf_cat['url'] ) ) {
+                        $cf_prod['url'] = $cf_cat['url'];
+                    } else {
+                        $cf_prod['url'] = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' );
+                    }
+                }
+            }
+            unset( $cf_prod );
+        }
+        unset( $cf_cat );
 
         // Render each category section
         foreach ( $categories_feed as $cat_key => $cat ) :
@@ -366,19 +384,25 @@ get_header(); ?>
                 <div class="mobile-product-scroller">
                     <?php foreach ( $cat['products'] as $p ) : ?>
                         <article class="mobile-product-card" data-product-id="<?php echo esc_attr( $p['id'] ); ?>">
-                            <div class="mobile-card-thumb-wrap">
-                                <span class="mobile-card-pack-pill"><?php echo esc_html( $p['pack'] ); ?></span>
-                                <?php if ( ! empty( $p['discount'] ) ) : ?>
-                                    <span class="mobile-card-discount-pill"><?php echo esc_html( $p['discount'] ); ?></span>
-                                <?php endif; ?>
-                                <img src="<?php echo esc_url( $p['image'] ); ?>" alt="<?php echo esc_attr( $p['title'] ); ?>" class="mobile-card-img" loading="lazy">
-                            </div>
+                            <!-- Clickable Card Area: Direct Navigation to Product Details Page -->
+                            <a href="<?php echo esc_url( $p['url'] ); ?>" class="mobile-card-link" aria-label="<?php echo esc_attr( $p['title'] ); ?>">
+                                <div class="mobile-card-thumb-wrap">
+                                    <span class="mobile-card-pack-pill"><?php echo esc_html( $p['pack'] ); ?></span>
+                                    <?php if ( ! empty( $p['discount'] ) ) : ?>
+                                        <span class="mobile-card-discount-pill"><?php echo esc_html( $p['discount'] ); ?></span>
+                                    <?php endif; ?>
+                                    <img src="<?php echo esc_url( $p['image'] ); ?>" alt="<?php echo esc_attr( $p['title'] ); ?>" class="mobile-card-img" loading="lazy">
+                                </div>
 
-                            <div class="mobile-card-details">
-                                <h3 class="mobile-card-title" title="<?php echo esc_attr( $p['title'] ); ?>">
-                                    <?php echo esc_html( $p['title'] ); ?>
-                                </h3>
+                                <div class="mobile-card-details">
+                                    <h3 class="mobile-card-title" title="<?php echo esc_attr( $p['title'] ); ?>">
+                                        <?php echo esc_html( $p['title'] ); ?>
+                                    </h3>
+                                </div>
+                            </a>
 
+                            <!-- Product Pricing & Instant Add-to-Cart Action -->
+                            <div class="mobile-card-action-bar">
                                 <div class="mobile-card-pricing-row">
                                     <span class="mobile-card-price"><?php echo esc_html( $p['price'] ); ?></span>
                                     <?php if ( ! empty( $p['mrp'] ) ) : ?>

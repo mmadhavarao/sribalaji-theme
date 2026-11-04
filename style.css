@@ -1305,9 +1305,36 @@ ul.products li.product .button:hover {
     align-items: stretch !important;
 }
 
-/* 3. Card Styling for Login & Register Columns */
-.woocommerce .col2-set#customer_login .col-1,
-.woocommerce .col2-set#customer_login .col-2 {
+/* Sri Balaji Custom Auth Isolation: Disarm nested grid/card padding inside .sribalaji-auth-card */
+.sribalaji-auth-card .col2-set#customer_login,
+.sribalaji-auth-card #customer_login {
+    display: block !important;
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.sribalaji-auth-card .col2-set#customer_login .col-1,
+.sribalaji-auth-card .col2-set#customer_login .col-2 {
+    display: block !important;
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+}
+
+/* 3. Card Styling for Login & Register Columns (When outside sribalaji-auth-card) */
+.woocommerce:not(.sribalaji-auth-card) .col2-set#customer_login .col-1,
+.woocommerce:not(.sribalaji-auth-card) .col2-set#customer_login .col-2 {
     float: none !important;
     width: 100% !important;
     max-width: 100% !important;
@@ -1514,7 +1541,15 @@ ul.products li.product .button:hover {
 .woocommerce-account .woocommerce-MyAccount-navigation {
     float: none !important;
     width: 100% !important;
-    margin-bottom: 2rem !important;
+    margin-bottom: 1.75rem !important;
+    box-sizing: border-box !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation::-webkit-scrollbar {
+    display: none !important;
 }
 
 .woocommerce-account .woocommerce-MyAccount-navigation ul {
@@ -1522,23 +1557,30 @@ ul.products li.product .button:hover {
     display: flex !important;
     flex-wrap: wrap !important;
     gap: 0.5rem !important;
-    padding: 0 !important;
+    padding: 0.25rem 0.25rem 0.75rem 0.25rem !important;
     margin: 0 !important;
     border-bottom: 2px solid var(--border) !important;
-    padding-bottom: 0.75rem !important;
+    box-sizing: border-box !important;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation li {
+    margin: 0 !important;
+    flex-shrink: 0 !important;
 }
 
 .woocommerce-account .woocommerce-MyAccount-navigation li a {
     display: inline-block !important;
-    padding: 0.6rem 1.2rem !important;
-    border-radius: 6px !important;
+    padding: 0.55rem 1.15rem !important;
+    border-radius: 999px !important;
     text-decoration: none !important;
     color: var(--text-main) !important;
     font-weight: 600 !important;
-    font-size: 0.92rem !important;
+    font-size: 0.9rem !important;
     background: #ffffff !important;
-    border: 1px solid var(--border) !important;
+    border: 1.5px solid var(--border) !important;
     transition: all 0.15s !important;
+    white-space: nowrap !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
 }
 
 .woocommerce-account .woocommerce-MyAccount-navigation li.is-active a,
@@ -1551,11 +1593,13 @@ ul.products li.product .button:hover {
 .woocommerce-account .woocommerce-MyAccount-content {
     float: none !important;
     width: 100% !important;
+    box-sizing: border-box !important;
     background: #ffffff !important;
     border: 1px solid var(--border) !important;
     border-radius: 12px !important;
     padding: 2rem !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+    overflow-x: auto !important;
 }
 
 /* 8. Notices & Alerts */
@@ -2378,12 +2422,61 @@ details[open] > summary > .cat-toggle-icon::before {
 @media (max-width: 768px) {
     .header-container {
         flex-wrap: wrap;
-        gap: 1rem;
+        gap: 0.5rem;
     }
     
-    .site-branding-row,
+    .site-branding-row {
+        order: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        gap: 0.5rem !important;
+    }
+    
     .site-branding {
-        order: 1;
+        order: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+        overflow: hidden !important;
+    }
+
+    .brand-title {
+        font-size: 1.15rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        display: block !important;
+        max-width: 100% !important;
+    }
+
+    .brand-tagline {
+        display: none !important;
+    }
+
+    .header-account-area {
+        order: 2 !important;
+        display: flex !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+        margin-left: 0.25rem !important;
+    }
+
+    .profile-trigger-btn {
+        padding: 0.24rem 0.55rem 0.24rem 0.3rem !important;
+    }
+
+    .profile-user-name {
+        max-width: 85px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        font-size: 0.78rem !important;
     }
     
     .header-search-container {
@@ -3690,6 +3783,8 @@ details[open] > summary > .cat-toggle-icon::before {
     align-items: center;
     padding: 2.5rem 1rem;
     min-height: 520px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .sribalaji-auth-card {
@@ -3702,6 +3797,17 @@ details[open] > summary > .cat-toggle-icon::before {
     padding: 2.25rem 2rem;
     position: relative;
     box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+    .sribalaji-auth-wrapper {
+        padding: 1.25rem 0.75rem !important;
+        min-height: auto !important;
+    }
+    .sribalaji-auth-card {
+        padding: 1.5rem 1rem !important;
+        border-radius: 12px !important;
+    }
 }
 
 .sribalaji-auth-header {
@@ -3859,6 +3965,8 @@ details[open] > summary > .cat-toggle-icon::before {
     align-items: center;
     margin-bottom: 1rem;
     font-size: 0.88rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .otp-sent-notice {
@@ -3871,16 +3979,26 @@ details[open] > summary > .cat-toggle-icon::before {
 
 .sribalaji-otp-field {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     padding: 0.85rem !important;
-    font-size: 1.5rem !important;
+    font-size: 1.4rem !important;
     font-weight: 800 !important;
     text-align: center;
-    letter-spacing: 0.45em;
+    letter-spacing: 0.35em;
     border: 1.5px solid #cbd5e1 !important;
     border-radius: 10px !important;
     margin-bottom: 1.25rem;
     color: #1e3a8a !important;
     transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+@media (max-width: 400px) {
+    .sribalaji-otp-field {
+        font-size: 1.2rem !important;
+        letter-spacing: 0.25em !important;
+        padding: 0.75rem 0.5rem !important;
+    }
 }
 
 .sribalaji-otp-field:focus {
@@ -4179,21 +4297,26 @@ details[open] > summary > .cat-toggle-icon::before {
     }
 
     .site-branding {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        display: flex !important;
+        align-items: center !important;
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+        overflow: hidden !important;
     }
 
     .brand-title {
-        font-size: 1.2rem !important;
+        font-size: 1.15rem !important;
         font-weight: 800 !important;
         letter-spacing: -0.02em;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        display: block !important;
+        max-width: 100% !important;
     }
 
     .brand-tagline {
-        font-size: 0.72rem !important;
-        display: inline-block;
-        margin-left: 0.5rem;
+        display: none !important;
     }
 
     /* Hide desktop nav links on mobile (Bottom App Bar handles this!) */
@@ -4726,6 +4849,31 @@ body.preview-mode-mobile .site-branding-row {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
+    min-width: 0 !important;
+    gap: 0.5rem !important;
+}
+
+body.preview-mode-mobile .site-branding {
+    order: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
+}
+
+body.preview-mode-mobile .brand-title {
+    font-size: 1.15rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+    max-width: 100% !important;
+}
+
+body.preview-mode-mobile .header-account-area {
+    order: 2 !important;
+    flex-shrink: 0 !important;
 }
 
 body.preview-mode-mobile .brand-tagline {
@@ -4904,6 +5052,31 @@ body.woocommerce-checkout .site-header {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
+        min-width: 0 !important;
+        gap: 0.5rem !important;
+    }
+
+    body:not(.preview-mode-desktop) .site-branding {
+        order: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+        overflow: hidden !important;
+    }
+
+    body:not(.preview-mode-desktop) .brand-title {
+        font-size: 1.15rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        display: block !important;
+        max-width: 100% !important;
+    }
+
+    body:not(.preview-mode-desktop) .header-account-area {
+        order: 2 !important;
+        flex-shrink: 0 !important;
     }
 
     body:not(.preview-mode-desktop) .brand-tagline {
@@ -4932,6 +5105,80 @@ body.woocommerce-checkout .site-header {
 
     .site-footer {
         padding: 2.5rem 0 5.5rem 0 !important;
+    }
+
+    /* Standard Page & WooCommerce Account Mobile Constraints */
+    .page-container {
+        padding: 0 0.85rem !important;
+        margin: 1.25rem auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .woocommerce-account .woocommerce-MyAccount-navigation {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        margin-bottom: 1.25rem !important;
+    }
+
+    .woocommerce-account .woocommerce-MyAccount-navigation::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .woocommerce-account .woocommerce-MyAccount-navigation ul {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        gap: 0.45rem !important;
+        padding: 0.35rem 0.25rem 0.75rem 0.25rem !important;
+        margin: 0 !important;
+        border-bottom: 2px solid #e2e8f0 !important;
+        width: max-content !important;
+        min-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .woocommerce-account .woocommerce-MyAccount-navigation ul::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .woocommerce-account .woocommerce-MyAccount-navigation li {
+        flex-shrink: 0 !important;
+        margin: 0 !important;
+    }
+
+    .woocommerce-account .woocommerce-MyAccount-navigation li a {
+        display: inline-block !important;
+        padding: 0.48rem 0.95rem !important;
+        border-radius: 999px !important;
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        white-space: nowrap !important;
+    }
+
+    .woocommerce-account .woocommerce-MyAccount-content {
+        padding: 1.25rem 0.85rem !important;
+        border-radius: 10px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: auto !important;
+    }
+
+    .woocommerce-message,
+    .woocommerce-info,
+    .woocommerce-error {
+        padding: 0.75rem 0.85rem !important;
+        font-size: 0.84rem !important;
+        margin-bottom: 1.25rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 }
 
@@ -5270,6 +5517,16 @@ body.preview-mode-tablet ul.products li.product a img {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    min-width: 0;
+    gap: 0.5rem;
+}
+
+.site-branding {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
 }
 
 .header-account-area {
@@ -5321,7 +5578,7 @@ body.preview-mode-tablet ul.products li.product a img {
     font-size: 0.8rem;
     font-weight: 700;
     color: #1e293b;
-    max-width: 100px;
+    max-width: 85px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -5648,9 +5905,28 @@ body.preview-mode-tablet ul.products li.product a img {
     z-index: 2;
 }
 
+.mobile-card-link {
+    text-decoration: none !important;
+    color: inherit !important;
+    display: block !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-card-link:hover .mobile-card-title,
+.mobile-card-link:active .mobile-card-title {
+    color: #0a7c71 !important;
+}
+
 .mobile-card-details {
     display: flex;
     flex-direction: column;
+}
+
+.mobile-card-action-bar {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
 }
 
 .mobile-card-title {
