@@ -15,8 +15,11 @@
 <body <?php body_class( 'wide-lens-mode compact-height-mode watermark-active' ); ?> data-theme="teal-mist">
 <?php wp_body_open(); ?>
 
-<?php if ( function_exists( 'sribalaji_is_staging_or_sandbox' ) && sribalaji_is_staging_or_sandbox() ) : ?>
-<!-- Temporary Local Device Preview Switcher (Removable after testing) -->
+<?php 
+$sribalaji_show_switcher = function_exists( 'sribalaji_show_device_switcher' ) && sribalaji_show_device_switcher();
+if ( $sribalaji_show_switcher ) : 
+?>
+<!-- Temporary Local Device Preview Switcher (Strictly Local Testing Only; Hidden on Staging & Production) -->
 <div class="local-device-switcher-bar" id="localDeviceSwitcherBar" role="region" aria-label="Device Simulation Bar">
     <div class="device-switcher-inner">
         <span class="switcher-tag">🧪 LOCAL PREVIEW:</span>
@@ -61,7 +64,17 @@ function toggleDeviceSwitcher() {
     } catch(e) {}
 })();
 </script>
+<?php else : ?>
+<script>
+// On staging/production, ensure simulated device classes do not linger from earlier testing sessions
+try {
+    localStorage.removeItem('sb_device_preview');
+    document.body.classList.remove('preview-mode-mobile', 'preview-mode-tablet', 'preview-mode-desktop');
+} catch(e) {}
+</script>
+<?php endif; ?>
 
+<?php if ( function_exists( 'sribalaji_is_staging_or_sandbox' ) && sribalaji_is_staging_or_sandbox() ) : ?>
 <!-- Dynamic Staging / Testing Environment Alert Marquee Ribbon -->
 <div class="staging-alert-marquee-bar" id="stagingAlertBar" role="alert" aria-label="Staging Environment Notice">
     <div class="staging-alert-track">

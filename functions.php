@@ -49,6 +49,43 @@ function sribalaji_is_staging_or_sandbox() {
 }
 
 /**
+ * Determine whether to show the local device preview switcher.
+ * Restricted to strictly local development (.local, localhost, 127.0.0.1)
+ * OR explicit manual testing via ?preview=1 or ?device_preview=1.
+ * Excluded from staging and production by default so real mobile devices test cleanly.
+ *
+ * @return bool True if local development or opt-in query param, false for staging/production.
+ */
+function sribalaji_show_device_switcher() {
+    // 1. Explicit opt-out via query param (?preview=0)
+    if ( isset( $_GET['preview'] ) && ( '0' === $_GET['preview'] || 'false' === $_GET['preview'] ) ) {
+        return false;
+    }
+
+    // 2. Explicit opt-in via query param (?preview=1 or ?device_preview=1)
+    if ( ! empty( $_GET['preview'] ) || ! empty( $_GET['device_preview'] ) ) {
+        return true;
+    }
+
+    // 3. Strictly local environments
+    $host = isset( $_SERVER['HTTP_HOST'] ) ? strtolower( $_SERVER['HTTP_HOST'] ) : '';
+    if ( empty( $host ) ) {
+        $host = strtolower( (string) wp_parse_url( home_url(), PHP_URL_HOST ) );
+    }
+
+    if (
+        strpos( $host, '.local' ) !== false ||
+        strpos( $host, 'localhost' ) !== false ||
+        strpos( $host, '127.0.0.1' ) !== false ||
+        strpos( $host, 'sandbox-local' ) !== false
+    ) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * Setup theme features.
  */
 function sribalaji_theme_setup() {
