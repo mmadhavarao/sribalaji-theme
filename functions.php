@@ -227,13 +227,218 @@ remove_action( 'woocommerce_after_main_content', 'woocommerce_output_content_wra
 remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
 
 /**
- * Blinkit-Style Reversed-U Shape Category Title Bar for Shop & Archives
+ * Master Single Source of Truth for Store Product Categories
+ * Returns unified array of canonical store categories with real dynamic term URLs, icons, badges, and product counts.
+ * Consumed identically across Homepage mobile tabs, shop reversed-U tabs, quick-commerce feeds, desktop categories grid, and menus.
  */
-function sribalaji_render_reversed_u_category_bar() {
+function sribalaji_get_all_store_categories() {
+    static $cached_categories = null;
+    if ( null !== $cached_categories ) {
+        return $cached_categories;
+    }
+
     $shop_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink( 'shop' ) : home_url('/shop/');
     if ( empty( $shop_url ) || $shop_url === home_url( '/' ) || $shop_url === home_url() ) {
         $shop_url = home_url( '/shop/' );
     }
+
+    // Total store published product count
+    $total_count = 0;
+    if ( function_exists( 'wp_count_posts' ) ) {
+        $count_posts = wp_count_posts( 'product' );
+        if ( isset( $count_posts->publish ) ) {
+            $total_count = intval( $count_posts->publish );
+        }
+    }
+    if ( $total_count <= 0 ) {
+        $total_count = 856;
+    }
+
+    // Canonical curated category definitions
+    $definitions = array(
+        'all' => array(
+            'id'          => 'all',
+            'name'        => 'All Categories',
+            'icon'        => '✨',
+            'badge'       => 'EXPLORE ALL',
+            'slugs'       => array(),
+            'url'         => $shop_url,
+            'count'       => $total_count,
+            'count_label' => $total_count . ' items',
+            'term_slug'   => '',
+            'description' => 'Explore all books, notebooks, pens, and stationery',
+        ),
+        'notebooks' => array(
+            'id'          => 'notebooks',
+            'name'        => 'Notebooks & Registers',
+            'icon'        => '📓',
+            'badge'       => 'BEST VALUE',
+            'slugs'       => array( 'notebooks', 'notebooks-registers', 'paper-registers', 'stationery' ),
+            'url'         => '',
+            'count'       => 0,
+            'count_label' => '',
+            'term_slug'   => '',
+            'description' => 'Single line, unruled, long books, graph & drawing books',
+        ),
+        'school-essentials' => array(
+            'id'          => 'school-essentials',
+            'name'        => 'School Essentials',
+            'icon'        => '📐',
+            'badge'       => 'EXAM KITS',
+            'slugs'       => array( 'school-essentials', 'school-kits', 'geometry' ),
+            'url'         => '',
+            'count'       => 0,
+            'count_label' => '',
+            'term_slug'   => '',
+            'description' => 'Geometry boxes, exam boards, calculators & student kits',
+        ),
+        'pens' => array(
+            'id'          => 'pens',
+            'name'        => 'Pens & Writing',
+            'icon'        => '🖊️',
+            'badge'       => 'TOP BRANDS',
+            'slugs'       => array( 'pens-refills', 'pens', 'pens-pencils', 'writing' ),
+            'url'         => '',
+            'count'       => 0,
+            'count_label' => '',
+            'term_slug'   => '',
+            'description' => 'Gel pens, rollerballs, fine liners, pencils & refills',
+        ),
+        'art-craft' => array(
+            'id'          => 'art-craft',
+            'name'        => 'Art & Craft',
+            'icon'        => '🎨',
+            'badge'       => 'CREATIVE',
+            'slugs'       => array( 'art-craft', 'art-supplies', 'art', 'paints-canvases' ),
+            'url'         => '',
+            'count'       => 0,
+            'count_label' => '',
+            'term_slug'   => '',
+            'description' => 'Acrylics, oil pastels, sketchbooks, canvases & craft clay',
+        ),
+        'office-supplies' => array(
+            'id'          => 'office-supplies',
+            'name'        => 'Office Supplies',
+            'icon'        => '📁',
+            'badge'       => 'ESSENTIALS',
+            'slugs'       => array( 'office-supplies', 'office', 'files' ),
+            'url'         => '',
+            'count'       => 0,
+            'count_label' => '',
+            'term_slug'   => '',
+            'description' => 'Files, folders, staplers, adhesives & desk organizers',
+        ),
+        'novelty-gifts' => array(
+            'id'          => 'novelty-gifts',
+            'name'        => 'Novelty & Gifts',
+            'icon'        => '🎁',
+            'badge'       => 'SPECIAL',
+            'slugs'       => array( 'novelty-gifts', 'novelty', 'gifts' ),
+            'url'         => '',
+            'count'       => 0,
+            'count_label' => '',
+            'term_slug'   => '',
+            'description' => 'Gift items, cute stationery, desk novelties & pouches',
+        ),
+        'bags-totes' => array(
+            'id'          => 'bags-totes',
+            'name'        => 'Bags & Totes',
+            'icon'        => '🎒',
+            'badge'       => 'POPULAR',
+            'slugs'       => array( 'bags-totes', 'bags', 'jute-bags' ),
+            'url'         => '',
+            'count'       => 0,
+            'count_label' => '',
+            'term_slug'   => '',
+            'description' => 'Eco-friendly jute shopping bags, tote bags & pouches',
+        ),
+    );
+
+    $matched_term_ids = array();
+
+    // Dynamically match each category against WooCommerce terms in database
+    if ( taxonomy_exists( 'product_cat' ) ) {
+        foreach ( $definitions as $key => &$cat ) {
+            if ( $key === 'all' ) {
+                continue;
+            }
+
+            $matched_term = null;
+            // 1. Try candidate slugs
+            foreach ( $cat['slugs'] as $slug ) {
+                $term = get_term_by( 'slug', $slug, 'product_cat' );
+                if ( $term && ! is_wp_error( $term ) ) {
+                    $matched_term = $term;
+                    break;
+                }
+            }
+
+            // 2. Try category name match if slug didn't match
+            if ( ! $matched_term ) {
+                $term = get_term_by( 'name', $cat['name'], 'product_cat' );
+                if ( $term && ! is_wp_error( $term ) ) {
+                    $matched_term = $term;
+                }
+            }
+
+            if ( $matched_term && ! is_wp_error( $matched_term ) ) {
+                $link = get_term_link( $matched_term, 'product_cat' );
+                $cat['url'] = ! is_wp_error( $link ) ? $link : $shop_url;
+                $cat['count'] = intval( $matched_term->count );
+                $cat['count_label'] = $matched_term->count . ' items';
+                $cat['term_slug'] = $matched_term->slug;
+                $matched_term_ids[] = $matched_term->term_id;
+            } else {
+                $cat['url'] = sribalaji_get_category_url( $cat['slugs'], $cat['name'] );
+                $cat['count_label'] = '';
+            }
+        }
+        unset( $cat );
+
+        // Dynamically append any other root terms present in WooCommerce that aren't already covered
+        $extra_terms = get_terms( array(
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => 1,
+            'parent'     => 0,
+            'exclude'    => $matched_term_ids,
+        ) );
+
+        if ( ! empty( $extra_terms ) && ! is_wp_error( $extra_terms ) ) {
+            foreach ( $extra_terms as $eterm ) {
+                $term_link = get_term_link( $eterm );
+                if ( is_wp_error( $term_link ) ) {
+                    continue;
+                }
+                // Avoid duplicating 'stationery' if notebooks is already covered
+                if ( $eterm->slug === 'stationery' && isset( $definitions['notebooks'] ) && ! empty( $definitions['notebooks']['term_slug'] ) ) {
+                    continue;
+                }
+
+                $definitions[ $eterm->slug ] = array(
+                    'id'          => $eterm->slug,
+                    'name'        => $eterm->name,
+                    'icon'        => '🏷️',
+                    'badge'       => 'POPULAR',
+                    'slugs'       => array( $eterm->slug ),
+                    'url'         => $term_link,
+                    'count'       => intval( $eterm->count ),
+                    'count_label' => $eterm->count . ' items',
+                    'term_slug'   => $eterm->slug,
+                    'description' => $eterm->description ? $eterm->description : 'Browse our ' . $eterm->name . ' collection',
+                );
+            }
+        }
+    }
+
+    $cached_categories = $definitions;
+    return $definitions;
+}
+
+/**
+ * Blinkit-Style Reversed-U Shape Category Title Bar for Shop & Archives
+ */
+function sribalaji_render_reversed_u_category_bar() {
+    $category_defs = sribalaji_get_all_store_categories();
     
     // Determine active category
     $active_cat = 'all';
@@ -245,121 +450,16 @@ function sribalaji_render_reversed_u_category_bar() {
     } elseif ( ! empty( $_GET['product_cat'] ) ) {
         $active_cat = sanitize_text_field( $_GET['product_cat'] );
     }
-
-    $category_defs = array();
-
-    // 1. Populate strictly from authentic terms in WooCommerce database
-    if ( taxonomy_exists( 'product_cat' ) ) {
-        $real_terms = get_terms( array(
-            'taxonomy'   => 'product_cat',
-            'hide_empty' => 1,
-            'parent'     => 0,
-        ) );
-
-        if ( ! empty( $real_terms ) && ! is_wp_error( $real_terms ) ) {
-            // "All Categories" is always the first tab
-            $category_defs['all'] = array(
-                'name'  => 'All Categories',
-                'icon'  => '✨',
-                'badge' => 'EXPLORE ALL',
-                'url'   => $shop_url,
-            );
-
-            foreach ( $real_terms as $term ) {
-                $term_link = get_term_link( $term );
-                if ( is_wp_error( $term_link ) ) {
-                    continue;
-                }
-
-                $slug_lower = strtolower( $term->slug . ' ' . $term->name );
-                $icon = '🏷️';
-                $badge = 'POPULAR';
-
-                if ( strpos( $slug_lower, 'notebook' ) !== false || strpos( $slug_lower, 'register' ) !== false || strpos( $slug_lower, 'copy' ) !== false ) {
-                    $icon = '📓'; $badge = 'BEST VALUE';
-                } elseif ( strpos( $slug_lower, 'pen' ) !== false || strpos( $slug_lower, 'pencil' ) !== false || strpos( $slug_lower, 'write' ) !== false || strpos( $slug_lower, 'writing' ) !== false ) {
-                    $icon = '🖊️'; $badge = 'TOP BRANDS';
-                } elseif ( strpos( $slug_lower, 'art' ) !== false || strpos( $slug_lower, 'craft' ) !== false || strpos( $slug_lower, 'color' ) !== false || strpos( $slug_lower, 'paint' ) !== false ) {
-                    $icon = '🎨'; $badge = 'CREATIVE';
-                } elseif ( strpos( $slug_lower, 'office' ) !== false || strpos( $slug_lower, 'file' ) !== false || strpos( $slug_lower, 'folder' ) !== false ) {
-                    $icon = '📁'; $badge = 'ESSENTIALS';
-                } elseif ( strpos( $slug_lower, 'geometry' ) !== false || strpos( $slug_lower, 'school' ) !== false || strpos( $slug_lower, 'kit' ) !== false ) {
-                    $icon = '📐'; $badge = 'EXAM KITS';
-                } elseif ( strpos( $slug_lower, 'bag' ) !== false || strpos( $slug_lower, 'tote' ) !== false ) {
-                    $icon = '🎒'; $badge = 'POPULAR';
-                } elseif ( strpos( $slug_lower, 'kid' ) !== false || strpos( $slug_lower, 'toy' ) !== false || strpos( $slug_lower, 'lifestyle' ) !== false ) {
-                    $icon = '🧸'; $badge = 'KIDS PICK';
-                } elseif ( strpos( $slug_lower, 'novelty' ) !== false || strpos( $slug_lower, 'gift' ) !== false ) {
-                    $icon = '🎁'; $badge = 'SPECIAL';
-                } elseif ( strpos( $slug_lower, 'stationery' ) !== false ) {
-                    $icon = '📐'; $badge = 'TOP PICKS';
-                } elseif ( strpos( $slug_lower, 'book' ) !== false || strpos( $slug_lower, 'guide' ) !== false || strpos( $slug_lower, 'textbook' ) !== false ) {
-                    $icon = '📚'; $badge = 'BESTSELLER';
-                } elseif ( strpos( $slug_lower, 'diar' ) !== false || strpos( $slug_lower, 'planner' ) !== false ) {
-                    $icon = '📖'; $badge = 'POPULAR';
-                }
-
-                $category_defs[ $term->slug ] = array(
-                    'name'  => $term->name,
-                    'icon'  => $icon,
-                    'badge' => $badge,
-                    'url'   => $term_link,
-                );
-            }
-        }
-    }
-
-    // 2. Fallback only if no terms exist in database (e.g. empty catalog)
-    if ( empty( $category_defs ) ) {
-        $category_defs = array(
-            'all' => array(
-                'name'  => 'All Categories',
-                'icon'  => '✨',
-                'badge' => 'EXPLORE ALL',
-                'url'   => $shop_url,
-            ),
-            'notebooks' => array(
-                'name'  => 'Notebooks & Registers',
-                'icon'  => '📓',
-                'badge' => 'BEST VALUE',
-                'url'   => sribalaji_get_category_url( array( 'notebooks', 'stationery' ), 'Notebooks' ),
-            ),
-            'pens' => array(
-                'name'  => 'Pens & Writing',
-                'icon'  => '🖊️',
-                'badge' => 'TOP BRANDS',
-                'url'   => sribalaji_get_category_url( array( 'pens', 'writing' ), 'Pens' ),
-            ),
-            'art' => array(
-                'name'  => 'Art & Craft',
-                'icon'  => '🎨',
-                'badge' => 'CREATIVE',
-                'url'   => sribalaji_get_category_url( array( 'art', 'art-craft', 'art-supplies' ), 'Art & Craft' ),
-            ),
-            'office' => array(
-                'name'  => 'Office & Files',
-                'icon'  => '📁',
-                'badge' => 'ESSENTIALS',
-                'url'   => sribalaji_get_category_url( array( 'office', 'office-supplies' ), 'Office Supplies' ),
-            ),
-            'geometry' => array(
-                'name'  => 'School Kits',
-                'icon'  => '📐',
-                'badge' => 'EXAM KITS',
-                'url'   => sribalaji_get_category_url( array( 'school', 'geometry', 'school-kits' ), 'School Kits' ),
-            ),
-        );
-    }
     ?>
     <!-- Blinkit-Style Reversed-U Shape Category Title Bar -->
     <nav class="sribalaji-reversed-u-bar" aria-label="Product Categories Title Bar">
         <div class="reversed-u-scroll-track">
-            <?php foreach ( $category_defs as $cat_slug => $cat ): 
-                $is_active = ( $active_cat === $cat_slug );
+            <?php foreach ( $category_defs as $cat_key => $cat ): 
+                $is_active = ( $active_cat === $cat_key || $active_cat === $cat['id'] || ( ! empty( $cat['term_slug'] ) && $active_cat === $cat['term_slug'] ) || ( ! empty( $cat['slugs'] ) && in_array( $active_cat, $cat['slugs'], true ) ) );
             ?>
                 <a href="<?php echo esc_url( $cat['url'] ); ?>" 
                    class="reversed-u-cat-card <?php echo $is_active ? 'is-active' : ''; ?>" 
-                   data-category="<?php echo esc_attr( $cat_slug ); ?>"
+                   data-category="<?php echo esc_attr( $cat['id'] ); ?>"
                    title="<?php echo esc_attr( $cat['name'] ); ?>">
                     <div class="reversed-u-tab-header">
                         <span class="reversed-u-header-badge"><?php echo esc_html( $cat['badge'] ); ?></span>

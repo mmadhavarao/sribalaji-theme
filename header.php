@@ -206,17 +206,104 @@ try {
 
 <header class="site-header">
     <div class="header-container">
-        <div class="site-branding-row">
-            <div class="site-branding">
-                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="brand-title">
-                    <?php bloginfo( 'name' ); ?>
-                </a>
-                <div class="brand-tagline">
-                    <?php bloginfo( 'description' ); ?>
+        
+        <!-- Left: Brand Logo & Tagline -->
+        <div class="site-branding">
+            <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="brand-title">
+                <?php bloginfo( 'name' ); ?>
+            </a>
+            <div class="brand-tagline">
+                <?php bloginfo( 'description' ); ?>
+            </div>
+        </div>
+
+        <?php 
+        // Suppress search bar and category tabs on My Account, Login, Checkout, and Cart pages
+        $sribalaji_hide_search_and_tabs = false;
+        if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+            $sribalaji_hide_search_and_tabs = true;
+        }
+        if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+            $sribalaji_hide_search_and_tabs = true;
+        }
+        if ( function_exists( 'is_cart' ) && is_cart() ) {
+            $sribalaji_hide_search_and_tabs = true;
+        }
+
+        // On WooCommerce shop, category archive, and product pages, category navigation is handled by the dedicated Reversed-U Shop Title Bar
+        $sribalaji_hide_category_tabs = $sribalaji_hide_search_and_tabs;
+        if ( ( function_exists( 'is_shop' ) && is_shop() ) || ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) || ( function_exists( 'is_product_category' ) && is_product_category() ) || ( function_exists( 'is_product' ) && is_product() ) ) {
+            $sribalaji_hide_category_tabs = true;
+        }
+        ?>
+
+        <?php if ( ! $sribalaji_hide_search_and_tabs ) : ?>
+        <!-- Center: Instant Product Search Bar (Wide on Desktop) -->
+        <div class="header-search-container">
+            <?php if ( class_exists( 'WooCommerce' ) ) : ?>
+                <form role="search" method="get" class="header-product-search" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+                    <input type="search" class="search-field" placeholder="Search notebooks, pens, art supplies, school essentials..." value="<?php echo get_search_query(); ?>" name="s" required />
+                    <input type="hidden" name="post_type" value="product" />
+                    <button type="submit" class="search-submit" aria-label="Search">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </form>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+
+        <!-- Right: Actions Group (Menu Dropdown + Cart Button + Sign In / Account at far right end) -->
+        <div class="header-actions-area" id="headerActionsArea">
+            
+            <!-- Compact Menu Dropdown Button -->
+            <div class="header-menu-dropdown-wrapper" id="headerMenuDropdownWrapper">
+                <button type="button" class="header-menu-trigger-btn" id="headerMenuTriggerBtn" onclick="toggleHeaderMenuDropdown(event)" aria-expanded="false" aria-haspopup="true">
+                    <span class="menu-trigger-icon">☰</span>
+                    <span class="menu-trigger-text">Menu</span>
+                    <svg class="menu-trigger-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div class="header-menu-dropdown-panel" id="headerMenuDropdownPanel" role="menu">
+                    <ul class="header-menu-list">
+                        <li>
+                            <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="header-menu-link">
+                                <span class="h-menu-icon">🏠</span>
+                                <span class="h-menu-text">Home</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo esc_url( class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/shop/' ) ); ?>" class="header-menu-link">
+                                <span class="h-menu-icon">🛍️</span>
+                                <span class="h-menu-text">Shop All</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo esc_url( get_template_directory_uri() . '/faq.html' ); ?>" class="header-menu-link">
+                                <span class="h-menu-icon">❓</span>
+                                <span class="h-menu-text">FAQs &amp; Help</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo esc_url( get_template_directory_uri() . '/bulk-orders.html' ); ?>" class="header-menu-link">
+                                <span class="h-menu-icon">📦</span>
+                                <span class="h-menu-text">Bulk Orders</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- Top-Right Account & Profile Trigger -->
+            <!-- Cart Trigger Button -->
+            <?php if ( class_exists( 'WooCommerce' ) ) : 
+                $cart_count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0;
+            ?>
+            <a href="<?php echo esc_url( wc_get_cart_url() ); ?>" class="header-cart-btn" aria-label="View Shopping Cart">
+                <span class="cart-btn-icon">🛒</span>
+                <span class="cart-btn-text">Cart</span>
+                <span class="header-cart-count-badge" id="headerCartCount"><?php echo esc_html( $cart_count ); ?></span>
+            </a>
+            <?php endif; ?>
+
+            <!-- Sign In / User Profile Dropdown (At Far Right End) -->
             <div class="header-account-area" id="headerAccountArea">
                 <?php if ( is_user_logged_in() ) : 
                     $current_user = wp_get_current_user();
@@ -286,158 +373,62 @@ try {
                     </button>
                 <?php endif; ?>
             </div>
-        </div>
 
-        <?php 
-        // Suppress search bar and category tabs on My Account, Login, Checkout, and Cart pages
-        $sribalaji_hide_search_and_tabs = false;
-        if ( function_exists( 'is_account_page' ) && is_account_page() ) {
-            $sribalaji_hide_search_and_tabs = true;
-        }
-        if ( function_exists( 'is_checkout' ) && is_checkout() ) {
-            $sribalaji_hide_search_and_tabs = true;
-        }
-        if ( function_exists( 'is_cart' ) && is_cart() ) {
-            $sribalaji_hide_search_and_tabs = true;
-        }
+        </div><!-- /.header-actions-area -->
 
-        // On WooCommerce shop, category archive, and product pages, category navigation is handled by the dedicated Reversed-U Shop Title Bar
-        $sribalaji_hide_category_tabs = $sribalaji_hide_search_and_tabs;
-        if ( ( function_exists( 'is_shop' ) && is_shop() ) || ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) || ( function_exists( 'is_product_category' ) && is_product_category() ) || ( function_exists( 'is_product' ) && is_product() ) ) {
-            $sribalaji_hide_category_tabs = true;
-        }
+        <?php if ( ! $sribalaji_hide_category_tabs ) : 
+            $mobile_nav_cats = function_exists( 'sribalaji_get_all_store_categories' ) ? sribalaji_get_all_store_categories() : array();
         ?>
-
-        <?php if ( ! $sribalaji_hide_search_and_tabs ) : ?>
-        <!-- Instant Product Search Bar -->
-        <div class="header-search-container">
-            <?php if ( class_exists( 'WooCommerce' ) ) : ?>
-                <form role="search" method="get" class="header-product-search" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-                    <input type="search" class="search-field" placeholder="Search notebooks, pens, art supplies..." value="<?php echo get_search_query(); ?>" name="s" required />
-                    <input type="hidden" name="post_type" value="product" />
-                    <button type="submit" class="search-submit" aria-label="Search">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    </button>
-                </form>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
-
-        <?php if ( ! $sribalaji_hide_category_tabs ) : ?>
         <!-- Sticky Blinkit Horizontal Reversed-U Category Tabs (Shown on Mobile / Tablet) -->
         <nav class="mobile-category-tabs-bar sribalaji-reversed-u-bar" id="mobileCategoryTabsBar" aria-label="Product Categories">
             <div class="reversed-u-scroll-track">
-                <button type="button" class="reversed-u-cat-card is-active" data-category="all" onclick="selectCategoryTab('all', this)">
+                <?php 
+                $is_first = true;
+                foreach ( $mobile_nav_cats as $cat_key => $cat ) : 
+                    $is_active = $is_first ? 'is-active' : '';
+                    $is_first = false;
+                ?>
+                <button type="button" class="reversed-u-cat-card <?php echo $is_active; ?>" data-category="<?php echo esc_attr( $cat['id'] ); ?>" onclick="selectCategoryTab('<?php echo esc_js( $cat['id'] ); ?>', this)">
                     <div class="reversed-u-tab-header">
-                        <span class="reversed-u-header-badge">EXPLORE ALL</span>
+                        <span class="reversed-u-header-badge"><?php echo esc_html( $cat['badge'] ); ?></span>
                     </div>
                     <div class="reversed-u-tab-body">
                         <div class="reversed-u-thumb-box">
-                            <span class="reversed-u-icon">✨</span>
+                            <span class="reversed-u-icon"><?php echo $cat['icon']; ?></span>
                         </div>
                         <div class="reversed-u-text-col">
-                            <span class="reversed-u-title">All Categories</span>
+                            <span class="reversed-u-title"><?php echo esc_html( $cat['name'] ); ?></span>
                         </div>
                     </div>
                 </button>
-                <button type="button" class="reversed-u-cat-card" data-category="notebooks" onclick="selectCategoryTab('notebooks', this)">
-                    <div class="reversed-u-tab-header">
-                        <span class="reversed-u-header-badge">BEST VALUE</span>
-                    </div>
-                    <div class="reversed-u-tab-body">
-                        <div class="reversed-u-thumb-box">
-                            <span class="reversed-u-icon">📓</span>
-                        </div>
-                        <div class="reversed-u-text-col">
-                            <span class="reversed-u-title">Notebooks &amp; Registers</span>
-                        </div>
-                    </div>
-                </button>
-                <button type="button" class="reversed-u-cat-card" data-category="pens" onclick="selectCategoryTab('pens', this)">
-                    <div class="reversed-u-tab-header">
-                        <span class="reversed-u-header-badge">TOP BRANDS</span>
-                    </div>
-                    <div class="reversed-u-tab-body">
-                        <div class="reversed-u-thumb-box">
-                            <span class="reversed-u-icon">🖊️</span>
-                        </div>
-                        <div class="reversed-u-text-col">
-                            <span class="reversed-u-title">Pens &amp; Writing</span>
-                        </div>
-                    </div>
-                </button>
-                <button type="button" class="reversed-u-cat-card" data-category="art" onclick="selectCategoryTab('art', this)">
-                    <div class="reversed-u-tab-header">
-                        <span class="reversed-u-header-badge">CREATIVE</span>
-                    </div>
-                    <div class="reversed-u-tab-body">
-                        <div class="reversed-u-thumb-box">
-                            <span class="reversed-u-icon">🎨</span>
-                        </div>
-                        <div class="reversed-u-text-col">
-                            <span class="reversed-u-title">Art &amp; Craft</span>
-                        </div>
-                    </div>
-                </button>
-                <button type="button" class="reversed-u-cat-card" data-category="office" onclick="selectCategoryTab('office', this)">
-                    <div class="reversed-u-tab-header">
-                        <span class="reversed-u-header-badge">ESSENTIALS</span>
-                    </div>
-                    <div class="reversed-u-tab-body">
-                        <div class="reversed-u-thumb-box">
-                            <span class="reversed-u-icon">📁</span>
-                        </div>
-                        <div class="reversed-u-text-col">
-                            <span class="reversed-u-title">Office &amp; Files</span>
-                        </div>
-                    </div>
-                </button>
-                <button type="button" class="reversed-u-cat-card" data-category="geometry" onclick="selectCategoryTab('geometry', this)">
-                    <div class="reversed-u-tab-header">
-                        <span class="reversed-u-header-badge">EXAM KITS</span>
-                    </div>
-                    <div class="reversed-u-tab-body">
-                        <div class="reversed-u-thumb-box">
-                            <span class="reversed-u-icon">📐</span>
-                        </div>
-                        <div class="reversed-u-text-col">
-                            <span class="reversed-u-title">School Kits</span>
-                        </div>
-                    </div>
-                </button>
+                <?php endforeach; ?>
             </div>
         </nav>
         <?php endif; ?>
 
-        <nav class="header-nav">
-            <?php
-            if ( has_nav_menu( 'primary' ) ) {
-                wp_nav_menu( array(
-                    'theme_location' => 'primary',
-                    'container'      => false,
-                    'fallback_cb'    => false,
-                ) );
-            } else {
-                echo '<ul>';
-                echo '<li><a href="' . esc_url( home_url( '/' ) ) . '">Home</a></li>';
-                if ( class_exists( 'WooCommerce' ) ) {
-                    echo '<li><a href="' . esc_url( wc_get_page_permalink( 'shop' ) ) . '">Shop</a></li>';
-                    echo '<li><a href="' . esc_url( get_template_directory_uri() . '/faq.html' ) . '">FAQs</a></li>';
-                    echo '<li><a href="' . esc_url( get_template_directory_uri() . '/bulk-orders.html' ) . '">Bulk Orders</a></li>';
-                    echo '<li><a href="' . esc_url( wc_get_cart_url() ) . '">Cart (' . WC()->cart->get_cart_contents_count() . ')</a></li>';
-                    echo '<li><a href="' . esc_url( wc_get_page_permalink( 'myaccount' ) ) . '">My Account</a></li>';
-                } else {
-                    echo '<li><a href="' . esc_url( get_template_directory_uri() . '/faq.html' ) . '">FAQs</a></li>';
-                    echo '<li><a href="' . esc_url( get_template_directory_uri() . '/bulk-orders.html' ) . '">Bulk Orders</a></li>';
-                }
-                echo '</ul>';
-            }
-            ?>
-        </nav>
     </div>
 </header>
 
 <script>
+function toggleHeaderMenuDropdown(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    var panel = document.getElementById('headerMenuDropdownPanel');
+    var btn = document.getElementById('headerMenuTriggerBtn');
+    if (!panel) return;
+    var isOpen = panel.classList.toggle('is-open');
+    if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    
+    // Close profile dropdown if open
+    var profMenu = document.getElementById('profileDropdownMenu');
+    var profBtn = document.getElementById('profileTriggerBtn');
+    if (profMenu && profMenu.classList.contains('is-open')) {
+        profMenu.classList.remove('is-open');
+        if (profBtn) profBtn.setAttribute('aria-expanded', 'false');
+    }
+}
 function toggleProfileDropdown(e) {
     if (e) {
         e.preventDefault();
@@ -457,6 +448,15 @@ document.addEventListener('click', function(e) {
         if (!menu.contains(e.target) && (!btn || !btn.contains(e.target))) {
             menu.classList.remove('is-open');
             if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+    var headerMenu = document.getElementById('headerMenuDropdownPanel');
+    var headerMenuBtn = document.getElementById('headerMenuTriggerBtn');
+    if (headerMenu && headerMenu.classList.contains('is-open')) {
+        if (!headerMenu.contains(e.target) && (!headerMenuBtn || !headerMenuBtn.contains(e.target))) {
+            headerMenu.classList.remove('is-open');
+            if (headerMenuBtn) headerMenuBtn.setAttribute('aria-expanded', 'false');
         }
     }
 });
